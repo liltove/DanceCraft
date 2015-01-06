@@ -1,5 +1,8 @@
 import processing.video.*;
 import ddf.minim.*;
+import ddf.minim.signals.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
 
 import controlP5.*;
 
@@ -12,9 +15,20 @@ Movie animation3;
 
 
 //AudioPlayer player;
-AudioPlayer soundtrack;
-AudioPlayer verbalDescription; 
+//AudioPlayer soundtrack;
+AudioPlayer feedback; 
+AudioPlayer exercise1;
+AudioPlayer exercise2;
+AudioPlayer exercise3;
+AudioPlayer exercise4;
+AudioPlayer exercise5;
+AudioPlayer tryAgain;
+AudioPlayer nextExercise;
+AudioPlayer greatJob;
+
+
 Minim minim;//audio context
+//audio context
 int track = 1; //initial track number
 String trackNum; //holds track number for calling from file
 
@@ -29,10 +43,11 @@ String [] files;
 String username, time;
 String desktopPath = "\\records/";
 
-String [] encouragements = {"Reach up and stretch towards your toes", "Shake out your arms and legs", "reach behind your back and stretch", "Gently move your head to each side", "move your shoulders up and down", "You finished the warm up!", "So cool", "Wow"};
+String [] encouragements = {"Reach up and stretch towards your toes", "Shake out your arms and legs", "Reach behind your back and stretch", "Gently move your head to each side", "Move your shoulders up and down", "You finished the warm up!", "So cool", "Wow"};
 String [] responses = {"Let's move on to the next exercise", "Try again", "Great Job!"}; 
 Movie[] movies = new Movie[7]; 
-AudioPlayer[] feedback = new AudioPlayer[8];
+//AudioPlayer[] feedback = new AudioPlayer[8];
+
 
 
 
@@ -72,6 +87,7 @@ void setup() {
   play = loadImage("elements/play.png");
   arrow = loadImage("elements/arrow.png");
   congratulations = loadImage("elements/congratulations.png");
+  
   //whiteBackground = loadImage("whiteBackground.png");
   encIndex = 0;
   count = 0; 
@@ -87,9 +103,12 @@ void setup() {
   figure = true;
   points[0] = 0;
   recordsIndex = 1;
+  
   kinectSetup();
+  minim = new Minim(this);
   //musicSetup();
-  //feedback[0] = minim.loadFile("exercise1.mp4"); 
+  
+  //feedback[0] = minim.loadFile("music/exercise1.mp4"); 
   //feedback[1] = minim.loadFile("exercise2.mp4"); 
   //feedback[2] = minim.loadFile("exercise3.mp4"); 
   //feedback[3] = minim.loadFile("exercise4.mp4"); 
@@ -106,13 +125,23 @@ void setup() {
   movies[2] = new Movie(this, "elements/floor3.mp4");
   movies[3] = new Movie(this, "elements/floor4.mp4");
   movies[4] = new Movie(this, "elements/floor5.mp4");
-  
+ 
+  feedback = minim.loadFile("music/congratulationscompletedWarmup.wav");
+  exercise1 = minim.loadFile("music/exercise1.wav");
+  exercise2 = minim.loadFile("music/exercise2.wav");
+  exercise3 = minim.loadFile("music/exercise3.wav");
+  exercise4 = minim.loadFile("music/exercise4.wav");
+  exercise5 = minim.loadFile("music/exercise5.wav");
+  tryAgain = minim.loadFile("music/tryAgain.wav");
+  nextExercise = minim.loadFile("music/nextExercise.wav");
+  greatJob = minim.loadFile("music/greatJob.wav");
   background = 0;
-  minim = new Minim(this);
-  randomTrack(); 
   
   
-  soundtrack.play();
+  //randomTrack(); 
+  //soundtrack.play();
+  
+  
 }
 
 void draw() {
@@ -147,6 +176,7 @@ Draw the dance screen. Calls the animation/background image. Calls Kinect class.
 void drawDanceScreen() {
   //background(28,45,17);
   background(255);
+  
   if (count < 5){
   image(movies[count], 0, 0, 340, 300);
   } else {
@@ -169,16 +199,16 @@ void drawDanceScreen() {
   }
   //animation2.read();
   
-  if (music == true) {
-    if(!soundtrack.isPlaying()){
-      soundtrack.pause();
-      soundtrack.rewind();
-      randomTrack();
-      soundtrack.play();
-    }
-  } else{
-    soundtrack.pause();
-  }
+  //if (music == true) {
+    //if(!soundtrack.isPlaying()){
+      //soundtrack.pause();
+      //soundtrack.rewind();
+      //randomTrack();
+      //soundtrack.play();
+   // }
+  //} else{
+   // soundtrack.pause();
+  //}
   //looks to see if dance buddy is activated, if it is, then run animation
   //otherwise, pull the static background
   //if (figure == true) {
@@ -533,6 +563,7 @@ void keyPressed() {
        background(255);
        showEncouragements = false; 
        showPoints = false; 
+       feedback.play();
        image(congratulations, 0, 0, 640, 460);
     
     //feedback[count].play();
@@ -570,12 +601,15 @@ void keyPressed() {
   }
   if (key == 's'){
     showPoints = true; 
+    
+    feedback.play();
   }
   
   if (key == 'z'){
     // lets move on
     showEncouragements = false;
     showResponses = true;
+    nextExercise.play();
     text(responses[0]+"!", width*.6,height*.1);
   }
    if (key == 'x'){
@@ -583,6 +617,7 @@ void keyPressed() {
      response = 1; 
      showEncouragements = false;
      showResponses = true;
+     tryAgain.play();
     text(responses[1]+"!", width*.6,height*.1);
   }
    if (key == 'c'){
@@ -590,6 +625,7 @@ void keyPressed() {
      response = 2; 
      showEncouragements = false;
      showResponses = true;
+     greatJob.play();
     text(responses[2]+"!", width*.6,height*.1);
   }
   }
@@ -663,38 +699,38 @@ void keyReleased(){
   //}
 //}
 
-void musicPlay(){
-  //calls a random track from the music folder
-    randomTrack();
-    soundtrack.play();
-    
-//loop of music playing
-  while(music == true){ 
-    //plays the music
-    if(!soundtrack.isPlaying()){
-      soundtrack.pause();
-      soundtrack.rewind();
-      randomTrack();
-      soundtrack.play();
-    }
-  }
-}//Boolean music
-
-void stop()
-{
-  soundtrack.close();
-  minim.stop();
-  super.stop();
-}
-
-void getTrack(int track){
-  trackNum = "music/"+track+".mp3";
-  soundtrack = minim.loadFile(trackNum, 2048);
-}
-
-void randomTrack(){
-  track = int(random(23)) + 1;
-  println("Now playing track number: " + track);
-  getTrack(track);
-}
+//void musicPlay(){
+//  //calls a random track from the music folder
+//    randomTrack();
+//    soundtrack.play();
+//    
+////loop of music playing
+//  while(music == true){ 
+//    //plays the music
+//    if(!soundtrack.isPlaying()){
+//      soundtrack.pause();
+//      soundtrack.rewind();
+//      randomTrack();
+//      soundtrack.play();
+//    }
+//  }
+//}//Boolean music
+//
+//void stop()
+//{
+//  soundtrack.close();
+//  minim.stop();
+//  super.stop();
+//}
+//
+//void getTrack(int track){
+//  trackNum = "music/"+track+".mp3";
+//  soundtrack = minim.loadFile(trackNum, 2048);
+//}
+//
+//void randomTrack(){
+//  track = int(random(23)) + 1;
+//  println("Now playing track number: " + track);
+//  getTrack(track);
+//}
 
