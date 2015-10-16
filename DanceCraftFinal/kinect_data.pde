@@ -73,6 +73,7 @@ void kinectSetup()
  
  // enable skeleton generation for all joints
  kinect.enableUser();
+ 
 
   oldPosition = new PVector();
 
@@ -177,7 +178,12 @@ void kinectDance(){
   saveTable(tablePose,"data/csvPoseData.csv");
   // And reloading it
   //loadData();
+  
+   //Draw skeleton on top of player as they play
+  drawSkeleton (1);
   }
+  
+ 
   
   saveTable(tableAngles,"data/csvAngles.csv");
 } // void draw()
@@ -219,12 +225,13 @@ void calcPoints(int userID, int jointID, PVector currentPosition, int oldsum){
    println(currentPosition.z);
    
    AddToCSV(jointID,currentPosition.x,currentPosition.y, currentPosition.z);
-   
+   //This function saves a pose into a table
    if(keyPressed)
    {
      if(key=='q'||key=='Q')
      {
        AddPose(pose,jointID,currentPosition.x,currentPosition.y, currentPosition.z);
+       println("Pose saved!");
        p=true;
      }
    }
@@ -433,4 +440,31 @@ void AddAngle(int _pose,float _lh1, float _lh2, float _lh3, float _h1, float _rh
   rowA.setFloat("LL2", _ll2);
   rowA.setFloat("RL1", _rl1);
   rowA.setFloat("RL2", _rl2);
+}
+
+/*-------------------------------------------------
+Draw a rudimentary skeleton on top of the player
+-----------------------------------------------------*/
+
+void drawSkeleton (int userId) {
+	//Set color of skeleton "bones" to black
+	stroke(0);
+	//Set weight of line
+	strokeWeight (5);
+	
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_RIGHT_ELBOW);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW, SimpleOpenNI.SKEL_RIGHT_HAND);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_LEFT_HIP);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_KNEE, SimpleOpenNI.SKEL_LEFT_FOOT);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_RIGHT_HIP);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_RIGHT_KNEE);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_LEFT_HIP);
 }
