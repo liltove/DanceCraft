@@ -195,6 +195,7 @@ void onNewUser(SimpleOpenNI curContext, int userId){
  // start tracking of user id
  curContext.startTrackingSkeleton(userId);
 } //void onNewUser(SimpleOpenNI curContext, int userId)
+
 /*---------------------------------------------------------------
 Print when user is lost. Input is int userId of user lost
 ----------------------------------------------------------------*/
@@ -202,6 +203,7 @@ void onLostUser(SimpleOpenNI curContext, int userId){
  // print user lost and user id
  println("User Lost - userId: " + userId);
 } //void onLostUser(SimpleOpenNI curContext, int userId)
+
 
 /*---------------------------------------------------------------
 Create points for each userID
@@ -213,11 +215,13 @@ void addPoints(int id){
 }
 
 void calcPoints(int userID, int jointID, PVector currentPosition, int oldsum){
+   kinect.getJointPositionSkeleton(userID,jointID, currentPosition);
 
    println(jointID);
    println(currentPosition.x);
    println(currentPosition.y);
    println(currentPosition.z);
+
    AddToCSV(jointID,currentPosition.x,currentPosition.y, currentPosition.z);
    //This function saves a pose into a table
    if(keyPressed)
@@ -229,13 +233,18 @@ void calcPoints(int userID, int jointID, PVector currentPosition, int oldsum){
        p=true;
      }
    }
+
    //createXML(1,1, jointID,currentPosition.x,currentPosition.y, currentPosition.z);
    //save the current position with a place holder
    PVector placeHolderPosition = new PVector();
    placeHolderPosition = currentPosition;
+
    //calculate the distance between vectors by transforming currentPosition
+   currentPosition.sub(oldPosition);
+
    //store magnitude
    offByDistance = currentPosition.mag();
+
    sum = int(abs(offByDistance - oldDistance));
    //println(jointID+"sum: "+sum);
    //println(jointID+"old sum: "+oldsum);
@@ -287,6 +296,7 @@ sk
 }*/
 
 /*void storeJoints(){
+
 }
 
 void createXML(){
@@ -297,9 +307,15 @@ void createXML(){
   println(root.getName());
   XML firstChild = root.getChild("exerciseONE");
   println(firstChild.getName());
+
   root.removeChild(firstChild);
+
+  XML pose;
+  pose = root.addChild("test");
   pose.setContent("im the content for test");
+
   saveXML(root, "subset.xml");
+  println("im done");
 }*/
 
 /*--------------------------------------------------------------
@@ -317,6 +333,7 @@ void AddToCSV(int _joint, float _x, float _y, float _z) {
 }
 
 /*--------------------------------------------------------------
+Storing each pose to a table
 --------------------------------------------------------------*/
 void AddPose(int _pose,int _joint, float _x, float _y, float _z) {
   // Create a new row
@@ -333,14 +350,17 @@ void AddPose(int _pose,int _joint, float _x, float _y, float _z) {
 Compute angles for the pose-joint data from the csv
 --------------------------------------------------------------*/
 void computeAngles(int poseNo) {
+
   for (TableRow row : tablePose.findRows(str(poseNo), "Pose")) {
     poseJointArray[0][row.getInt("Joint")]=row.getFloat("x");
     poseJointArray[1][row.getInt("Joint")]=row.getFloat("y");
     poseJointArray[2][row.getInt("Joint")]=row.getFloat("z");
   }
+
   for(int i=0;i<15;i=i+1){
       j1[i]=new PVector(poseJointArray[0][i],poseJointArray[1][i],poseJointArray[2][i]);
   }
+
   //Vectors between joints
   PVector pv01 = PVector.sub(j1[0], j1[1]);
   PVector pv12 = PVector.sub(j1[1], j1[2]);
@@ -354,11 +374,13 @@ void computeAngles(int poseNo) {
   PVector pv57 = PVector.sub(j1[5], j1[7]);
   PVector pv89 = PVector.sub(j1[8], j1[9]);
   PVector pv810 = PVector.sub(j1[8], j1[10]);
+  PVector pv911 = PVector.sub(j1[9], j1[11]);
   PVector pv913 = PVector.sub(j1[9], j1[13]);
   PVector pv1012 = PVector.sub(j1[10], j1[12]);
   PVector pv1014 = PVector.sub(j1[10], j1[14]);
   PVector pv1113 = PVector.sub(j1[11], j1[13]);
   PVector pv1214 = PVector.sub(j1[12], j1[14]);
+
   //
 //  float lh1=AngleBetweenTwoVectors(pv18,pv14);
 //  float lh2=AngleBetweenTwoVectors(pv12,pv24);
@@ -372,6 +394,7 @@ void computeAngles(int poseNo) {
 //  float ll2=AngleBetweenTwoVectors(pv911,pv1113);
 //  float rl1=AngleBetweenTwoVectors(pv810,pv1014);
 //  float rl2=AngleBetweenTwoVectors(pv1012,pv1214);
+
   float lh1=PVector.angleBetween(pv18,pv14);
   float lh2=PVector.angleBetween(pv12,pv24);
   float lh3=PVector.angleBetween(pv24,pv46);
@@ -384,6 +407,7 @@ void computeAngles(int poseNo) {
   float ll2=PVector.angleBetween(pv911,pv1113);
   float rl1=PVector.angleBetween(pv810,pv1014);
   float rl2=PVector.angleBetween(pv1012,pv1214);
+
   AddAngle(poseNo,lh1,lh2,lh3,h1,rh1,rh2,rh3,sp1,ll1,ll2,rl1,rl2);
 }
 
@@ -391,9 +415,11 @@ float AngleBetweenTwoVectors(PVector v1, PVector v2){    //https://social.msdn.m
   float dotProduct = 0.0f;
   dotProduct= PVector.dot(v1, v2);
   print("DP"+dotProduct);
+  return (float)Math.acos(dotProduct);
 }
 
 /*--------------------------------------------------------------
+Storing each angle for each pose to a table
 --------------------------------------------------------------*/
 void AddAngle(int _pose,float _lh1, float _lh2, float _lh3, float _h1, float _rh1, float _rh2, float _rh3, float _sp1, float _ll1, float _ll2, float _rl1, float _rl2) {
   // Create a new row
@@ -423,6 +449,7 @@ void drawSkeleton (int userId) {
 	stroke(0);
 	//Set weight of line
 	strokeWeight (5);
+
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW);
@@ -438,4 +465,40 @@ void drawSkeleton (int userId) {
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_RIGHT_KNEE);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_LEFT_HIP);
+
+  noStroke();
+
+  fill(255,0,0);
+
+  //Begin drawing the joints of the skeleton
+
+  drawJoint(userId, SimpleOpenNI.SKEL_HEAD);
+  drawJoint(userId, SimpleOpenNI.SKEL_NECK);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_ELBOW);
+  drawJoint(userId, SimpleOpenNI.SKEL_NECK);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW);
+  drawJoint(userId,SimpleOpenNI.SKEL_TORSO);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HIP);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_KNEE);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_HIP);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_FOOT);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_KNEE);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HIP);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_FOOT);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_HAND);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HAND);
+
+}
+
+void drawJoint (int userId, int jointID) {
+  PVector joint = new PVector();
+  float confidence = kinect.getJointPositionSkeleton(userId, jointID, joint);
+  if (confidence < 0.5) {
+    return;
+  }
+  PVector convertedJoint = new PVector();
+  kinect.convertRealWorldToProjective (joint, convertedJoint);
+  ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
 }
