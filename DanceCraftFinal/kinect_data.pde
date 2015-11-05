@@ -64,15 +64,16 @@ void kinectSetup()
  kinect.setMirror(true);
  // enable depth sensor
  kinect.enableDepth();
- 
+
  // enable color camera
   kinect.enableRGB(1280, 1024, 15);
- 
+
   kinect.alternativeViewPointDepthToImage();
- kinect.setDepthColorSyncEnabled(true); 
- 
+ kinect.setDepthColorSyncEnabled(true);
+
  // enable skeleton generation for all joints
  kinect.enableUser();
+
 
   oldPosition = new PVector();
 
@@ -82,20 +83,20 @@ void kinectSetup()
   table.addColumn("x",Table.FLOAT);
   table.addColumn("y",Table.FLOAT);
   table.addColumn("z", Table.FLOAT);
-  
+
   tablePose=new Table();
   tablePose.addColumn("Pose",Table.INT);
   tablePose.addColumn("Joint",Table.INT);
   tablePose.addColumn("x",Table.FLOAT);
   tablePose.addColumn("y",Table.FLOAT);
   tablePose.addColumn("z", Table.FLOAT);
-  
+
   tableAngles=new Table();
   tableAngles.addColumn("Pose",Table.INT);
   tableAngles.addColumn("LH1",Table.FLOAT);  //(1-8)-(1-4)  Spine and Elbow (L)
   tableAngles.addColumn("LH2",Table.FLOAT);  //(1-2)-(2-4)  Neck-Shoulder- Shoulder-Elbow (L)
   tableAngles.addColumn("LH3",Table.FLOAT);  //(2-4)-(4-6)  Shoulder-Elbow- Elbow-Wrist (L)
-  tableAngles.addColumn("H1", Table.FLOAT);  //(0-1)-(1-2)  Head-Neck- Neck-Shoulder 
+  tableAngles.addColumn("H1", Table.FLOAT);  //(0-1)-(1-2)  Head-Neck- Neck-Shoulder
   tableAngles.addColumn("RH1", Table.FLOAT); //(1-8)-(1-5)  Spine and Elbow (R)
   tableAngles.addColumn("RH2", Table.FLOAT); //(1-3)-(3-5)  Neck-Shoulder- Shoulder-Elbow (R)
   tableAngles.addColumn("RH3", Table.FLOAT); //(3-5)-(5-7)  Shoulder-Elbow- Elbow-Wrist (R)
@@ -106,10 +107,10 @@ void kinectSetup()
   tableAngles.addColumn("RL2", Table.FLOAT); //(10-12)-(12-14) Hip-Knee- Knee-Leg (R)
 
   poseJointArray= new float[3][15];
-  
+
   j1=new PVector[15];
 } // void setup()
- 
+
 /*---------------------------------------------------------------
 Updates Kinect. Gets users tracking and draws skeleton and
 head if confidence of tracking is above threshold
@@ -121,36 +122,36 @@ void kinectDance(){
 
 
   // get the Kinect color image
-  rgbImage = kinect.rgbImage(); 
-  
+  rgbImage = kinect.rgbImage();
+
   // prepare the color pixels
   loadPixels();
   // get pixels for the user tracked
   userMapping = kinect.userMap();
-  
+
   // for the length of the pixels tracked, color them
   // in with the rgb camera
   for (int i =0; i < userMapping.length; i++) {
     // if the pixel is part of the user
     if (userMapping[i] != 0) {
-            
+
       // set the sketch pixel to the rgb camera pixel
-      pixels[i] = rgbImage.pixels[i]; 
+      pixels[i] = rgbImage.pixels[i];
     } // if (userMap[i] != 0)
-    
+
   } // (int i =0; i < userMap.length; i++)
-  
-   
+
+
   // update any changed pixels
   updatePixels();
-  
+
  if(kinect.isTrackingSkeleton(1)){
    //get vector of current position
    PVector currentPosition = new PVector();
    //kinect.getJointPositionSkeleton(1,SimpleOpenNI.SKEL_LEFT_HAND, currentPosition);
-   calcPoints(1,SimpleOpenNI.SKEL_HEAD,currentPosition, sum);           //0    
-   calcPoints(1,SimpleOpenNI.SKEL_NECK,currentPosition, sum);           //1    
-   calcPoints(1,SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition, sum);  //2  
+   calcPoints(1,SimpleOpenNI.SKEL_HEAD,currentPosition, sum);           //0
+   calcPoints(1,SimpleOpenNI.SKEL_NECK,currentPosition, sum);           //1
+   calcPoints(1,SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition, sum);  //2
    calcPoints(1,SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition, sum); //3
    calcPoints(1,SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition, sum);     //4
    calcPoints(1,SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition, sum);    //5
@@ -163,25 +164,28 @@ void kinectDance(){
    calcPoints(1,SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition, sum);     //12
    calcPoints(1,SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition, sumLF);    //13
    calcPoints(1,SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition, sumRF);   //14
-   
+
    if(p==true){
    computeAngles(pose);}
    p=false;
    pose=pose+1;
    //createXML();
-  
+
   // Writing the CSV back to the same file
   saveTable(table,"data/csvdata.csv");
-  
+
   // Writing the specific poses for the CSV back to the poses file
   saveTable(tablePose,"data/csvPoseData.csv");
   // And reloading it
   //loadData();
+
+   //Draw skeleton on top of player as they play
+  drawSkeleton (1);
   }
-  
+
   saveTable(tableAngles,"data/csvAngles.csv");
 } // void draw()
- 
+
 /*---------------------------------------------------------------
 When a new user is found, print new user detected along with
 userID and start pose detection. Input is userID
@@ -191,7 +195,7 @@ void onNewUser(SimpleOpenNI curContext, int userId){
  // start tracking of user id
  curContext.startTrackingSkeleton(userId);
 } //void onNewUser(SimpleOpenNI curContext, int userId)
- 
+
 /*---------------------------------------------------------------
 Print when user is lost. Input is int userId of user lost
 ----------------------------------------------------------------*/
@@ -199,7 +203,7 @@ void onLostUser(SimpleOpenNI curContext, int userId){
  // print user lost and user id
  println("User Lost - userId: " + userId);
 } //void onLostUser(SimpleOpenNI curContext, int userId)
- 
+
 
 /*---------------------------------------------------------------
 Create points for each userID
@@ -211,35 +215,36 @@ void addPoints(int id){
 }
 
 void calcPoints(int userID, int jointID, PVector currentPosition, int oldsum){
-   kinect.getJointPositionSkeleton(userID,jointID, currentPosition); 
+   kinect.getJointPositionSkeleton(userID,jointID, currentPosition);
 
    println(jointID);
    println(currentPosition.x);
    println(currentPosition.y);
    println(currentPosition.z);
-   
+
    AddToCSV(jointID,currentPosition.x,currentPosition.y, currentPosition.z);
-   
+   //This function saves a pose into a table
    if(keyPressed)
    {
      if(key=='q'||key=='Q')
      {
        AddPose(pose,jointID,currentPosition.x,currentPosition.y, currentPosition.z);
+       println("Pose saved!");
        p=true;
      }
    }
-   
+
    //createXML(1,1, jointID,currentPosition.x,currentPosition.y, currentPosition.z);
    //save the current position with a place holder
    PVector placeHolderPosition = new PVector();
    placeHolderPosition = currentPosition;
-   
+
    //calculate the distance between vectors by transforming currentPosition
-   currentPosition.sub(oldPosition); 
-   
+   currentPosition.sub(oldPosition);
+
    //store magnitude
    offByDistance = currentPosition.mag();
-   
+
    sum = int(abs(offByDistance - oldDistance));
    //println(jointID+"sum: "+sum);
    //println(jointID+"old sum: "+oldsum);
@@ -248,7 +253,7 @@ void calcPoints(int userID, int jointID, PVector currentPosition, int oldsum){
    }
    oldDistance = offByDistance;
    oldPosition = placeHolderPosition;
-   
+
    switch(jointID){
      case 6:
         sumLH = sum;
@@ -291,7 +296,7 @@ sk
 }*/
 
 /*void storeJoints(){
-    
+
 }
 
 void createXML(){
@@ -302,15 +307,15 @@ void createXML(){
   println(root.getName());
   XML firstChild = root.getChild("exerciseONE");
   println(firstChild.getName());
-  
+
   root.removeChild(firstChild);
-  
-  XML pose; 
-  pose = root.addChild("test"); 
+
+  XML pose;
+  pose = root.addChild("test");
   pose.setContent("im the content for test");
-    
+
   saveXML(root, "subset.xml");
-  println("im done"); 
+  println("im done");
 }*/
 
 /*--------------------------------------------------------------
@@ -328,7 +333,7 @@ void AddToCSV(int _joint, float _x, float _y, float _z) {
 }
 
 /*--------------------------------------------------------------
-Storing each pose to a table 
+Storing each pose to a table
 --------------------------------------------------------------*/
 void AddPose(int _pose,int _joint, float _x, float _y, float _z) {
   // Create a new row
@@ -345,17 +350,17 @@ void AddPose(int _pose,int _joint, float _x, float _y, float _z) {
 Compute angles for the pose-joint data from the csv
 --------------------------------------------------------------*/
 void computeAngles(int poseNo) {
-  
+
   for (TableRow row : tablePose.findRows(str(poseNo), "Pose")) {
     poseJointArray[0][row.getInt("Joint")]=row.getFloat("x");
     poseJointArray[1][row.getInt("Joint")]=row.getFloat("y");
     poseJointArray[2][row.getInt("Joint")]=row.getFloat("z");
   }
-  
+
   for(int i=0;i<15;i=i+1){
       j1[i]=new PVector(poseJointArray[0][i],poseJointArray[1][i],poseJointArray[2][i]);
   }
-  
+
   //Vectors between joints
   PVector pv01 = PVector.sub(j1[0], j1[1]);
   PVector pv12 = PVector.sub(j1[1], j1[2]);
@@ -369,13 +374,13 @@ void computeAngles(int poseNo) {
   PVector pv57 = PVector.sub(j1[5], j1[7]);
   PVector pv89 = PVector.sub(j1[8], j1[9]);
   PVector pv810 = PVector.sub(j1[8], j1[10]);
-  PVector pv911 = PVector.sub(j1[9], j1[11]); 
+  PVector pv911 = PVector.sub(j1[9], j1[11]);
   PVector pv913 = PVector.sub(j1[9], j1[13]);
   PVector pv1012 = PVector.sub(j1[10], j1[12]);
   PVector pv1014 = PVector.sub(j1[10], j1[14]);
   PVector pv1113 = PVector.sub(j1[11], j1[13]);
   PVector pv1214 = PVector.sub(j1[12], j1[14]);
-  
+
   //
 //  float lh1=AngleBetweenTwoVectors(pv18,pv14);
 //  float lh2=AngleBetweenTwoVectors(pv12,pv24);
@@ -389,7 +394,7 @@ void computeAngles(int poseNo) {
 //  float ll2=AngleBetweenTwoVectors(pv911,pv1113);
 //  float rl1=AngleBetweenTwoVectors(pv810,pv1014);
 //  float rl2=AngleBetweenTwoVectors(pv1012,pv1214);
-  
+
   float lh1=PVector.angleBetween(pv18,pv14);
   float lh2=PVector.angleBetween(pv12,pv24);
   float lh3=PVector.angleBetween(pv24,pv46);
@@ -402,7 +407,7 @@ void computeAngles(int poseNo) {
   float ll2=PVector.angleBetween(pv911,pv1113);
   float rl1=PVector.angleBetween(pv810,pv1014);
   float rl2=PVector.angleBetween(pv1012,pv1214);
-  
+
   AddAngle(poseNo,lh1,lh2,lh3,h1,rh1,rh2,rh3,sp1,ll1,ll2,rl1,rl2);
 }
 
@@ -410,11 +415,11 @@ float AngleBetweenTwoVectors(PVector v1, PVector v2){    //https://social.msdn.m
   float dotProduct = 0.0f;
   dotProduct= PVector.dot(v1, v2);
   print("DP"+dotProduct);
-  return (float)Math.acos(dotProduct); 
+  return (float)Math.acos(dotProduct);
 }
 
 /*--------------------------------------------------------------
-Storing each angle for each pose to a table 
+Storing each angle for each pose to a table
 --------------------------------------------------------------*/
 void AddAngle(int _pose,float _lh1, float _lh2, float _lh3, float _h1, float _rh1, float _rh2, float _rh3, float _sp1, float _ll1, float _ll2, float _rl1, float _rl2) {
   // Create a new row
@@ -433,4 +438,67 @@ void AddAngle(int _pose,float _lh1, float _lh2, float _lh3, float _h1, float _rh
   rowA.setFloat("LL2", _ll2);
   rowA.setFloat("RL1", _rl1);
   rowA.setFloat("RL2", _rl2);
+}
+
+/*-------------------------------------------------
+Draw a rudimentary skeleton on top of the player
+-----------------------------------------------------*/
+
+void drawSkeleton (int userId) {
+	//Set color of skeleton "bones" to black
+	stroke(0);
+	//Set weight of line
+	strokeWeight (5);
+
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_RIGHT_ELBOW);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW, SimpleOpenNI.SKEL_RIGHT_HAND);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_LEFT_HIP);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_KNEE, SimpleOpenNI.SKEL_LEFT_FOOT);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_RIGHT_HIP);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_RIGHT_KNEE);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_LEFT_HIP);
+
+  noStroke();
+
+  fill(255,0,0);
+
+  //Begin drawing the joints of the skeleton
+
+  drawJoint(userId, SimpleOpenNI.SKEL_HEAD);
+  drawJoint(userId, SimpleOpenNI.SKEL_NECK);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_ELBOW);
+  drawJoint(userId, SimpleOpenNI.SKEL_NECK);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW);
+  drawJoint(userId,SimpleOpenNI.SKEL_TORSO);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HIP);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_KNEE);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_HIP);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_FOOT);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_KNEE);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HIP);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_FOOT);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_HAND);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HAND);
+
+}
+
+void drawJoint (int userId, int jointID) {
+  PVector joint = new PVector();
+  float confidence = kinect.getJointPositionSkeleton(userId, jointID, joint);
+  if (confidence < 0.5) {
+    return;
+  }
+  PVector convertedJoint = new PVector();
+  kinect.convertRealWorldToProjective (joint, convertedJoint);
+  ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
 }
