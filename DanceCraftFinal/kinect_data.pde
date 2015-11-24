@@ -25,6 +25,10 @@ int[] userMapping;
 PImage backgroundImage;
 // image from rgb camera
 PImage rgbImage;
+
+//Joint array
+String[] joint = {"HEAD", "NECK", "LEFT_SHOULDER", "RIGHT_SHOULDER", "LEFT_ELBOW", "RIGHT_ELBOW", "LEFT_HAND", "RIGHT_HAND", "TORSO", "LEFT_HIP", "RIGHT_HIP", "LEFT_KNEE", "RIGHT_KNEE", "LEFT_FOOT", "RIGHT_FOOT"}; 
+
 float threshold = 50;
 
 float offByDistance = 0.0;
@@ -67,8 +71,9 @@ void kinectSetup()
 
  // enable color camera
   kinect.enableRGB(1280, 1024, 15);
-
-  kinect.alternativeViewPointDepthToImage();
+  
+ //trim the camera for better Image 
+ kinect.alternativeViewPointDepthToImage();
  kinect.setDepthColorSyncEnabled(true);
 
  // enable skeleton generation for all joints
@@ -117,12 +122,12 @@ head if confidence of tracking is above threshold
 ----------------------------------------------------------------*/
 void kinectDance(){
 
- // update the camera
- kinect.update();
+   // update the camera
+   kinect.update();
 
 
-  // get the Kinect color image
-  rgbImage = kinect.rgbImage();
+    // get the Kinect color image
+    rgbImage = kinect.rgbImage();
 
   // prepare the color pixels
   loadPixels();
@@ -131,58 +136,67 @@ void kinectDance(){
 
   // for the length of the pixels tracked, color them
   // in with the rgb camera
-  for (int i =0; i < userMapping.length; i++) {
+  //for (int i =0; i < userMapping.length; i++) {
     // if the pixel is part of the user
-    if (userMapping[i] != 0) {
+    //if (userMapping[i] != 0) {
 
       // set the sketch pixel to the rgb camera pixel
-      pixels[i] = rgbImage.pixels[i];
-    } // if (userMap[i] != 0)
+     // pixels[i] = rgbImage.pixels[i];
+    //} // if (userMap[i] != 0)
 
-  } // (int i =0; i < userMap.length; i++)
+  //} // (int i =0; i < userMap.length; i++)
 
 
   // update any changed pixels
-  updatePixels();
-
- if(kinect.isTrackingSkeleton(1)){
-   //get vector of current position
-   PVector currentPosition = new PVector();
-   //kinect.getJointPositionSkeleton(1,SimpleOpenNI.SKEL_LEFT_HAND, currentPosition);
-   calcPoints(1,SimpleOpenNI.SKEL_HEAD,currentPosition, sum);           //0
-   calcPoints(1,SimpleOpenNI.SKEL_NECK,currentPosition, sum);           //1
-   calcPoints(1,SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition, sum);  //2
-   calcPoints(1,SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition, sum); //3
-   calcPoints(1,SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition, sum);     //4
-   calcPoints(1,SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition, sum);    //5
-   calcPoints(1,SimpleOpenNI.SKEL_LEFT_HAND,currentPosition, sumLH);    //6
-   calcPoints(1,SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition, sumRH);   //7
-   calcPoints(1,SimpleOpenNI.SKEL_TORSO,currentPosition, sumT);         //8
-   calcPoints(1,SimpleOpenNI.SKEL_LEFT_HIP,currentPosition, sum);       //9
-   calcPoints(1,SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition, sum);      //10
-   calcPoints(1,SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition, sum);      //11
-   calcPoints(1,SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition, sum);     //12
-   calcPoints(1,SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition, sumLF);    //13
-   calcPoints(1,SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition, sumRF);   //14
-
-   if(p==true){
-   computeAngles(pose);}
-   p=false;
-   pose=pose+1;
-   //createXML();
-
-  // Writing the CSV back to the same file
-  saveTable(table,"data/csvdata.csv");
-
-  // Writing the specific poses for the CSV back to the poses file
-  saveTable(tablePose,"data/csvPoseData.csv");
-  // And reloading it
-  //loadData();
-
-   //Draw skeleton on top of player as they play
-  drawSkeleton (1);
+  //updatePixels();
+  
+  //get the list of users
+  int[] users = kinect.getUsers();
+  
+  //iterate through each users
+  for(int i = 0; i < users.length; i++)
+  {
+    //check if the user has skeleton
+   if(kinect.isTrackingSkeleton(users[i])){
+     //get vector of current position
+     PVector currentPosition = new PVector();
+     //kinect.getJointPositionSkeleton(1,SimpleOpenNI.SKEL_LEFT_HAND, currentPosition);
+     calcPoints(users[i],SimpleOpenNI.SKEL_HEAD,currentPosition, sum);           //0
+     calcPoints(users[i],SimpleOpenNI.SKEL_NECK,currentPosition, sum);           //1
+     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition, sum);  //2
+     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition, sum); //3
+     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition, sum);     //4
+     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition, sum);    //5
+     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_HAND,currentPosition, sumLH);    //6
+     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition, sumRH);   //7
+     calcPoints(users[i],SimpleOpenNI.SKEL_TORSO,currentPosition, sumT);         //8
+     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_HIP,currentPosition, sum);       //9
+     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition, sum);      //10
+     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition, sum);      //11
+     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition, sum);     //12
+     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition, sumLF);    //13
+     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition, sumRF);   //14
+  
+     if(p==true){
+     computeAngles(pose);}
+     p=false;
+     pose=pose+1;
+     //createXML();
+  
+    // Writing the CSV back to the same file
+    saveTable(table,"data/csvdata.csv");
+  
+    // Writing the specific poses for the CSV back to the poses file
+    saveTable(tablePose,"data/csvPoseData.csv");
+    // And reloading it
+    //loadData();
+  
+     //Draw skeleton on top of player as they play
+    drawSkeleton(users[i]);
+    }
   }
-
+  //rgbImage.resize(213, 160);
+  //image(rgbImage, 320, 240);
   saveTable(tableAngles,"data/csvAngles.csv");
 } // void draw()
 
@@ -330,6 +344,7 @@ void AddToCSV(int _joint, float _x, float _y, float _z) {
   row.setFloat("x", _x);
   row.setFloat("y", _y);
   row.setFloat("z", _z);
+  row.setString("jointname", joint[_joint]);
 }
 
 /*--------------------------------------------------------------
@@ -460,7 +475,8 @@ void drawSkeleton (int userId) {
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_LEFT_HIP);
-	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_KNEE, SimpleOpenNI.SKEL_LEFT_FOOT);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_HIP, SimpleOpenNI.SKEL_LEFT_KNEE);
+        kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_KNEE, SimpleOpenNI.SKEL_LEFT_FOOT);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_RIGHT_HIP);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_RIGHT_KNEE);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);
