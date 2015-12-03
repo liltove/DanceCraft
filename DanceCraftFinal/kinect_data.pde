@@ -27,9 +27,10 @@ PImage backgroundImage;
 PImage rgbImage;
 
 //Joint array
-String[] joint = {"HEAD", "NECK", "LEFT_SHOULDER", "RIGHT_SHOULDER", "LEFT_ELBOW", "RIGHT_ELBOW", "LEFT_HAND", "RIGHT_HAND", "TORSO", "LEFT_HIP", "RIGHT_HIP", "LEFT_KNEE", "RIGHT_KNEE", "LEFT_FOOT", "RIGHT_FOOT"}; 
+String[] joint = {"HEAD", "NECK", "LEFT_SHOULDER", "RIGHT_SHOULDER", "LEFT_ELBOW", "RIGHT_ELBOW", "LEFT_HAND", "RIGHT_HAND", "TORSO", "LEFT_HIP", "RIGHT_HIP", "LEFT_KNEE", "RIGHT_KNEE", "LEFT_FOOT", "RIGHT_FOOT"};
 
-String dataLocation = "data/csvdata.csv";
+int fileWritten = 1;
+String dataLocation = new String();
 String poseDataLocation = "data/csvPoseData.csv";
 String anglesLocation = "data/csvAngles.csv";
 float threshold = 50;
@@ -46,6 +47,7 @@ int sumT = 0;
 int sumLF = 0;
 int sumRF = 0;
 
+
 float[][] poseJointArray;
 PVector[][] skel_data;
 
@@ -59,6 +61,7 @@ PVector[] j1;
 //Counter for the poses
 int pose=1;
 boolean p=false;
+
 
 /*---------------------------------------------------------------
 Starts new kinect object and enables skeleton tracking.
@@ -75,8 +78,8 @@ void kinectSetup()
 
  // enable color camera
   kinect.enableRGB(1280, 1024, 15);
-  
- //trim the camera for better Image 
+
+ //trim the camera for better Image
  kinect.alternativeViewPointDepthToImage();
  kinect.setDepthColorSyncEnabled(true);
 
@@ -153,15 +156,15 @@ void kinectDance(){
 
   // update any changed pixels
   //updatePixels();
-  
+
   //get the list of users
   int[] users = kinect.getUsers();
-  
+
   //iterate through each users
   for(int i = 0; i < users.length; i++)
   {
     //check if the user has skeleton
-   if(kinect.isTrackingSkeleton(users[i])){
+   if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
      //get vector of current position
      PVector currentPosition = new PVector();
      //kinect.getJointPositionSkeleton(1,SimpleOpenNI.SKEL_LEFT_HAND, currentPosition);
@@ -180,30 +183,26 @@ void kinectDance(){
      calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition, sum);     //12
      calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition, sumLF);    //13
      calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition, sumRF);   //14
-  
+
      if(p==true){
      computeAngles(pose);}
      p=false;
      pose=pose+1;
-     //createXML();
-  
-    // Writing the CSV back to the same file
-    saveTable(table, dataLocation);
-  
+
+
     // Writing the specific poses for the CSV back to the poses file
     saveTable(tablePose, poseDataLocation);
     // And reloading it
     //loadData();
-  
+
      //Draw skeleton on top of player as they play
     drawSkeleton(users[i]);
-    readCsv(users[i], dataLocation);
+    //readCsv(users[i], dataLocation);
     }
   }
-  //rgbImage.resize(213, 160);
-  //image(rgbImage, 320, 240);
-  saveTable(tableAngles, anglesLocation);
-  
+
+  //saveTable(tableAngles, anglesLocation);
+
 } // void draw()
 
 /*---------------------------------------------------------------
@@ -461,6 +460,21 @@ void AddAngle(int _pose,float _lh1, float _lh2, float _lh3, float _h1, float _rh
   rowA.setFloat("RL2", _rl2);
 }
 
+
+
+//Save the Skeleton Data to a specific location
+void saveSkeletonTable(File selection) {
+  dataLocation = selection.getAbsolutePath();
+  println ("DataLocation value is: " + dataLocation);
+  //println ("DataLocation Refernece is: " + dataLocationRef);
+  //println ("FileName value is: " + fileName);
+  saveTable(table, dataLocation + "/" + fileName, "csv");
+  cp5.remove("input");
+  typingFileName = false;
+  isPaused = false;
+}
+
+
 /*-------------------------------------------------
 Draw a rudimentary skeleton on top of the player
 -----------------------------------------------------*/
@@ -528,9 +542,9 @@ void drawJoint (int userId, int jointID) {
 void readCsv(int userID, String fileName)
 {
   //read the csv file
-  table = loadTable(fileName, "header"); 
+  table = loadTable(fileName, "header");
   int rows = 1; //number of rows
-  int i = 0; 
+  int i = 0;
   int index = 0; //the index of the row that will be read
   //iterate through the file to get the number of rows
   for (TableRow skim : table.rows()) {
