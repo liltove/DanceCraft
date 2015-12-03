@@ -29,6 +29,9 @@ PImage rgbImage;
 //Joint array
 String[] joint = {"HEAD", "NECK", "LEFT_SHOULDER", "RIGHT_SHOULDER", "LEFT_ELBOW", "RIGHT_ELBOW", "LEFT_HAND", "RIGHT_HAND", "TORSO", "LEFT_HIP", "RIGHT_HIP", "LEFT_KNEE", "RIGHT_KNEE", "LEFT_FOOT", "RIGHT_FOOT"}; 
 
+String dataLocation = "data/csvdata.csv";
+String poseDataLocation = "data/csvPoseData.csv";
+String anglesLocation = "data/csvAngles.csv";
 float threshold = 50;
 
 float offByDistance = 0.0;
@@ -44,6 +47,7 @@ int sumLF = 0;
 int sumRF = 0;
 
 float[][] poseJointArray;
+PVector[][] skel_data;
 
 //Table for Kinect Data to be stored in CSV
 Table table;
@@ -184,20 +188,22 @@ void kinectDance(){
      //createXML();
   
     // Writing the CSV back to the same file
-    saveTable(table,"data/csvdata.csv");
+    saveTable(table, dataLocation);
   
     // Writing the specific poses for the CSV back to the poses file
-    saveTable(tablePose,"data/csvPoseData.csv");
+    saveTable(tablePose, poseDataLocation);
     // And reloading it
     //loadData();
   
      //Draw skeleton on top of player as they play
     drawSkeleton(users[i]);
+    readCsv(users[i], dataLocation);
     }
   }
   //rgbImage.resize(213, 160);
   //image(rgbImage, 320, 240);
-  saveTable(tableAngles,"data/csvAngles.csv");
+  saveTable(tableAngles, anglesLocation);
+  
 } // void draw()
 
 /*---------------------------------------------------------------
@@ -517,4 +523,69 @@ void drawJoint (int userId, int jointID) {
   PVector convertedJoint = new PVector();
   kinect.convertRealWorldToProjective (joint, convertedJoint);
   ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
+}
+
+void readCsv(int userID, String fileName)
+{
+  //read the csv file
+  table = loadTable(fileName, "header"); 
+  int rows = 1; //number of rows
+  int i = 0; 
+  int index = 0; //the index of the row that will be read
+  //iterate through the file to get the number of rows
+  for (TableRow skim : table.rows()) {
+    rows++;
+  }
+  //get the number of unread skeletons in the file
+  int num = rows / 14;
+  //retrieves the skeleton's data
+  while( num > 0)
+  {
+   // ArrayList<int> skeleton_data = new ArrayList<int>();
+   //retrieves skeleton's coordinate values for each position
+   //interate through 14 position of the skeleton
+    for (int j = 0; j < 14; j++)
+    {
+      //get the data of the row at index
+      TableRow row = table.getRow(index);
+      skel_data[i][j].x = row.getInt("x");
+      skel_data[i][j].y = row.getInt("y");
+      skel_data[i][j].z = row.getInt("z");
+      index++; //increasing index
+    }
+    i++; //move to the next skeleton
+    num--; //minus read skeletons
+  }
+  //play back the skeletons
+  playBack(userID, skel_data);
+}
+
+//playBack the skeleton
+void playBack(int userID, PVector[][] skel_data)
+{
+  //iterate through the skeletons
+  for(int i = 0; i < skel_data.length; i++)
+  {
+    //iterate through the positions of a skeleton
+     for(int j = 0; j < skel_data[i].length - 1; i++)
+    {
+      //get the next position
+      int next_pos = j + 1;
+      //draw back the current position and next position.
+      drawBack(userID, skel_data[i][j], skel_data[i][next_pos]);
+    }
+  }
+}
+void drawBack(int userID, PVector skeA, PVector skeB)
+{
+   //Set color of skeleton "bones" to black
+  stroke(0);
+  //Set weight of line
+  strokeWeight (5);
+  //draw a point for the first position
+  ellipse(skeA.x, skeA.y, 5, 5);
+  //draw a point for the second position
+  ellipse(skeB.x, skeB.y, 5, 5);
+  //draw a joint between two position
+  line(skeA.x, skeA.y, skeB.x, skeB.y);
 }
