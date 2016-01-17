@@ -121,6 +121,7 @@ void kinectSetup()
   poseJointArray= new float[3][15];
 
   j1=new PVector[15];
+
 } // void setup()
 
 /*---------------------------------------------------------------
@@ -129,79 +130,85 @@ head if confidence of tracking is above threshold
 ----------------------------------------------------------------*/
 void kinectDance(){
 
-   // update the camera
-   kinect.update();
+  // update the camera
+  kinect.update();
 
+   // get the Kinect color image
+  rgbImage = kinect.rgbImage();
 
-    // get the Kinect color image
-    rgbImage = kinect.rgbImage();
-
-  // prepare the color pixels
+   // prepare the color pixels
   loadPixels();
   // get pixels for the user tracked
   userMapping = kinect.userMap();
 
   // for the length of the pixels tracked, color them
   // in with the rgb camera
-  //for (int i =0; i < userMapping.length; i++) {
+  for (int i =0; i < userMapping.length; i++) {
     // if the pixel is part of the user
-    //if (userMapping[i] != 0) {
+    if (userMapping[i] != 0) {
 
       // set the sketch pixel to the rgb camera pixel
-     // pixels[i] = rgbImage.pixels[i];
-    //} // if (userMap[i] != 0)
+      pixels[i] = rgbImage.pixels[i];
+    } // if (userMap[i] != 0)
 
-  //} // (int i =0; i < userMap.length; i++)
+   } // (int i =0; i < userMap.length; i++)
 
 
   // update any changed pixels
-  //updatePixels();
+  updatePixels();
 
   //get the list of users
   int[] users = kinect.getUsers();
 
-  //iterate through each users
-  for(int i = 0; i < users.length; i++)
-  {
-    //check if the user has skeleton
-   if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
-     //get vector of current position
-     PVector currentPosition = new PVector();
-     //kinect.getJointPositionSkeleton(1,SimpleOpenNI.SKEL_LEFT_HAND, currentPosition);
-     calcPoints(users[i],SimpleOpenNI.SKEL_HEAD,currentPosition, sum);           //0
-     calcPoints(users[i],SimpleOpenNI.SKEL_NECK,currentPosition, sum);           //1
-     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition, sum);  //2
-     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition, sum); //3
-     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition, sum);     //4
-     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition, sum);    //5
-     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_HAND,currentPosition, sumLH);    //6
-     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition, sumRH);   //7
-     calcPoints(users[i],SimpleOpenNI.SKEL_TORSO,currentPosition, sumT);         //8
-     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_HIP,currentPosition, sum);       //9
-     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition, sum);      //10
-     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition, sum);      //11
-     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition, sum);     //12
-     calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition, sumLF);    //13
-     calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition, sumRF);   //14
+  if (recordMode == true) {
+    //Do stuff we're currently doing like drawing the skeleton and saving it.
 
-     if(p==true){
-     computeAngles(pose);}
-     p=false;
-     pose=pose+1;
+   //iterate through each users
+   for(int i = 0; i < users.length; i++)
+   {
+     //check if the user has skeleton
+    if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
+      //get vector of current position
+      PVector currentPosition = new PVector();
+      //kinect.getJointPositionSkeleton(1,SimpleOpenNI.SKEL_LEFT_HAND, currentPosition);
+      calcPoints(users[i],SimpleOpenNI.SKEL_HEAD,currentPosition, sum);           //0
+      calcPoints(users[i],SimpleOpenNI.SKEL_NECK,currentPosition, sum);           //1
+      calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition, sum);  //2
+      calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition, sum); //3
+      calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition, sum);     //4
+      calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition, sum);    //5
+      calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_HAND,currentPosition, sumLH);    //6
+      calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition, sumRH);   //7
+      calcPoints(users[i],SimpleOpenNI.SKEL_TORSO,currentPosition, sumT);         //8
+      calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_HIP,currentPosition, sum);       //9
+      calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition, sum);      //10
+      calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition, sum);      //11
+      calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition, sum);     //12
+      calcPoints(users[i],SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition, sumLF);    //13
+      calcPoints(users[i],SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition, sumRF);   //14
+
+      if(p==true){
+      computeAngles(pose);}
+      p=false;
+      pose=pose+1;
 
 
-    // Writing the specific poses for the CSV back to the poses file
-    saveTable(tablePose, poseDataLocation);
-    // And reloading it
-    //loadData();
+     // Writing the specific poses for the CSV back to the poses file
+     saveTable(tablePose, poseDataLocation);
+     // And reloading it
+     //loadData();
 
-     //Draw skeleton on top of player as they play
-    drawSkeleton(users[i]);
-    //readCsv(users[i], dataLocation);
-    }
-  }
+      //Draw skeleton on top of player as they play
+     drawSkeleton(users[i]);
+     //readCsv(users[i], dataLocation);
+     }
+   }
 
-  //saveTable(tableAngles, anglesLocation);
+   //saveTable(tableAngles, anglesLocation);
+
+ } else {
+   text ("Press L to load a dance", width/2, height/2);
+ }
 
 } // void draw()
 
@@ -464,12 +471,9 @@ void AddAngle(int _pose,float _lh1, float _lh2, float _lh3, float _h1, float _rh
 
 //Save the Skeleton Data to a specific location
 void saveSkeletonTable(File selection) {
-  dataLocation = selection.getAbsolutePath();
-  println ("DataLocation value is: " + dataLocation);
-  //println ("DataLocation Refernece is: " + dataLocationRef);
-  //println ("FileName value is: " + fileName);
-  saveTable(table, dataLocation + "/" + fileName, "csv");
-  cp5.remove("input");
+  dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
+  saveTable(table, dataLocation + "/" + fileName, "csv"); //Write table to location
+  cp5.remove("input"); //ControlP5 controller removes text input box from dance screen
   typingFileName = false;
   isPaused = false;
 }
@@ -496,7 +500,7 @@ void drawSkeleton (int userId) {
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_LEFT_HIP);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_HIP, SimpleOpenNI.SKEL_LEFT_KNEE);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_KNEE, SimpleOpenNI.SKEL_LEFT_FOOT);
+  kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_KNEE, SimpleOpenNI.SKEL_LEFT_FOOT);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_RIGHT_HIP);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_RIGHT_KNEE);
 	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);
@@ -539,59 +543,82 @@ void drawJoint (int userId, int jointID) {
   ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
 }
 
-void readCsv(int userID, String fileName)
+void readCsv(File selection)
 {
-  //read the csv file
-  table = loadTable(fileName, "header");
-  int rows = 1; //number of rows
-  int i = 0;
-  int index = 0; //the index of the row that will be read
-  //iterate through the file to get the number of rows
-  for (TableRow skim : table.rows()) {
-    rows++;
-  }
-  //get the number of unread skeletons in the file
-  int num = rows / 14;
-  //retrieves the skeleton's data
-  while( num > 0)
-  {
-   // ArrayList<int> skeleton_data = new ArrayList<int>();
-   //retrieves skeleton's coordinate values for each position
-   //interate through 14 position of the skeleton
-    for (int j = 0; j < 14; j++)
-    {
-      //get the data of the row at index
-      TableRow row = table.getRow(index);
-      skel_data[i][j].x = row.getInt("x");
-      skel_data[i][j].y = row.getInt("y");
-      skel_data[i][j].z = row.getInt("z");
-      index++; //increasing index
+  //read the csv file if something has been selected
+  if (selection != null) {
+    println(selection.toString());
+    table = loadTable(selection.toString(), "header");
+    //println(table);
+    skel_data = new PVector [table.getRowCount()/15][15]; //Initalize skel_data w/ row size = number of "skeletons" and column size = number of joints.
+    int i = 0; //count the number of skeletons that are read
+    int index; //count the join of the i skeleton that are read
+    //iterate through each row of the table
+    for (TableRow row : table.rows()) {
+      //println (row);
+      //get the joint position
+      index = row.getInt("joint");
+      //println ("Index is --->" + index);
+      //Create a new PVector to hold the stuff we're about to grab from the table
+      PVector joint = new PVector();
+      //Insert that PVector into the skel_data array
+      skel_data[i][index] = joint;
+      //println ("Inital Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
+      //set coordinates of index joint for i skeleton
+      skel_data[i][index].x = row.getFloat("x");
+      skel_data[i][index].y = row.getFloat("y");
+      skel_data[i][index].z = row.getFloat("z");
+      //println ("FINAL Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
+      //println ("Table row count is ---->" + table.getRowCount());
+      //once the iteration has read all 14 joint, it starts recording a new skeleton
+      if (index == 14)
+      {
+        i++;
+      }
     }
-    i++; //move to the next skeleton
-    num--; //minus read skeletons
+    println ("For loop finished!");
+
+    //printArray(skel_data);
+    // //play back the skeletons
+    playBack (skel_data);
+
+  } else {
+    println ("No file selected or incorrect file type.  Must be CSV.");
   }
-  //play back the skeletons
-  playBack(userID, skel_data);
 }
 
 //playBack the skeleton
-void playBack(int userID, PVector[][] skel_data)
+void playBack(PVector[][] skel_data)
 {
   //iterate through the skeletons
   for(int i = 0; i < skel_data.length; i++)
   {
-    //iterate through the positions of a skeleton
-     for(int j = 0; j < skel_data[i].length - 1; i++)
-    {
-      //get the next position
-      int next_pos = j + 1;
       //draw back the current position and next position.
-      drawBack(userID, skel_data[i][j], skel_data[i][next_pos]);
-    }
+      println("It " + i);
+      pushMatrix();
+      drawBack(skel_data[i][0], skel_data[i][1]); //Head and neck
+      drawBack(skel_data[i][1], skel_data[i][2]); //Neck and left shoulder
+      drawBack(skel_data[i][2], skel_data[i][4]); //Left shoulder and Left elbow
+      drawBack(skel_data[i][4], skel_data[i][6]); //Left elbow and left hand
+      drawBack(skel_data[i][1], skel_data[i][3]); //Neck and right shoulder
+      drawBack(skel_data[i][3], skel_data[i][5]); //Right shoulder and right elbow
+      drawBack(skel_data[i][5], skel_data[i][7]); //Right elbow and right hand
+      drawBack(skel_data[i][2], skel_data[i][8]); //Left shoulder and TORSO
+      drawBack(skel_data[i][3], skel_data[i][8]); //Right shoulder and TORSO
+      drawBack(skel_data[i][8], skel_data[i][9]); //Torso and left Hip
+      drawBack(skel_data[i][9], skel_data[i][11]); //Left hip and left Knee
+      drawBack(skel_data[i][11], skel_data[i][13]); //left knee and left foot
+      drawBack(skel_data[i][8], skel_data[i][10]); ///Torso and right hip
+      drawBack(skel_data[i][10], skel_data[i][12]); //Right hip and right knee
+      drawBack(skel_data[i][12], skel_data[i][14]); //Right knee and right foot
+      drawBack(skel_data[i][10], skel_data[i][9]); //Right hip and left hip
+      popMatrix();
+      delay(100);
   }
 }
-void drawBack(int userID, PVector skeA, PVector skeB)
+void drawBack(PVector skeA, PVector skeB)
 {
+
    //Set color of skeleton "bones" to black
   stroke(0);
   //Set weight of line
@@ -602,4 +629,7 @@ void drawBack(int userID, PVector skeA, PVector skeB)
   ellipse(skeB.x, skeB.y, 5, 5);
   //draw a joint between two position
   line(skeA.x, skeA.y, skeB.x, skeB.y);
+
+  //noStroke();
+
 }

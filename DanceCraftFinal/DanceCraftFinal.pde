@@ -47,6 +47,7 @@ String fileName = new String();
 String [] encouragements = {"Reach up and stretch towards your toes", "Shake out your arms and legs", "Reach behind your back and stretch", "Gently move your head to each side", "Move your shoulders up and down", "You finished the warm up!", "So cool", "Wow"};
 String [] responses = {"Let's move on to the next exercise", "Try again", "Great Job!"};
 Movie[] movies = new Movie[7];
+Boolean [] keysPressed = new Boolean[20];
 //AudioPlayer[] feedback = new AudioPlayer[8];
 
 
@@ -57,6 +58,9 @@ Movie[] movies = new Movie[7];
 Boolean typingUsername, music, figure, animationPlaying, animation2playing, showPoints, showResponses, showEncouragements;
 Boolean isPaused = false;
 Boolean typingFileName = false;
+Boolean recordMode = false;
+Boolean allowRecordModeActivationAgain = true;
+
 
 int startTime;
 int diamonds;
@@ -140,6 +144,11 @@ void setup() {
   nextExercise = minim.loadFile("music/nextExercise.wav");
   greatJob = minim.loadFile("music/greatJob.wav");
   background = 0;
+
+  //Fill the Boolean array keysPressed with falses
+  for (int i = 0; i < keysPressed.length; i++) {
+    keysPressed[i] = false;
+  }
 
 
   //randomTrack();
@@ -371,11 +380,12 @@ void drawGraph() {
 void drawLoginScreen() {
    background(84,84,84);
    text("Enter Your Name",200,200);
-    image(welcomelogin,0,0,width,height);
-    fill(0);
-    textSize(30);
-    text(username+(frameCount/10 % 2 == 0 ? "_" : ""), 247,264);
-    typingUsername = true;
+   image(welcomelogin,0,0,width,height);
+   fill(0);
+   textSize(30);
+   text(username+(frameCount/10 % 2 == 0 ? "_" : ""), 247,264);
+   typingUsername = true;
+   toggleRecordMode();
 }
 
 void drawOptionScreen() {
@@ -452,6 +462,24 @@ void drawBackButton() {
 void typeUsername() {
   typingUsername = true;
   username = "";
+}
+
+void toggleRecordMode () {
+      //Switch to recording mode if you're pressing SHIFT and ctrl
+      // keysPressed is an array containing a boolean at the keyCode for SHIFT (16) and CTRL (17)
+      if (keysPressed[16] && keysPressed[17]  && recordMode == false  && allowRecordModeActivationAgain == true) {
+        recordMode = true;
+        allowRecordModeActivationAgain = false;
+        println("Record Mode Activated");
+        //Draw red circle indicatiing that we are recording
+        fill (189, 41, 2);
+        ellipse (width-20, 20, 10, 10);
+      }
+      if (keysPressed[16] && keysPressed[17] && recordMode == true && allowRecordModeActivationAgain == true ) {
+          recordMode = false;
+          allowRecordModeActivationAgain = false;
+          println("Record Mode Deactivated");
+      }
 }
 
 void mousePressed() {
@@ -543,6 +571,9 @@ void mousePressed() {
 }
 
 void keyPressed() {
+  //println("Key pressed is --->" + key);
+  //println ("Key code is ---->" + keyCode);
+  //Key code for shift key is 16 and ctrl is 17
   if (typingUsername == true) {
     username = username + str(key);
     if(key == BACKSPACE){
@@ -552,93 +583,101 @@ void keyPressed() {
       username = username.substring(0,max(0,username.length()-1));
       phase = "dance";
     }
+    //If you're pressing one of the special keys, then use the code generated to set a value in the keysPressed array to TRUE
+    //We also make sure not to do this for key presses whose keyCode value is greater than the array.
+    if (key == CODED && keyCode <= keysPressed.length-1 ) {
+      keysPressed[keyCode] = true;
+      println ("Value in array for key pressed: --->" + keysPressed[keyCode]);
+    }
   }
   if (typingUsername == false){
-  if (key == TAB){
-    movies[count].stop();
-    //movies[0].loop();
-    //phase = "dance";
+    //Check to see the phase of the game
+    if (phase == "dance") {
+      if (recordMode == false) { //If we're not recording, allow user to load a dance when P pressed
+        if (key == 'p' || key =='P') {
+          selectFolder("Select the Dance you wish to load", "readCsv");
+        }
+      }
+    }
+    if (key == TAB){
+      movies[count].stop();
+      //movies[0].loop();
+      //phase = "dance";
 
-  }
+    }
 
-  if (key == 'n'){
-    count +=1;
-     if (count >4){
-       background(255);
-       showEncouragements = false;
-       showPoints = false;
-       feedback.play();
-       image(congratulations, 0, 0, 640, 460);
+    if (key == 'n'){
+      count +=1;
+      if (count >4){
+        background(255);
+        showEncouragements = false;
+        showPoints = false;
+        feedback.play();
+        image(congratulations, 0, 0, 640, 460);
 
-    //feedback[count].play();
-  } else {
-    showEncouragements = true;
-    showResponses = false;
-    movies[count].loop();
-    text(encouragements[count]+"!", width*.6,height*.1);
+        //feedback[count].play();
+      } else {
+        showEncouragements = true;
+        showResponses = false;
+        movies[count].loop();
+        text(encouragements[count]+"!", width*.6,height*.1);
 
-}
-  }
+      }
+    }
 
-   if (key == 'm'){
-    count -=1;
-    showResponses = false;
-    showEncouragements = true;
-
-    movies[count].loop();
-    text(encouragements[count]+"!", width*.6,height*.1);
-   }
+    if (key == 'm'){
+      count -=1;
+      showResponses = false;
+      showEncouragements = true;
+      movies[count].loop();
+      text(encouragements[count]+"!", width*.6,height*.1);
+    }
 
     if (key == 'r'){
-    count = count;
-    showResponses = false;
-    showEncouragements = true;
+      count = count;
+      showResponses = false;
+      showEncouragements = true;
+      movies[count].loop();
+      text(encouragements[count]+"!", width*.6,height*.1);
+    }
 
-    movies[count].loop();
-    text(encouragements[count]+"!", width*.6,height*.1);
-   }
+    if (key == 'p'){
+      if (showPoints = true){
+        showPoints = false;
+      }
+    }
 
-  if (key == 'p'){
-    if (showPoints = true){
-    showPoints = false;
-  }
-  }
-  if (key == 's'){
-    showPoints = true;
+    if (key == 's'){
+      showPoints = true;
+      feedback.play();
+    }
 
-    feedback.play();
-  }
+    if (key == 'z'){
+      // lets move on
+      showEncouragements = false;
+      showResponses = true;
+      nextExercise.play();
+      text(responses[0]+"!", width*.6,height*.1);
+    }
+    if (key == 'x'){
+      //try again
+      response = 1;
+      showEncouragements = false;
+      showResponses = true;
+      tryAgain.play();
+      text(responses[1]+"!", width*.6,height*.1);
+    }
+    if (key == 'c'){
+      //great job
+      response = 2;
+      showEncouragements = false;
+      showResponses = true;
+      greatJob.play();
+      text(responses[2]+"!", width*.6,height*.1);
+    }
 
-  if (key == 'z'){
-    // lets move on
-    showEncouragements = false;
-    showResponses = true;
-    nextExercise.play();
-    text(responses[0]+"!", width*.6,height*.1);
-  }
-   if (key == 'x'){
-     //try again
-     response = 1;
-     showEncouragements = false;
-     showResponses = true;
-     tryAgain.play();
-    text(responses[1]+"!", width*.6,height*.1);
-  }
-   if (key == 'c'){
-     //great job
-     response = 2;
-     showEncouragements = false;
-     showResponses = true;
-     greatJob.play();
-    text(responses[2]+"!", width*.6,height*.1);
-  }
-
-  /*Listen for user pressing the "L" key
-  Prompts user to pick location.  Writes file to selected location with number (e.g. "csvSkeletonData1")
-  Increments the number on the filename each time saved (e.g. "csvS)
-  */
-    if(key=='l'|| key=='L')
-    {
+    // Listen for user pressing the "L" key.  Sets typingFileName to TRUE.  Prompts user to pick location.
+    if(key=='l'|| key=='L') {
       isPaused = true;
       typingFileName = true;
       text("Name Your Dance",200,200);
@@ -699,6 +738,16 @@ void keyReleased(){
    if (key == TAB){
      movies[count].loop();
    }
+   //When you release a special key, make sure to set it's value back to false in the keysPressed array
+   if (key == CODED && keyCode <= keysPressed.length-1 ) {
+     keysPressed[keyCode] = false;
+     println ("Value in array for key pressed: --->" + keysPressed[keyCode]);
+   }
+   //Allow Record Mode to be active once at least one either SHIFT or CTRL is let up
+   if (!keysPressed[16] || !keysPressed[17]) {
+     allowRecordModeActivationAgain = true;
+   }
+
     //count = count + 1;
 
 //    image(movies[count], 0, 0);
