@@ -55,6 +55,7 @@ PVector[][] skel_data;
 Table table;
 Table tablePose;
 Table tableAngles;
+Table loadedSkelTable = new Table();
 
 PVector[] j1;
 
@@ -359,6 +360,8 @@ void AddToCSV(int _joint, float _x, float _y, float _z) {
   row.setString("jointname", joint[_joint]);
 }
 
+
+
 /*--------------------------------------------------------------
 Storing each pose to a table
 --------------------------------------------------------------*/
@@ -548,13 +551,13 @@ void readCsv(File selection)
   //read the csv file if something has been selected
   if (selection != null) {
     println(selection.toString());
-    table = loadTable(selection.toString(), "header");
+    loadedSkelTable = loadTable(selection.toString(), "header");
     //println(table);
-    skel_data = new PVector [table.getRowCount()/15][15]; //Initalize skel_data w/ row size = number of "skeletons" and column size = number of joints.
+    skel_data = new PVector [loadedSkelTable.getRowCount()/15][15]; //Initalize skel_data w/ row size = number of "skeletons" and column size = number of joints.
     int i = 0; //count the number of skeletons that are read
     int index; //count the join of the i skeleton that are read
     //iterate through each row of the table
-    for (TableRow row : table.rows()) {
+    for (TableRow row : loadedSkelTable.rows()) {
       //println (row);
       //get the joint position
       index = row.getInt("joint");
@@ -568,7 +571,7 @@ void readCsv(File selection)
       skel_data[i][index].x = row.getFloat("x");
       skel_data[i][index].y = row.getFloat("y");
       skel_data[i][index].z = row.getFloat("z");
-      //println ("FINAL Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
+      println ("FINAL Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
       //println ("Table row count is ---->" + table.getRowCount());
       //once the iteration has read all 14 joint, it starts recording a new skeleton
       if (index == 14)
@@ -577,6 +580,8 @@ void readCsv(File selection)
       }
     }
     println ("For loop finished!");
+    println (table);
+    //Print out table
 
     //printArray(skel_data);
     // //play back the skeletons
@@ -591,29 +596,27 @@ void readCsv(File selection)
 void playBack(PVector[][] skel_data)
 {
   //iterate through the skeletons
-  for(int i = 0; i < skel_data.length; i++)
+  for(int i = 0; i < skel_data.length/15 ; i++)
   {
+
       //draw back the current position and next position.
-      println("It " + i);
-      pushMatrix();
-      drawBack(skel_data[i][0], skel_data[i][1]); //Head and neck
-      drawBack(skel_data[i][1], skel_data[i][2]); //Neck and left shoulder
-      drawBack(skel_data[i][2], skel_data[i][4]); //Left shoulder and Left elbow
-      drawBack(skel_data[i][4], skel_data[i][6]); //Left elbow and left hand
-      drawBack(skel_data[i][1], skel_data[i][3]); //Neck and right shoulder
-      drawBack(skel_data[i][3], skel_data[i][5]); //Right shoulder and right elbow
-      drawBack(skel_data[i][5], skel_data[i][7]); //Right elbow and right hand
-      drawBack(skel_data[i][2], skel_data[i][8]); //Left shoulder and TORSO
-      drawBack(skel_data[i][3], skel_data[i][8]); //Right shoulder and TORSO
-      drawBack(skel_data[i][8], skel_data[i][9]); //Torso and left Hip
-      drawBack(skel_data[i][9], skel_data[i][11]); //Left hip and left Knee
-      drawBack(skel_data[i][11], skel_data[i][13]); //left knee and left foot
-      drawBack(skel_data[i][8], skel_data[i][10]); ///Torso and right hip
-      drawBack(skel_data[i][10], skel_data[i][12]); //Right hip and right knee
-      drawBack(skel_data[i][12], skel_data[i][14]); //Right knee and right foot
-      drawBack(skel_data[i][10], skel_data[i][9]); //Right hip and left hip
-      popMatrix();
-      delay(100);
+        drawBack(skel_data[i][0], skel_data[i][1]); //Head and neck
+        drawBack(skel_data[i][1], skel_data[i][2]); //Neck and left shoulder
+        drawBack(skel_data[i][2], skel_data[i][4]); //Left shoulder and Left elbow
+        drawBack(skel_data[i][4], skel_data[i][6]); //Left elbow and left hand
+        drawBack(skel_data[i][1], skel_data[i][3]); //Neck and right shoulder
+        drawBack(skel_data[i][3], skel_data[i][5]); //Right shoulder and right elbow
+        drawBack(skel_data[i][5], skel_data[i][7]); //Right elbow and right hand
+        drawBack(skel_data[i][2], skel_data[i][8]); //Left shoulder and TORSO
+        drawBack(skel_data[i][3], skel_data[i][8]); //Right shoulder and TORSO
+        drawBack(skel_data[i][8], skel_data[i][9]); //Torso and left Hip
+        drawBack(skel_data[i][9], skel_data[i][11]); //Left hip and left Knee
+        drawBack(skel_data[i][11], skel_data[i][13]); //left knee and left foot
+        drawBack(skel_data[i][8], skel_data[i][10]); ///Torso and right hip
+        drawBack(skel_data[i][10], skel_data[i][12]); //Right hip and right knee
+        drawBack(skel_data[i][12], skel_data[i][14]); //Right knee and right foot
+        drawBack(skel_data[i][10], skel_data[i][9]); //Right hip and left hip
+        delay(1000);
   }
 }
 void drawBack(PVector skeA, PVector skeB)
