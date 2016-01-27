@@ -59,6 +59,7 @@ Boolean typingUsername, music, figure, animationPlaying, animation2playing, show
 Boolean isPaused = false;
 Boolean typingFileName = false;
 Boolean recordMode = false;
+Boolean dancePlayback = false;
 Boolean allowRecordModeActivationAgain = true;
 
 
@@ -69,6 +70,7 @@ int background;
 int recordsIndex;
 int count;
 int response;
+int numIterationsCompleted = 0; //Used to drawback skeletons
 
 
 int [] pointsArray = {};
@@ -165,7 +167,14 @@ void draw() {
     //drawOptionScreen();
   //}
   else if (phase=="dance") {
-    drawDanceScreen();
+    //Branch to playback recorded dance
+    if (dancePlayback == true) {
+      background(255);  //Clear background
+      playBack (numIterationsCompleted); // //play back the skeletons
+      numIterationsCompleted++;
+    } else {
+      drawDanceScreen();
+    }
   }
   else if (phase=="quit") {
     drawQuitScreen();

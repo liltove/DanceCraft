@@ -208,7 +208,11 @@ void kinectDance(){
    //saveTable(tableAngles, anglesLocation);
 
  } else {
-   text ("Press L to load a dance", width/2, height/2);
+   background(255);
+   fill(0);
+   textSize(32);
+   textAlign(CENTER);
+   text ("Press P to load a dance", width/2, height/2);
  }
 
 } // void draw()
@@ -544,95 +548,4 @@ void drawJoint (int userId, int jointID) {
   PVector convertedJoint = new PVector();
   kinect.convertRealWorldToProjective (joint, convertedJoint);
   ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
-}
-
-void readCsv(File selection)
-{
-  //read the csv file if something has been selected
-  if (selection != null) {
-    println(selection.toString());
-    loadedSkelTable = loadTable(selection.toString(), "header");
-    //println(table);
-    skel_data = new PVector [loadedSkelTable.getRowCount()/15][15]; //Initalize skel_data w/ row size = number of "skeletons" and column size = number of joints.
-    int i = 0; //count the number of skeletons that are read
-    int index; //count the join of the i skeleton that are read
-    //iterate through each row of the table
-    for (TableRow row : loadedSkelTable.rows()) {
-      //println (row);
-      //get the joint position
-      index = row.getInt("joint");
-      //println ("Index is --->" + index);
-      //Create a new PVector to hold the stuff we're about to grab from the table
-      PVector joint = new PVector();
-      //Insert that PVector into the skel_data array
-      skel_data[i][index] = joint;
-      //println ("Inital Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
-      //set coordinates of index joint for i skeleton
-      skel_data[i][index].x = row.getFloat("x");
-      skel_data[i][index].y = row.getFloat("y");
-      skel_data[i][index].z = row.getFloat("z");
-      println ("FINAL Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
-      //println ("Table row count is ---->" + table.getRowCount());
-      //once the iteration has read all 14 joint, it starts recording a new skeleton
-      if (index == 14)
-      {
-        i++;
-      }
-    }
-    println ("For loop finished!");
-    println (table);
-    //Print out table
-
-    //printArray(skel_data);
-    // //play back the skeletons
-    playBack (skel_data);
-
-  } else {
-    println ("No file selected or incorrect file type.  Must be CSV.");
-  }
-}
-
-//playBack the skeleton
-void playBack(PVector[][] skel_data)
-{
-  //iterate through the skeletons
-  for(int i = 0; i < skel_data.length/15 ; i++)
-  {
-
-      //draw back the current position and next position.
-        drawBack(skel_data[i][0], skel_data[i][1]); //Head and neck
-        drawBack(skel_data[i][1], skel_data[i][2]); //Neck and left shoulder
-        drawBack(skel_data[i][2], skel_data[i][4]); //Left shoulder and Left elbow
-        drawBack(skel_data[i][4], skel_data[i][6]); //Left elbow and left hand
-        drawBack(skel_data[i][1], skel_data[i][3]); //Neck and right shoulder
-        drawBack(skel_data[i][3], skel_data[i][5]); //Right shoulder and right elbow
-        drawBack(skel_data[i][5], skel_data[i][7]); //Right elbow and right hand
-        drawBack(skel_data[i][2], skel_data[i][8]); //Left shoulder and TORSO
-        drawBack(skel_data[i][3], skel_data[i][8]); //Right shoulder and TORSO
-        drawBack(skel_data[i][8], skel_data[i][9]); //Torso and left Hip
-        drawBack(skel_data[i][9], skel_data[i][11]); //Left hip and left Knee
-        drawBack(skel_data[i][11], skel_data[i][13]); //left knee and left foot
-        drawBack(skel_data[i][8], skel_data[i][10]); ///Torso and right hip
-        drawBack(skel_data[i][10], skel_data[i][12]); //Right hip and right knee
-        drawBack(skel_data[i][12], skel_data[i][14]); //Right knee and right foot
-        drawBack(skel_data[i][10], skel_data[i][9]); //Right hip and left hip
-        delay(1000);
-  }
-}
-void drawBack(PVector skeA, PVector skeB)
-{
-
-   //Set color of skeleton "bones" to black
-  stroke(0);
-  //Set weight of line
-  strokeWeight (5);
-  //draw a point for the first position
-  ellipse(skeA.x, skeA.y, 5, 5);
-  //draw a point for the second position
-  ellipse(skeB.x, skeB.y, 5, 5);
-  //draw a joint between two position
-  line(skeA.x, skeA.y, skeB.x, skeB.y);
-
-  //noStroke();
-
 }
