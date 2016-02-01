@@ -16,7 +16,7 @@ Movie animation3;
 
 //AudioPlayer player;
 //AudioPlayer soundtrack;
-AudioPlayer feedback; 
+AudioPlayer feedback;
 AudioPlayer exercise1;
 AudioPlayer exercise2;
 AudioPlayer exercise3;
@@ -32,7 +32,7 @@ Minim minim;//audio context
 int track = 1; //initial track number
 String trackNum; //holds track number for calling from file
 
-PImage welcomelogin, welcomebg, dancecraft, onedancer, multidancers, 
+PImage welcomelogin, welcomebg, dancecraft, onedancer, multidancers,
 myrecords, quitgame, question, dancebg, switchOn, diamond, play, arrow,
 picture1, picture2, picture3, endPicture, whiteBackground, congratulations;
 
@@ -42,10 +42,12 @@ String phase, mode;
 String [] files;
 String username, time;
 String desktopPath = "\\records/";
+String fileName = new String();
 
 String [] encouragements = {"Reach up and stretch towards your toes", "Shake out your arms and legs", "Reach behind your back and stretch", "Gently move your head to each side", "Move your shoulders up and down", "You finished the warm up!", "So cool", "Wow"};
-String [] responses = {"Let's move on to the next exercise", "Try again", "Great Job!"}; 
-Movie[] movies = new Movie[7]; 
+String [] responses = {"Let's move on to the next exercise", "Try again", "Great Job!"};
+Movie[] movies = new Movie[7];
+Boolean [] keysPressed = new Boolean[20];
 //AudioPlayer[] feedback = new AudioPlayer[8];
 
 
@@ -54,6 +56,12 @@ Movie[] movies = new Movie[7];
 
 
 Boolean typingUsername, music, figure, animationPlaying, animation2playing, showPoints, showResponses, showEncouragements;
+Boolean isPaused = false;
+Boolean typingFileName = false;
+Boolean recordMode = false;
+Boolean dancePlayback = false;
+Boolean allowRecordModeActivationAgain = true;
+
 
 int startTime;
 int diamonds;
@@ -61,7 +69,8 @@ int encIndex;
 int background;
 int recordsIndex;
 int count;
-int response; 
+int response;
+int numIterationsCompleted = 0; //Used to drawback skeletons
 
 
 int [] pointsArray = {};
@@ -87,45 +96,46 @@ void setup() {
   play = loadImage("elements/play.png");
   arrow = loadImage("elements/arrow.png");
   congratulations = loadImage("elements/congratulations.png");
-  
+
   //whiteBackground = loadImage("whiteBackground.png");
   encIndex = 0;
-  count = 0; 
+  count = 0;
   response = 0;
   username = "";
   typingUsername = false;
   animationPlaying = false;
-  animation2playing = false; 
-  showPoints = true; 
-  showResponses = false; 
+  animation2playing = false;
+  showPoints = true;
+  showResponses = false;
   showEncouragements = true;
   music = true;
   figure = true;
   points[0] = 0;
   recordsIndex = 1;
-  
+  cp5 = new ControlP5(this);
+
   kinectSetup();
   minim = new Minim(this);
   //musicSetup();
-  
-  //feedback[0] = minim.loadFile("music/exercise1.mp4"); 
-  //feedback[1] = minim.loadFile("exercise2.mp4"); 
-  //feedback[2] = minim.loadFile("exercise3.mp4"); 
-  //feedback[3] = minim.loadFile("exercise4.mp4"); 
-  //feedback[4] = minim.loadFile("exercise5.mp4"); 
-  //feedback[5] = minim.loadFile("congratulationscompletedWarmup.mp4"); 
-  //feedback[6] = minim.loadFile("greatJob.mp4"); 
-  //feedback[7] = minim.loadFile("nextExercise.mp4"); 
-  //feedback[8] = minim.loadFile("tryAgain.mp4"); 
-  
 
-  
+  //feedback[0] = minim.loadFile("music/exercise1.mp4");
+  //feedback[1] = minim.loadFile("exercise2.mp4");
+  //feedback[2] = minim.loadFile("exercise3.mp4");
+  //feedback[3] = minim.loadFile("exercise4.mp4");
+  //feedback[4] = minim.loadFile("exercise5.mp4");
+  //feedback[5] = minim.loadFile("congratulationscompletedWarmup.mp4");
+  //feedback[6] = minim.loadFile("greatJob.mp4");
+  //feedback[7] = minim.loadFile("nextExercise.mp4");
+  //feedback[8] = minim.loadFile("tryAgain.mp4");
+
+
+
   movies[0] = new Movie(this, "elements/floor1.mp4");
   movies[1] = new Movie(this, "elements/floor2.mp4");
   movies[2] = new Movie(this, "elements/floor3.mp4");
   movies[3] = new Movie(this, "elements/floor4.mp4");
   movies[4] = new Movie(this, "elements/floor5.mp4");
- 
+
   feedback = minim.loadFile("music/congratulationscompletedWarmup.wav");
   exercise1 = minim.loadFile("music/exercise1.wav");
   exercise2 = minim.loadFile("music/exercise2.wav");
@@ -136,12 +146,17 @@ void setup() {
   nextExercise = minim.loadFile("music/nextExercise.wav");
   greatJob = minim.loadFile("music/greatJob.wav");
   background = 0;
-  
-  
-  //randomTrack(); 
+
+  //Fill the Boolean array keysPressed with falses
+  for (int i = 0; i < keysPressed.length; i++) {
+    keysPressed[i] = false;
+  }
+
+
+  //randomTrack();
   //soundtrack.play();
-  
-  
+
+
 }
 
 void draw() {
@@ -152,7 +167,15 @@ void draw() {
     //drawOptionScreen();
   //}
   else if (phase=="dance") {
-    drawDanceScreen();
+    //Branch to playback recorded dance
+    if (dancePlayback == true) {
+      background(255);  //Clear background
+      
+      playBack (numIterationsCompleted); // //play back the skeletons
+      numIterationsCompleted++;
+    } else {
+      drawDanceScreen();
+    }
   }
   else if (phase=="quit") {
     drawQuitScreen();
@@ -176,14 +199,14 @@ Draw the dance screen. Calls the animation/background image. Calls Kinect class.
 void drawDanceScreen() {
   //background(28,45,17);
   background(255);
-  
+
   if (count < 5){
   image(movies[count], 0, 0, 340, 300);
   } else {
     image(congratulations, 0,0, 640, 460);
     image(quitgame, width*.11, height*.95, 49*2.5, 12*2.5);
   }
-  typingUsername = false; 
+  typingUsername = false;
   int passedTime = millis() - startTime;
   int secs = passedTime/1000 %60;
   int mins = passedTime/1000/60;
@@ -198,7 +221,7 @@ void drawDanceScreen() {
     movies[count].read();
   }
   //animation2.read();
-  
+
   //if (music == true) {
     //if(!soundtrack.isPlaying()){
       //soundtrack.pause();
@@ -217,11 +240,11 @@ void drawDanceScreen() {
     //background = 0;
   //}
   //else {
-   //summons a rotating static background 
+   //summons a rotating static background
     //backgrnd();
     //image(dancebg,width/2,height/2,width,height);
   //}
- 
+
   textSize(30);
   fill(0);
   if (showEncouragements == true){
@@ -250,7 +273,7 @@ void drawDanceScreen() {
   }
   //for (int i=0; i<diamonds; i++) {
     //image(diamond, width*.575 - i*25, height*.218, 394/19,428/19);
- // }          
+ // }
   //image(myrecords, width*.11, height*.87, 49*2.5, 12*2.5);
   image(quitgame, width*.11, height*.95, 49*2.5, 12*2.5);
   image(arrow, width*.04, height*.03, 206*.2,93*.2);
@@ -275,19 +298,19 @@ void drawDanceScreen() {
   movies[count].loop();
   }
   animationPlaying = true;
-  if (10000<passedTime && passedTime<10020) {save("pictures/picture1.png");} 
-  else if (20000<passedTime && passedTime<20020) {save("pictures/picture2.png");} 
-  
+  if (10000<passedTime && passedTime<10020) {save("pictures/picture1.png");}
+  else if (20000<passedTime && passedTime<20020) {save("pictures/picture2.png");}
+
   // add to points array
   for (int x=5000; x<3000000; x+=5000) {
     if (x<passedTime && passedTime<x+18) {
-    pointsArray = append(pointsArray, points[0]); 
+    pointsArray = append(pointsArray, points[0]);
   }
   }
 }
 
 
-  
+
 
 void drawRecordsScreen() {
   background(0);
@@ -365,13 +388,14 @@ void drawGraph() {
 }
 
 void drawLoginScreen() {
-   background(84,84,84); 
+   background(84,84,84);
    text("Enter Your Name",200,200);
-    image(welcomelogin,0,0,width,height);
-    fill(0);
-    textSize(30);
-    text(username+(frameCount/10 % 2 == 0 ? "_" : ""), 247,264);
-    typingUsername = true;  
+   image(welcomelogin,0,0,width,height);
+   fill(0);
+   textSize(30);
+   text(username+(frameCount/10 % 2 == 0 ? "_" : ""), 247,264);
+   typingUsername = true;
+   toggleRecordMode();
 }
 
 void drawOptionScreen() {
@@ -446,8 +470,26 @@ void drawBackButton() {
 }
 
 void typeUsername() {
-  typingUsername = true; 
+  typingUsername = true;
   username = "";
+}
+
+void toggleRecordMode () {
+      //Switch to recording mode if you're pressing SHIFT and ctrl
+      // keysPressed is an array containing a boolean at the keyCode for SHIFT (16) and CTRL (17)
+      if (keysPressed[16] && keysPressed[17]  && recordMode == false  && allowRecordModeActivationAgain == true) {
+        recordMode = true;
+        allowRecordModeActivationAgain = false;
+        println("Record Mode Activated");
+        //Draw red circle indicatiing that we are recording
+        fill (189, 41, 2);
+        ellipse (width-20, 20, 10, 10);
+      }
+      if (keysPressed[16] && keysPressed[17] && recordMode == true && allowRecordModeActivationAgain == true ) {
+          recordMode = false;
+          allowRecordModeActivationAgain = false;
+          println("Record Mode Deactivated");
+      }
 }
 
 void mousePressed() {
@@ -539,6 +581,9 @@ void mousePressed() {
 }
 
 void keyPressed() {
+  //println("Key pressed is --->" + key);
+  //println ("Key code is ---->" + keyCode);
+  //Key code for shift key is 16 and ctrl is 17
   if (typingUsername == true) {
     username = username + str(key);
     if(key == BACKSPACE){
@@ -548,117 +593,151 @@ void keyPressed() {
       username = username.substring(0,max(0,username.length()-1));
       phase = "dance";
     }
+    //If you're pressing one of the special keys, then use the code generated to set a value in the keysPressed array to TRUE
+    //We also make sure not to do this for key presses whose keyCode value is greater than the array.
+    if (key == CODED && keyCode <= keysPressed.length-1 ) {
+      keysPressed[keyCode] = true;
+      println ("Value in array for key pressed: --->" + keysPressed[keyCode]);
+    }
   }
   if (typingUsername == false){
-  if (key == TAB){
-    movies[count].stop();
-    //movies[0].loop();
-    //phase = "dance";
-   
-  }
-  
-  if (key == 'n'){
-    count +=1;
-     if (count >4){
-       background(255);
-       showEncouragements = false; 
-       showPoints = false; 
-       feedback.play();
-       image(congratulations, 0, 0, 640, 460);
-    
-    //feedback[count].play();
-  } else {
-    showEncouragements = true;
-    showResponses = false;
-    movies[count].loop();
-    text(encouragements[count]+"!", width*.6,height*.1);
-   
-}
-  }
-  
-   if (key == 'm'){
-    count -=1;
-    showResponses = false;
-    showEncouragements = true;
-    
-    movies[count].loop();
-    text(encouragements[count]+"!", width*.6,height*.1);
-   }
-   
+    //Check to see the phase of the game
+    if (phase == "dance") {
+      if (recordMode == false) { //If we're not recording, allow user to load a dance when P pressed
+        if (key == 'p' || key =='P') {
+          selectFolder("Select the Dance you wish to load", "readCsv");
+        }
+      }
+    }
+    if (key == TAB){
+      movies[count].stop();
+      //movies[0].loop();
+      //phase = "dance";
+
+    }
+
+    if (key == 'n'){
+      count +=1;
+      if (count >4){
+        background(255);
+        showEncouragements = false;
+        showPoints = false;
+        feedback.play();
+        image(congratulations, 0, 0, 640, 460);
+
+        //feedback[count].play();
+      } else {
+        showEncouragements = true;
+        showResponses = false;
+        movies[count].loop();
+        text(encouragements[count]+"!", width*.6,height*.1);
+
+      }
+    }
+
+    if (key == 'm'){
+      count -=1;
+      showResponses = false;
+      showEncouragements = true;
+      movies[count].loop();
+      text(encouragements[count]+"!", width*.6,height*.1);
+    }
+
     if (key == 'r'){
-    count = count;
-    showResponses = false;
-    showEncouragements = true;
-    
-    movies[count].loop();
-    text(encouragements[count]+"!", width*.6,height*.1);
-   }
-   
-  if (key == 'p'){
-    if (showPoints = true){
-    showPoints = false;
-  }
-  }
-  if (key == 's'){
-    showPoints = true; 
-    
-    feedback.play();
-  }
-  
-  if (key == 'z'){
-    // lets move on
-    showEncouragements = false;
-    showResponses = true;
-    nextExercise.play();
-    text(responses[0]+"!", width*.6,height*.1);
-  }
-   if (key == 'x'){
-     //try again
-     response = 1; 
-     showEncouragements = false;
-     showResponses = true;
-     tryAgain.play();
-    text(responses[1]+"!", width*.6,height*.1);
-  }
-   if (key == 'c'){
-     //great job
-     response = 2; 
-     showEncouragements = false;
-     showResponses = true;
-     greatJob.play();
-    text(responses[2]+"!", width*.6,height*.1);
-  }
-  }
-  
-  
-  
+      count = count;
+      showResponses = false;
+      showEncouragements = true;
+      movies[count].loop();
+      text(encouragements[count]+"!", width*.6,height*.1);
+    }
+
+    if (key == 'p'){
+      if (showPoints = true){
+        showPoints = false;
+      }
+    }
+
+    if (key == 's'){
+      showPoints = true;
+      feedback.play();
+    }
+
+    if (key == 'z'){
+      // lets move on
+      showEncouragements = false;
+      showResponses = true;
+      nextExercise.play();
+      text(responses[0]+"!", width*.6,height*.1);
+    }
+    if (key == 'x'){
+      //try again
+      response = 1;
+      showEncouragements = false;
+      showResponses = true;
+      tryAgain.play();
+      text(responses[1]+"!", width*.6,height*.1);
+    }
+    if (key == 'c'){
+      //great job
+      response = 2;
+      showEncouragements = false;
+      showResponses = true;
+      greatJob.play();
+      text(responses[2]+"!", width*.6,height*.1);
+    }
+
+    // Listen for user pressing the "L" key.  Sets typingFileName to TRUE.  Prompts user to pick location.
+    if(key=='l'|| key=='L') {
+      isPaused = true;
+      typingFileName = true;
+      text("Name Your Dance",200,200);
+      //Create box to type in
+      cp5.addTextfield ("input")
+        .setPosition (width/2, (height/2)-40)
+        .setSize (200,80)
+        .setFocus(true);
+    }
+
+    //Capture the input
+    if (typingFileName == true) {
+      if (key == ENTER){
+        fileName = cp5.get(Textfield.class, "input").getText();
+        typingFileName = false;
+        selectFolder("Where do you wish to save your dance?", "saveSkeletonTable");
+      }
+    }
+
+}
+
+
+
  // if (key == n){
-   // count =+1; 
+   // count =+1;
     //animation[count].loop();
     //text(encouragemends[count];
  // }
-    
-    
+
+
     //println(key);
    // switch(key) {
           //// FIX THIS LATER
-    //case BACKSPACE: 
+    //case BACKSPACE:
       //username = username.substring(0,max(0,username.length()-1));
-    //case ENTER: 
+    //case ENTER:
       //username = username.substring(0,max(0,username.length()-1));
      // phase = "dance";
-      
-   //case TAB: 
+
+   //case TAB:
      //if (animationPlaying == true){
-       
+
      //animation.stop();
-    //animation2.loop(); 
-     
-    
+    //animation2.loop();
+
+
    // }
-   
-  
-  if (phase=="records") {  
+
+
+  if (phase=="records") {
       save(desktopPath+"report"+recordsIndex+"-"+month()+"-"+day()+"-"+year()+".png");
       println( "printing records...");
       recordsIndex++;
@@ -669,8 +748,18 @@ void keyReleased(){
    if (key == TAB){
      movies[count].loop();
    }
-    //count = count + 1; 
-    
+   //When you release a special key, make sure to set it's value back to false in the keysPressed array
+   if (key == CODED && keyCode <= keysPressed.length-1 ) {
+     keysPressed[keyCode] = false;
+     println ("Value in array for key pressed: --->" + keysPressed[keyCode]);
+   }
+   //Allow Record Mode to be active once at least one either SHIFT or CTRL is let up
+   if (!keysPressed[16] || !keysPressed[17]) {
+     allowRecordModeActivationAgain = true;
+   }
+
+    //count = count + 1;
+
 //    image(movies[count], 0, 0);
 //    movies[count].loop();
 //    if (username.length()>0) {
@@ -681,10 +770,10 @@ void keyReleased(){
 //      textAlign(LEFT);
 //      text(encouragements[count]+"!", width*.6,height*.1);
 //  }
-//   
+//
 //}
-}
-  
+} //End of KeyPressed function
+
 
 
 
@@ -703,9 +792,9 @@ void keyReleased(){
 //  //calls a random track from the music folder
 //    randomTrack();
 //    soundtrack.play();
-//    
+//
 ////loop of music playing
-//  while(music == true){ 
+//  while(music == true){
 //    //plays the music
 //    if(!soundtrack.isPlaying()){
 //      soundtrack.pause();
@@ -733,4 +822,3 @@ void keyReleased(){
 //  println("Now playing track number: " + track);
 //  getTrack(track);
 //}
-
