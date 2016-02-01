@@ -67,7 +67,7 @@ void playBack(Integer rowNum)
     drawBack(skel_data[rowNum][10], skel_data[rowNum][12]); //Right hip and right knee
     drawBack(skel_data[rowNum][12], skel_data[rowNum][14]); //Right knee and right foot
     drawBack(skel_data[rowNum][10], skel_data[rowNum][9]); //Right hip and left hip
-  } else {   
+  } else {
     dancePlayback = false;
     numIterationsCompleted = 0;
   }
@@ -80,12 +80,12 @@ void drawBack(PVector skeA, PVector skeB)
   stroke(0);
   //Set weight of line
   strokeWeight (5);
-  //draw a point for the first position
-  ellipse(skeA.x, skeA.y, 5, 5);
-  //draw a point for the second position
-  ellipse(skeB.x, skeB.y, 5, 5);
-  //draw a joint between two position
-  line(skeA.x, skeA.y, skeB.x, skeB.y);
+  //draw a point for the first position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
+  ellipse((.5)*skeA.x, (.25)*(-skeA.y)+150, 5, 5);
+  //draw a point for the second position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
+  ellipse((.5)*skeB.x, (.25)*(-skeB.y)+150, 5, 5);
+  //draw a joint between two  (divided in half to fit all of skeleton onto vertical area of screen.  Negated Y value to flip skeleton right side up)
+  line((.5)*skeA.x, (.25)*(-skeA.y)+150, (.5)*skeB.x, (.25)*(-skeB.y)+150);
 
   //noStroke();
 
