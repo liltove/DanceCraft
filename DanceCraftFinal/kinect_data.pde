@@ -479,7 +479,7 @@ void AddAngle(int _pose,float _lh1, float _lh2, float _lh3, float _h1, float _rh
 //Save the Skeleton Data to a specific location
 void saveSkeletonTable(File selection) {
   dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
-  saveTable(table, dataLocation + "/" + fileName, "csv"); //Write table to location
+  saveTable(table, dataLocation + "/" + fileName + ".csv", "csv"); //Write table to location
   cp5.remove("input"); //ControlP5 controller removes text input box from dance screen
   typingFileName = false;
   isPaused = false;
