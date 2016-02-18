@@ -170,7 +170,7 @@ void draw() {
     //Branch to playback recorded dance
     if (dancePlayback == true) {
       background(255);  //Clear background
-      
+
       playBack (numIterationsCompleted); // //play back the skeletons
       numIterationsCompleted++;
     } else {
@@ -693,6 +693,7 @@ void keyPressed() {
       text("Name Your Dance",200,200);
       //Create box to type in
       cp5.addTextfield ("input")
+        .clear()
         .setPosition (width/2, (height/2)-40)
         .setSize (200,80)
         .setFocus(true);
