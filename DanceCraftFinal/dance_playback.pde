@@ -3,7 +3,10 @@ This file contains the functions necessary for playing back "dances" recorded
 by the user.
 */
 //-------------------------------------------------------------//
-
+float offsetX; //The offset x of the skeleton
+float offsetY; // The offset y of the skeleton
+float midWidth = 320 * 4; //middle width of the left half screen
+float midHeight = 720; //middle height of the left haft screen
 void readCsv(File selection)
 {
   //read the csv file if something has been selected
@@ -51,6 +54,8 @@ void playBack(Integer rowNum)
 {
   if (rowNum < skel_data.length) {  //Compare number passed to function and make sure its less than the length of the array of skeleton data
     println ("Drawing!" + ' ' + rowNum);
+    offsetX = alignX(skel_data[0][8]);
+    offsetY = alignY(skel_data[0][8]);
     drawBack(skel_data[rowNum][0], skel_data[rowNum][1]); //Head and neck
     drawBack(skel_data[rowNum][1], skel_data[rowNum][2]); //Neck and left shoulder
     drawBack(skel_data[rowNum][2], skel_data[rowNum][4]); //Left shoulder and Left elbow
@@ -80,13 +85,28 @@ void drawBack(PVector skeA, PVector skeB)
   stroke(0);
   //Set weight of line
   strokeWeight (5);
+
+  float xA = 0.25 * (offsetX + skeA.x);
+  float yA = 0.25 * ((-skeA.y) + offsetY);
+  float xB = 0.25 * (offsetX + skeB.x);
+  float yB = 0.25 * ((-skeB.y) + offsetY);
   //draw a point for the first position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
-  ellipse((.5)*skeA.x, (.25)*(-skeA.y)+150, 5, 5);
+  ellipse(xA, yA, 5, 5);
   //draw a point for the second position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
-  ellipse((.5)*skeB.x, (.25)*(-skeB.y)+150, 5, 5);
+  ellipse(xB, yB, 5, 5);
   //draw a joint between two  (divided in half to fit all of skeleton onto vertical area of screen.  Negated Y value to flip skeleton right side up)
-  line((.5)*skeA.x, (.25)*(-skeA.y)+150, (.5)*skeB.x, (.25)*(-skeB.y)+150);
+  line(xA, yA, xB, yB);
 
-  //noStroke();
+}
 
+float alignX(PVector skeA)
+{
+  if(skeA.x < midWidth)
+    return  midWidth - skeA.x;
+  else
+    return skeA.x - midWidth;
+}
+float alignY(PVector skeA)
+{
+  return skeA.y + midHeight;
 }
