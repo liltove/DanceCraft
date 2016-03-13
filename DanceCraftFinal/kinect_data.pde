@@ -196,12 +196,9 @@ void kinectDance(){
 
      // Writing the specific poses for the CSV back to the poses file
      saveTable(tablePose, poseDataLocation);
-     // And reloading it
-     //loadData();
 
       //Draw skeleton on top of player as they play
      drawSkeleton(users[i]);
-     //readCsv(users[i], dataLocation);
      }
    }
 
