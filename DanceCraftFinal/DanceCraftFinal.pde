@@ -605,7 +605,7 @@ void keyPressed() {
     if (phase == "dance") {
       if (recordMode == false) { //If we're not recording, allow user to load a dance when P pressed
         if (key == 'p' || key =='P') {
-          selectFolder("Select the Dance you wish to load", "readCsv");
+          selectInput("Select the Dance you wish to load", "readCsv");
         }
       }
     }
