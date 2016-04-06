@@ -40,8 +40,6 @@ int count;
 int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 
-int [] pointsArray = {};
-
 void setup() {
   smooth();
   phase = "title";
@@ -337,8 +335,7 @@ void mousePressed() {
   else if (phase=="records") {
     if (mouseX>4 && mouseX<48 && mouseY>6 && mouseY<26) {
       phase = "option";
-      pointsArray = new int[0];
-      points[0] = 0;
+
     }
   }
   //println(mouseX,mouseY);
