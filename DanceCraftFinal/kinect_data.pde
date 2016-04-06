@@ -47,10 +47,6 @@ Table loadedSkelTable = new Table();
 
 PVector[] j1;
 
-//Counter for the poses
-int pose=1;
-boolean p=false;
-
 
 /*---------------------------------------------------------------
 Starts new kinect object and enables skeleton tracking.

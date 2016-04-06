@@ -35,9 +35,7 @@ Boolean dancePlayback = false;
 Boolean allowRecordModeActivationAgain = true;
 
 int startTime;
-int encIndex;
 int background;
-int recordsIndex;
 int count;
 int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
@@ -46,7 +44,7 @@ int [] pointsArray = {};
 
 void setup() {
   smooth();
-  phase = "login";
+  phase = "title";
   size(640,480);
   font=createFont("Arial", 48);
   textFont(font);
@@ -67,24 +65,15 @@ void setup() {
   arrow = loadImage("elements/arrow.png");
   congratulations = loadImage("elements/congratulations.png");
 
-  //whiteBackground = loadImage("whiteBackground.png");
-  encIndex = 0;
   count = 0;
   response = 0;
   username = "";
   typingUsername = false;
-  animationPlaying = false;
-  animation2playing = false;
-  showPoints = true;
-  showResponses = false;
-  showEncouragements = true;
   music = true;
   figure = true;
-  points[0] = 0;
-  recordsIndex = 1;
+  
   cp5 = new ControlP5(this);
-
-  kinectSetup();
+  //kinectSetup();
   minim = new Minim(this);
   //musicSetup();
 
@@ -103,8 +92,8 @@ Detect which phase of the program we are in and call appropriate draw function.
 ----------------------------------------------------------------*/
 void draw() {
   
-  if (phase=="login") {
-    drawLoginScreen();
+  if (phase=="title") {
+    drawTitleScreen();
   }
   else if (phase=="dance") {
     //Branch to playback recorded dance
@@ -115,6 +104,10 @@ void draw() {
     } else {
       drawDanceScreen();
     }
+  }
+  else if (phase=="record"){
+    //Branch to the recording screen, to record teacher's dances
+    //THIS MIGHT LOOK DIFFERENT THAN THE DANCE PHASE?
   }
   else if (phase=="quit") {
     drawQuitScreen();
@@ -134,30 +127,9 @@ void drawDanceScreen() {
 
   textSize(30);
   fill(0);
-  if (showEncouragements == true){
-    if (username.length()>0) {
-      textAlign(RIGHT);
-      text(encouragements[count]+", "+username+"!", width*.96,height*.1);
-  }
-  else {
-      textAlign(LEFT);
-      text(encouragements[count]+"!", width*.6,height*.1);
-  }}
-   if (showResponses == true) {
-   if (username.length()>0) {
-      textAlign(RIGHT);
-      text(responses[response]+", "+username+"!", width*.96,height*.1);
-  }
-  else {
-      textAlign(LEFT);
-      text(responses[response]+"!", width*.6,height*.1);
-  }}
   textAlign(LEFT);
   time = (nf(mins, 2) + ":" + nf(secs, 2));
- // text("TIME: " + time, width*.6, height*.17);
-  if (showPoints == true){
-  text("POINTS: " + points[0], width*.6, height*.24);
-  }
+
   image(quitgame, width*.11, height*.95, 49*2.5, 12*2.5);
   image(arrow, width*.04, height*.03, 206*.2,93*.2);
   fill(255,255,255,75);
@@ -169,11 +141,13 @@ void drawDanceScreen() {
   textSize(18);
   textAlign(LEFT);
 
-  kinectDance();
+  //kinectDance();
 }
 
-
-void drawLoginScreen() {
+/*---------------------------------------------------------------
+Draw the main title screen.
+----------------------------------------------------------------*/
+void drawTitleScreen() {
    background(84,84,84);
    text("Enter Your Name",200,200);
    image(welcomelogin,0,0,width,height);
@@ -184,6 +158,9 @@ void drawLoginScreen() {
    toggleRecordMode();
 }
 
+/*---------------------------------------------------------------
+Draw the options title screen.
+----------------------------------------------------------------*/
 void drawOptionScreen() {
     typingUsername=false;
     imageMode(CENTER);
@@ -206,6 +183,9 @@ void drawOptionScreen() {
     image(arrow, width*.04, height*.03, 206*.2,93*.2);
 }
 
+/*---------------------------------------------------------------
+Draw the quit screen.
+----------------------------------------------------------------*/
 void drawQuitScreen() {
   username="";
   textSize(30);
@@ -221,6 +201,9 @@ void drawQuitScreen() {
   text("PLAY AGAIN", width/2, height*.6);
 }
 
+/*---------------------------------------------------------------
+Draw the info screen.
+----------------------------------------------------------------*/
 void drawInfoScreen() {
     imageMode(CENTER);
     image(welcomebg,width/2,height/2,width,height);
@@ -325,8 +308,6 @@ void mousePressed() {
     }
     else if (mouseX>4 && mouseX<48 && mouseY>6 && mouseY<26) {
       phase = "option";
-      points[0] = 0;
-      diamonds = 0;
     }
     else if (mouseX>10 && mouseX<132 && mouseY>405 && mouseY<435) {
       save("pictures/endPicture.png");
@@ -335,15 +316,13 @@ void mousePressed() {
     else if (mouseX>10 && mouseX<132 && mouseY>444 && mouseY<473) {
       save("pictures/endPicture.png");
       phase = "quit";
-      points[0] = 0;
-      diamonds = 0;
     }
   }
   else if (phase=="quit") {
     if (mouseX>221 && mouseX<421 && mouseY>256 && mouseY<307) {
       imageMode(CORNER);
       textAlign(LEFT);
-      phase = "login";
+      phase = "title";
     }
   }
   else if (phase=="info") {
@@ -421,12 +400,8 @@ void keyPressed() {
 
 }
 
-}
 
 void keyReleased(){
-   if (key == TAB){
-     movies[count].loop();
-   }
    //When you release a special key, make sure to set it's value back to false in the keysPressed array
    if (key == CODED && keyCode <= keysPressed.length-1 ) {
      keysPressed[keyCode] = false;
