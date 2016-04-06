@@ -50,7 +50,7 @@ void setup() {
   textFont(font);
   
   //load all images needed for the UI
-  welcomelogin = loadImage("elements/1_welcome_login.jpg");
+  /*welcomelogin = loadImage("elements/1_welcome_login.jpg");
   welcomebg = loadImage("elements/welcomebg.png");
   dancecraft = loadImage("elements/dancecraft3.png");
   onedancer = loadImage("elements/onedancer.png");
@@ -63,7 +63,7 @@ void setup() {
   diamond = loadImage("elements/diamond.png");
   play = loadImage("elements/play.png");
   arrow = loadImage("elements/arrow.png");
-  congratulations = loadImage("elements/congratulations.png");
+  congratulations = loadImage("elements/congratulations.png");*/
 
   count = 0;
   response = 0;
@@ -148,13 +148,14 @@ void drawDanceScreen() {
 Draw the main title screen.
 ----------------------------------------------------------------*/
 void drawTitleScreen() {
-   background(84,84,84);
-   text("Enter Your Name",200,200);
-   image(welcomelogin,0,0,width,height);
-   fill(0);
-   textSize(30);
-   text(username+(frameCount/10 % 2 == 0 ? "_" : ""), 247,264);
-   typingUsername = true;
+   background(255); //makes background white
+   text("DanceCraft",175,50); //puts title in top center of screen
+   //text("Enter Your Name",200,200);
+   //image(welcomelogin,0,0,width,height);
+   fill(0); //fills in letters black
+   //textSize(30);
+//   text(username+(frameCount/10 % 2 == 0 ? "_" : ""), 247,264);
+//   typingUsername = true;
    toggleRecordMode();
 }
 
@@ -260,7 +261,7 @@ void toggleRecordMode () {
 Senses when mouse is clicked and does appropriate action.
 ----------------------------------------------------------------*/
 void mousePressed() {
-  if (phase=="login") {
+  if (phase=="title") {
     if (mouseX>455 && mouseX<528 && mouseY>240 && mouseY<273) {
       phase = "option";
     }
