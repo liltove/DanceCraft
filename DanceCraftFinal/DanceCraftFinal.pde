@@ -170,8 +170,8 @@ void draw() {
     //Branch to playback recorded dance
     if (dancePlayback == true) {
       background(255);  //Clear background
-
-      playBack (numIterationsCompleted); // //play back the skeletons
+      kinectDanceSkelPlayback(); //draw user shillohette
+      playBack (numIterationsCompleted); //play back the skeletons
       numIterationsCompleted++;
     } else {
       drawDanceScreen();

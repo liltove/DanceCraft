@@ -196,12 +196,9 @@ void kinectDance(){
 
      // Writing the specific poses for the CSV back to the poses file
      saveTable(tablePose, poseDataLocation);
-     // And reloading it
-     //loadData();
 
       //Draw skeleton on top of player as they play
      drawSkeleton(users[i]);
-     //readCsv(users[i], dataLocation);
      }
    }
 
@@ -216,6 +213,49 @@ void kinectDance(){
  }
 
 } // void draw()
+
+
+//kinectDanceSkelPlayback allows for the user to be drawn while the dance is being played back.
+
+void kinectDanceSkelPlayback () {
+  // update the camera
+  kinect.update();
+
+  // get the Kinect color image
+  rgbImage = kinect.rgbImage();
+
+  // prepare the color pixels
+  loadPixels();
+
+  //Create black color to turn user into a shadow
+  color black = color (0,0,0);
+  // get pixels for the user tracked
+  userMapping = kinect.userMap();
+
+  // for the length of the pixels tracked, color them
+  // in with the rgb camera
+  for (int i =0; i < userMapping.length; i++) {
+    // if the pixel is part of the user
+    if (userMapping[i] != 0) {
+      // set the pixel color of the part of the display that is the user to black
+      pixels[i] = black;
+    }
+  }
+
+  //update any changed pixels
+  updatePixels();
+
+  //Get an array with all the users
+  int[] users = kinect.getUsers();
+
+  //Draw skeleton on top of user
+  for (int i=0; i < users.length; i++) {
+    if (kinect.isTrackingSkeleton(users[i])) {
+      drawSkeleton(users[i]);
+    }
+  }
+  
+}
 
 /*---------------------------------------------------------------
 When a new user is found, print new user detected along with
@@ -492,7 +532,7 @@ Draw a rudimentary skeleton on top of the player
 
 void drawSkeleton (int userId) {
 	//Set color of skeleton "bones" to black
-	stroke(0);
+	stroke(128, 0, 128);
 	//Set weight of line
 	strokeWeight (5);
 
