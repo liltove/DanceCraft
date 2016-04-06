@@ -13,19 +13,17 @@ Movie animation;
 Movie animation2;
 Movie animation3;
 
-
 //AudioPlayer player;
 //AudioPlayer soundtrack;
-AudioPlayer feedback;
-AudioPlayer exercise1;
-AudioPlayer exercise2;
-AudioPlayer exercise3;
-AudioPlayer exercise4;
-AudioPlayer exercise5;
-AudioPlayer tryAgain;
-AudioPlayer nextExercise;
-AudioPlayer greatJob;
-
+//AudioPlayer feedback;
+//AudioPlayer exercise1;
+//AudioPlayer exercise2;
+//AudioPlayer exercise3;
+//AudioPlayer exercise4;
+//AudioPlayer exercise5;
+//AudioPlayer tryAgain;
+//AudioPlayer nextExercise;
+//AudioPlayer greatJob;
 
 Minim minim;//audio context
 //audio context
@@ -44,16 +42,11 @@ String username, time;
 String desktopPath = "\\records/";
 String fileName = new String();
 
-String [] encouragements = {"Reach up and stretch towards your toes", "Shake out your arms and legs", "Reach behind your back and stretch", "Gently move your head to each side", "Move your shoulders up and down", "You finished the warm up!", "So cool", "Wow"};
-String [] responses = {"Let's move on to the next exercise", "Try again", "Great Job!"};
-Movie[] movies = new Movie[7];
+//String [] encouragements = {"Reach up and stretch towards your toes", "Shake out your arms and legs", "Reach behind your back and stretch", "Gently move your head to each side", "Move your shoulders up and down", "You finished the warm up!", "So cool", "Wow"};
+//String [] responses = {"Let's move on to the next exercise", "Try again", "Great Job!"};
+//Movie[] movies = new Movie[7];
 Boolean [] keysPressed = new Boolean[20];
 //AudioPlayer[] feedback = new AudioPlayer[8];
-
-
-
-
-
 
 Boolean typingUsername, music, figure, animationPlaying, animation2playing, showPoints, showResponses, showEncouragements;
 Boolean isPaused = false;
@@ -61,7 +54,6 @@ Boolean typingFileName = false;
 Boolean recordMode = false;
 Boolean dancePlayback = false;
 Boolean allowRecordModeActivationAgain = true;
-
 
 int startTime;
 int diamonds;

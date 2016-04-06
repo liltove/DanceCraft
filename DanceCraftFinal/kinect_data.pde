@@ -35,10 +35,6 @@ String poseDataLocation = "data/csvPoseData.csv";
 String anglesLocation = "data/csvAngles.csv";
 float threshold = 50;
 
-float offByDistance = 0.0;
-float oldDistance = 0.0;
-PVector oldPosition;
-
 int sum = 0;
 int oldsum = 0;
 int sumLH = 0;
@@ -235,120 +231,6 @@ void onLostUser(SimpleOpenNI curContext, int userId){
  println("User Lost - userId: " + userId);
 } //void onLostUser(SimpleOpenNI curContext, int userId)
 
-
-/*---------------------------------------------------------------
-Create points for each userID
-----------------------------------------------------------------*/
-void addPoints(int id){
-   //this function is called when a particular userID *moves*
-  points[id] = points[id] + 1;
-  //points[id]=points[id]/1000;
-}
-
-void calcPoints(int userID, int jointID, PVector currentPosition, int oldsum){
-   kinect.getJointPositionSkeleton(userID,jointID, currentPosition);
-
-   println(jointID);
-   println(currentPosition.x);
-   println(currentPosition.y);
-   println(currentPosition.z);
-
-   AddToCSV(jointID,currentPosition.x,currentPosition.y, currentPosition.z);
-   //This function saves a pose into a table
-   if(keyPressed)
-   {
-     if(key=='q'||key=='Q')
-     {
-       AddPose(pose,jointID,currentPosition.x,currentPosition.y, currentPosition.z);
-       println("Pose saved!");
-       p=true;
-     }
-   }
-
-   //createXML(1,1, jointID,currentPosition.x,currentPosition.y, currentPosition.z);
-   //save the current position with a place holder
-   PVector placeHolderPosition = new PVector();
-   placeHolderPosition = currentPosition;
-
-   //calculate the distance between vectors by transforming currentPosition
-   currentPosition.sub(oldPosition);
-
-   //store magnitude
-   offByDistance = currentPosition.mag();
-
-   sum = int(abs(offByDistance - oldDistance));
-   //println(jointID+"sum: "+sum);
-   //println(jointID+"old sum: "+oldsum);
-   if((abs(sum-oldsum)) > threshold){
-     points[0] = points[0] + 1;
-   }
-   oldDistance = offByDistance;
-   oldPosition = placeHolderPosition;
-
-   switch(jointID){
-     case 6:
-        sumLH = sum;
-        break;
-     case 7:
-        sumRH = sum;
-        break;
-     case 8:
-        sumT = sum;
-        break;
-     case 13:
-        sumLF = sum;
-        break;
-     case 14:
-        sumRF = sum;
-        break;
-   }
-
-}
-
-/*------------------------------------------------------------
-Storing the joint positions for each pose in a xml file
-------------------------------------------------------------*/
-/*void createXML(int userId, int pose, int jointID1, float x, float y, float z){
-    XML root=loadXML("subset.xml");
-    XML poses;
-    //poses=root.addChild(pose.toString());
-sk
-
-    XML jointID;
-    //jointID=poses.AddChild(jointID1.toString());
-    //jointID=poses.addChild("joint");
-    XML x1;
-    //x1=jointID.AddChild(x.toString());
-    XML y1;
-    //y1=jointID.AddChild(y.toString());
-    XML z1;
-    //z1=jointID.AddChild(z.toString());
-    saveXML(root, "subset.xml");
-}*/
-
-/*void storeJoints(){
-
-}
-
-void createXML(){
-  XML root = loadXML("subset.xml");
-  println("I loaded");
-  println(root.getName());
-  root.setName("newname");
-  println(root.getName());
-  XML firstChild = root.getChild("exerciseONE");
-  println(firstChild.getName());
-
-  root.removeChild(firstChild);
-
-  XML pose;
-  pose = root.addChild("test");
-  pose.setContent("im the content for test");
-
-  saveXML(root, "subset.xml");
-  println("im done");
-}*/
-
 /*--------------------------------------------------------------
 Writing all joint data to a table for CSV file format
 --------------------------------------------------------------*/
@@ -364,8 +246,6 @@ void AddToCSV(int _joint, float _x, float _y, float _z) {
   row.setString("jointname", joint[_joint]);
 }
 
-
-
 /*--------------------------------------------------------------
 Storing each pose to a table
 --------------------------------------------------------------*/
@@ -380,103 +260,9 @@ void AddPose(int _pose,int _joint, float _x, float _y, float _z) {
   rowP.setFloat("z", _z);
 }
 
-/*--------------------------------------------------------------
-Compute angles for the pose-joint data from the csv
---------------------------------------------------------------*/
-void computeAngles(int poseNo) {
-
-  for (TableRow row : tablePose.findRows(str(poseNo), "Pose")) {
-    poseJointArray[0][row.getInt("Joint")]=row.getFloat("x");
-    poseJointArray[1][row.getInt("Joint")]=row.getFloat("y");
-    poseJointArray[2][row.getInt("Joint")]=row.getFloat("z");
-  }
-
-  for(int i=0;i<15;i=i+1){
-      j1[i]=new PVector(poseJointArray[0][i],poseJointArray[1][i],poseJointArray[2][i]);
-  }
-
-  //Vectors between joints
-  PVector pv01 = PVector.sub(j1[0], j1[1]);
-  PVector pv12 = PVector.sub(j1[1], j1[2]);
-  PVector pv13 = PVector.sub(j1[1], j1[3]);
-  PVector pv14 = PVector.sub(j1[1], j1[4]);
-  PVector pv15 = PVector.sub(j1[1], j1[5]);
-  PVector pv18 = PVector.sub(j1[1], j1[8]);
-  PVector pv24 = PVector.sub(j1[2], j1[4]);
-  PVector pv35 = PVector.sub(j1[3], j1[5]);
-  PVector pv46 = PVector.sub(j1[4], j1[6]);
-  PVector pv57 = PVector.sub(j1[5], j1[7]);
-  PVector pv89 = PVector.sub(j1[8], j1[9]);
-  PVector pv810 = PVector.sub(j1[8], j1[10]);
-  PVector pv911 = PVector.sub(j1[9], j1[11]);
-  PVector pv913 = PVector.sub(j1[9], j1[13]);
-  PVector pv1012 = PVector.sub(j1[10], j1[12]);
-  PVector pv1014 = PVector.sub(j1[10], j1[14]);
-  PVector pv1113 = PVector.sub(j1[11], j1[13]);
-  PVector pv1214 = PVector.sub(j1[12], j1[14]);
-
-  //
-//  float lh1=AngleBetweenTwoVectors(pv18,pv14);
-//  float lh2=AngleBetweenTwoVectors(pv12,pv24);
-//  float lh3=AngleBetweenTwoVectors(pv24,pv46);
-//  float h1=AngleBetweenTwoVectors(pv01,pv12);
-//  float rh1=AngleBetweenTwoVectors(pv18,pv15);
-//  float rh2=AngleBetweenTwoVectors(pv13,pv35);
-//  float rh3=AngleBetweenTwoVectors(pv35,pv57);
-//  float sp1=AngleBetweenTwoVectors(pv18,pv89);
-//  float ll1=AngleBetweenTwoVectors(pv89,pv913);
-//  float ll2=AngleBetweenTwoVectors(pv911,pv1113);
-//  float rl1=AngleBetweenTwoVectors(pv810,pv1014);
-//  float rl2=AngleBetweenTwoVectors(pv1012,pv1214);
-
-  float lh1=PVector.angleBetween(pv18,pv14);
-  float lh2=PVector.angleBetween(pv12,pv24);
-  float lh3=PVector.angleBetween(pv24,pv46);
-  float h1=PVector.angleBetween(pv01,pv12);
-  float rh1=PVector.angleBetween(pv18,pv15);
-  float rh2=PVector.angleBetween(pv13,pv35);
-  float rh3=PVector.angleBetween(pv35,pv57);
-  float sp1=PVector.angleBetween(pv18,pv89);
-  float ll1=PVector.angleBetween(pv89,pv913);
-  float ll2=PVector.angleBetween(pv911,pv1113);
-  float rl1=PVector.angleBetween(pv810,pv1014);
-  float rl2=PVector.angleBetween(pv1012,pv1214);
-
-  AddAngle(poseNo,lh1,lh2,lh3,h1,rh1,rh2,rh3,sp1,ll1,ll2,rl1,rl2);
-}
-
-float AngleBetweenTwoVectors(PVector v1, PVector v2){    //https://social.msdn.microsoft.com/Forums/en-US/8516bab7-c28b-4834-82c9-b3ef911cd1f7/using-kinect-to-calculate-angles-between-human-body-joints?forum=kinectsdk
-  float dotProduct = 0.0f;
-  dotProduct= PVector.dot(v1, v2);
-  print("DP"+dotProduct);
-  return (float)Math.acos(dotProduct);
-}
-
-/*--------------------------------------------------------------
-Storing each angle for each pose to a table
---------------------------------------------------------------*/
-void AddAngle(int _pose,float _lh1, float _lh2, float _lh3, float _h1, float _rh1, float _rh2, float _rh3, float _sp1, float _ll1, float _ll2, float _rl1, float _rl2) {
-  // Create a new row
-  TableRow rowA = tableAngles.addRow();
-  // Set the values of that row
-  rowA.setInt("Pose",_pose);
-  rowA.setFloat("LH1", _lh1);
-  rowA.setFloat("LH2", _lh2);
-  rowA.setFloat("LH3", _lh3);
-  rowA.setFloat("H1", _h1);
-  rowA.setFloat("RH1", _rh1);
-  rowA.setFloat("RH2", _rh2);
-  rowA.setFloat("RH3", _rh3);
-  rowA.setFloat("SP1", _sp1);
-  rowA.setFloat("LL1", _ll1);
-  rowA.setFloat("LL2", _ll2);
-  rowA.setFloat("RL1", _rl1);
-  rowA.setFloat("RL2", _rl2);
-}
-
-
-
-//Save the Skeleton Data to a specific location
+/*-------------------------------------------------
+Save the Skeleton Data to a specific location
+-----------------------------------------------------*/
 void saveSkeletonTable(File selection) {
   dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
   saveTable(table, dataLocation + "/" + fileName + ".csv", "csv"); //Write table to location
@@ -489,7 +275,6 @@ void saveSkeletonTable(File selection) {
 /*-------------------------------------------------
 Draw a rudimentary skeleton on top of the player
 -----------------------------------------------------*/
-
 void drawSkeleton (int userId) {
 	//Set color of skeleton "bones" to black
 	stroke(0);
@@ -518,7 +303,6 @@ void drawSkeleton (int userId) {
   fill(255,0,0);
 
   //Begin drawing the joints of the skeleton
-
   drawJoint(userId, SimpleOpenNI.SKEL_HEAD);
   drawJoint(userId, SimpleOpenNI.SKEL_NECK);
   drawJoint(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER);
@@ -539,6 +323,9 @@ void drawSkeleton (int userId) {
 
 }
 
+/*-------------------------------------------------
+Draw the joint bubbles on the skeleton on the player skeleton
+-----------------------------------------------------*/
 void drawJoint (int userId, int jointID) {
   PVector joint = new PVector();
   float confidence = kinect.getJointPositionSkeleton(userId, jointID, joint);
