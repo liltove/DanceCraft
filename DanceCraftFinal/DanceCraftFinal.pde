@@ -198,26 +198,6 @@ void drawTitleScreen() {
    //toggleRecordMode();
 }
 
-/*---------------------------------------------------------------
-Moves the program into recording mode.
-----------------------------------------------------------------*/
-void toggleRecordMode () {
-      //Switch to recording mode if you're pressing SHIFT and ctrl
-      // keysPressed is an array containing a boolean at the keyCode for SHIFT (16) and CTRL (17)
-      if (keysPressed[16]  && recordMode == false  && allowRecordModeActivationAgain == true) {
-        recordMode = true;
-        allowRecordModeActivationAgain = false;
-        println("Record Mode Activated");
-        //Draw red circle indicatiing that we are recording
-        fill (189, 41, 2);
-        ellipse (width-20, 20, 10, 10);
-      }
-      if (keysPressed[16] && keysPressed[17] && recordMode == true && allowRecordModeActivationAgain == true ) {
-          recordMode = false;
-          allowRecordModeActivationAgain = false;
-          println("Record Mode Deactivated");
-      }
-}
 
 /*---------------------------------------------------------------
 Senses when mouse is clicked and does appropriate action.
@@ -259,35 +239,34 @@ void keyPressed() {
   //println("Key pressed is --->" + key);
   //println ("Key code is ---->" + keyCode);
   //Key code for shift key is 16 and ctrl is 17
-  if (typingUsername == true) {
-    username = username + str(key);
-    if(key == BACKSPACE){
-      username = username.substring(0,max(0,username.length()-1));
-    }
-    if (key == ENTER){
-      username = username.substring(0,max(0,username.length()-1));
-      phase = "dance";
-    }
-    //If you're pressing one of the special keys, then use the code generated to set a value in the keysPressed array to TRUE
-    //We also make sure not to do this for key presses whose keyCode value is greater than the array.
-    if (key == CODED && keyCode <= keysPressed.length-1 ) {
-      keysPressed[keyCode] = true;
-      println ("Value in array for key pressed: --->" + keysPressed[keyCode]);
-    }
-  }
-  if (typingUsername == false){
-    //Check to see the phase of the game
-    if (phase == "dance") {
-      if (recordMode == false) { //If we're not recording, allow user to load a dance when P pressed
-        if (key == 'p' || key =='P') {
-          //selectInput("Select the Dance you wish to load", "readCsv");
-          playVideo(recordingName);
-        }
+
+  //Check to see the phase of the game
+  /*if (phase == "dance") {
+    if (recordMode == false) { //If we're not recording, allow user to load a dance when P pressed
+      if (key == 'p' || key =='P') {
+        //selectInput("Select the Dance you wish to load", "readCsv");
+        playVideo(recordingName);
       }
+    }
+  }*/
+  
+   //Switch to recording mode if you're pressing SPACE
+  if (keyPressed){
+    if (key == ' ' && phase == "dance" && recordMode == false  && allowRecordModeActivationAgain == true){
+      recordMode = true;
+      allowRecordModeActivationAgain = false;
+      println("Record Mode Activated");
+      //Draw red circle indicatiing that we are recording
+      fill (189, 41, 2);
+      ellipse (width-20, 20, 10, 10);
+    } else if (key == ' ' && phase == "dance" && recordMode == true && allowRecordModeActivationAgain == true ) {
+      recordMode = false;
+      allowRecordModeActivationAgain = false;
+      println("Record Mode Deactivated");
     }
   }
     // Listen for user pressing the "L" key.  Sets typingFileName to TRUE.  Prompts user to pick location.
-    if(key=='l'|| key=='L') {
+   /* if(key=='l'|| key=='L') {
       isPaused = true;
       typingFileName = true;
       text("Name Your Dance",200,200);
@@ -306,7 +285,7 @@ void keyPressed() {
         typingFileName = false;
         selectFolder("Where do you wish to save your dance?", "saveSkeletonTable");
       }
-    }
+    }*/
 
 }
 
