@@ -53,7 +53,7 @@ void readCsv(String selection)
 void playBack(Integer rowNum)
 {
   if (rowNum < skel_data.length) {  //Compare number passed to function and make sure its less than the length of the array of skeleton data
-    println ("Drawing!" + ' ' + rowNum);
+    //println ("Drawing!" + ' ' + rowNum);
     offsetX = alignX(skel_data[0][8]);
     offsetY = alignY(skel_data[0][8]);
     drawBack(skel_data[rowNum][0], skel_data[rowNum][1]); //Head and neck

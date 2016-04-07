@@ -26,6 +26,7 @@ String fileName = new String();
 
 int width = 640; // window width
 int height = 480; // window height
+
 // BUTTON VARIABLES
 color rectColor = color(50, 55, 100);
 color rectHighlightColor = color(150, 155, 155);
@@ -44,8 +45,8 @@ Boolean [] keysPressed = new Boolean[20];
 Boolean typingUsername, music, figure, animationPlaying, animation2playing, showPoints, showResponses, showEncouragements;
 Boolean isPaused = false;
 Boolean typingFileName = false;
-Boolean recordMode = false;
-Boolean dancePlayback = false;
+Boolean recordMode = false; //is program currently recording?
+Boolean dancePlayback = false; //is program currently playing back a recording?
 Boolean allowRecordModeActivationAgain = true;
 
 int startTime;
@@ -138,6 +139,12 @@ void drawDanceScreen() {
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectDance();
+  
+  //check to see if the user is either watching a recording or is recording their dances
+  //if they are not doing either of these things, then exit to main menu
+  if (recordMode == false && dancePlayback == false){
+     phase = "title"; 
+  }
 }
 
 /*---------------------------------------------------------------
