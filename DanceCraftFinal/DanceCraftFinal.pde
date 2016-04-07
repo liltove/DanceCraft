@@ -42,13 +42,13 @@ int numIterationsCompleted = 0; //Used to drawback skeletons
 
 void setup() {
   smooth();
-  phase = "title";
+  phase = "dance";
   size(640,480);
   font=createFont("Arial", 48);
   textFont(font);
   
   //load all images needed for the UI
-  /*welcomelogin = loadImage("elements/1_welcome_login.jpg");
+  welcomelogin = loadImage("elements/1_welcome_login.jpg");
   welcomebg = loadImage("elements/welcomebg.png");
   dancecraft = loadImage("elements/dancecraft3.png");
   onedancer = loadImage("elements/onedancer.png");
@@ -61,7 +61,7 @@ void setup() {
   diamond = loadImage("elements/diamond.png");
   play = loadImage("elements/play.png");
   arrow = loadImage("elements/arrow.png");
-  congratulations = loadImage("elements/congratulations.png");*/
+  congratulations = loadImage("elements/congratulations.png");
 
   count = 0;
   response = 0;
@@ -71,7 +71,10 @@ void setup() {
   figure = true;
   
   cp5 = new ControlP5(this);
+  
+  //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectSetup();
+  
   minim = new Minim(this);
   //musicSetup();
 
@@ -128,8 +131,8 @@ void drawDanceScreen() {
   textAlign(LEFT);
   time = (nf(mins, 2) + ":" + nf(secs, 2));
 
-  image(quitgame, width*.11, height*.95, 49*2.5, 12*2.5);
-  image(arrow, width*.04, height*.03, 206*.2,93*.2);
+  //image(quitgame, width*.11, height*.95, 49*2.5, 12*2.5);
+  //image(arrow, width*.04, height*.03, 206*.2,93*.2);
   fill(255,255,255,75);
   rectMode(CORNER);
   noStroke();
@@ -139,7 +142,8 @@ void drawDanceScreen() {
   textSize(18);
   textAlign(LEFT);
 
-  //kinectDance();
+  //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
+  kinectDance();
 }
 
 /*---------------------------------------------------------------
@@ -155,83 +159,6 @@ void drawTitleScreen() {
 //   text(username+(frameCount/10 % 2 == 0 ? "_" : ""), 247,264);
 //   typingUsername = true;
    toggleRecordMode();
-}
-
-/*---------------------------------------------------------------
-Draw the options title screen.
-----------------------------------------------------------------*/
-void drawOptionScreen() {
-    typingUsername=false;
-    imageMode(CENTER);
-    image(welcomebg,width/2,height/2,width,height);
-    image(dancecraft,width/2,height*.21,96*4.5,12*10);
-    textAlign(CENTER);
-    fill(255);
-    textSize(40);
-    if (username.length()>0) {
-      text("Welcome, "+username+"!", width/2,height*.43);
-    }
-    else {
-      text("Welcome!", width/2, height*.43);
-    }
-    image(onedancer, width/2, height*.6, 55*4.5, 11*4.5);
-    image(multidancers, width/2, height*.73, 55*4.5, 11*4.5);
-    image(myrecords, width*.11, height*.87, 49*2.5, 12*2.5);
-    image(quitgame, width*.11, height*.95, 49*2.5, 12*2.5);
-    image(question, width*.98, height*.04, 82*.2,149*.2);
-    image(arrow, width*.04, height*.03, 206*.2,93*.2);
-}
-
-/*---------------------------------------------------------------
-Draw the quit screen.
-----------------------------------------------------------------*/
-void drawQuitScreen() {
-  username="";
-  textSize(30);
-  imageMode(CENTER);
-  image(welcomebg,width/2,height/2,width,height);
-  textAlign(CENTER);
-  fill(40,40,40,150);
-  rectMode(CENTER);
-  noStroke();
-  rect(width/2, height*.58, 200,50);
-  fill(255);
-  text("Thank you for playing!", width/2, height*.4);
-  text("PLAY AGAIN", width/2, height*.6);
-}
-
-/*---------------------------------------------------------------
-Draw the info screen.
-----------------------------------------------------------------*/
-void drawInfoScreen() {
-    imageMode(CENTER);
-    image(welcomebg,width/2,height/2,width,height);
-    image(dancecraft,width/2,height*.21,96*4.5,12*10);
-    textAlign(CENTER);
-    fill(255);
-    textSize(40);
-    if (username.length()>0) {
-      text("Welcome, "+username+"!", width/2,height*.43);
-    }
-    else {
-      text("Welcome!", width/2, height*.43);
-    }
-    rectMode(CENTER);
-    fill(255,255,255,150);
-    rect(width/2, height*.66, 420,170);
-    fill(0);
-    textSize(30);
-    text("INSTRUCTIONS", width/2, height*.55);
-    textAlign(LEFT);
-    textSize(19);
-    text("Dance! You will see yourself on the screen.\nThe more you move, the more points you earn.\nWith enough points, you will earn a diamond!", 123, 300);
-    image(play, width/2, height*.92, 418*.25,181*.25);
-    image(arrow, width*.04, height*.03, 206*.2,93*.2);
-}
-
-void typeUsername() {
-  typingUsername = true;
-  username = "";
 }
 
 /*---------------------------------------------------------------

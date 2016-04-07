@@ -16,9 +16,6 @@ PImage kinectDepth;
 // int of each user being tracked
 int[] userID;
 
-// points variable array for each userID
-int[] points = new int[6];
-
 // mapping of users
 int[] userMapping;
 // background image
@@ -71,13 +68,6 @@ void kinectSetup()
  // enable skeleton generation for all joints
  kinect.enableUser();
 
-  //table to store user's skeletal coordinates
-  table=new Table();
-  table.addColumn("joint",Table.INT);
-  table.addColumn("x",Table.FLOAT);
-  table.addColumn("y",Table.FLOAT);
-  table.addColumn("z", Table.FLOAT);
-
 } // void setup()
 
 /*---------------------------------------------------------------
@@ -115,8 +105,19 @@ void kinectDance(){
 
   //get the list of users
   int[] users = kinect.getUsers();
+  
+  //CHANGE TO SILHOUETTE
+  for(int i = 0; i < users.length; i++)
+   {
+     //check if the user has skeleton
+    if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
+      //Draw skeleton on top of player as they play
+     drawSkeleton(users[i]);
+     }
+   }
 
-  if (recordMode == true) {
+//MOVE TO UI STUFF
+  /*if (recordMode == true) {
     //Do stuff we're currently doing like drawing the skeleton and saving it.
 
    //iterate through each users
@@ -128,13 +129,14 @@ void kinectDance(){
      drawSkeleton(users[i]);
      }
    }
- } else {
+ }else{
    background(255);
    fill(0);
    textSize(32);
    textAlign(CENTER);
    text ("Press P to load a dance", width/2, height/2);
- }
+ 
+ }*/
 
 } // void draw()
 
