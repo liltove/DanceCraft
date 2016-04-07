@@ -22,9 +22,9 @@ PFont font;
 String phase, mode;
 String [] files;
 String username, time;
-String desktopPath = "\\records/";
-String recordingsFolder = "data";
-String recordingName = "better_dance_recording.csv";
+String desktopPath = "\\records/"; 
+String recordingsFolder = "data"; // this is the folder that kinect skeleton recordings is in
+String recordingName = "better_dance_recording.csv"; // this is the file to temporarily use for the target recording to play
 String fileName = new String();
 
 Boolean [] keysPressed = new Boolean[20];
