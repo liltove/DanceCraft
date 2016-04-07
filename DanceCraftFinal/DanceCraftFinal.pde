@@ -173,7 +173,7 @@ Moves the program into recording mode.
 void toggleRecordMode () {
       //Switch to recording mode if you're pressing SHIFT and ctrl
       // keysPressed is an array containing a boolean at the keyCode for SHIFT (16) and CTRL (17)
-      if (keysPressed[16] && keysPressed[17]  && recordMode == false  && allowRecordModeActivationAgain == true) {
+      if (keysPressed==' '  && recordMode == false  && allowRecordModeActivationAgain == true) {
         recordMode = true;
         allowRecordModeActivationAgain = false;
         println("Record Mode Activated");
