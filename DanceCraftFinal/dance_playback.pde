@@ -7,12 +7,12 @@ float offsetX; //The offset x of the skeleton
 float offsetY; // The offset y of the skeleton
 float midWidth = 320 * 4; //middle width of the left half screen
 float midHeight = 720; //middle height of the left haft screen
-void readCsv(File selection)
+void readCsv(String selection)
 {
   //read the csv file if something has been selected
   if (selection != null) {
-    println(selection.toString());
-    loadedSkelTable = loadTable(selection.toString(), "header");
+    println(selection);
+    loadedSkelTable = loadTable(selection, "header");
     //println(table);
     skel_data = new PVector [loadedSkelTable.getRowCount()/15][15]; //Initalize skel_data w/ row size = number of "skeletons" and column size = number of joints.
     int i = 0; //count the number of skeletons that are read
@@ -32,7 +32,7 @@ void readCsv(File selection)
       skel_data[i][index].x = row.getFloat("x");
       skel_data[i][index].y = row.getFloat("y");
       skel_data[i][index].z = row.getFloat("z");
-      println ("FINAL Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
+      //println ("FINAL Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
       //println ("Table row count is ---->" + table.getRowCount());
       //once the iteration has read all 14 joint, it starts recording a new skeleton
       if (index == 14)

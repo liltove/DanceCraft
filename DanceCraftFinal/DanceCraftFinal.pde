@@ -23,6 +23,8 @@ String phase, mode;
 String [] files;
 String username, time;
 String desktopPath = "\\records/";
+String recordingsFolder = "data";
+String recordingName = "better_dance_recording.csv";
 String fileName = new String();
 
 Boolean [] keysPressed = new Boolean[20];
@@ -46,6 +48,7 @@ void setup() {
   size(640,480);
   font=createFont("Arial", 48);
   textFont(font);
+  
   
   //load all images needed for the UI
   welcomelogin = loadImage("elements/1_welcome_login.jpg");
@@ -140,7 +143,13 @@ void drawDanceScreen() {
   textAlign(LEFT);
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  kinectDance();
+  //kinectDance();
+  
+   background(255);
+   fill(0);
+   textSize(32);
+   textAlign(CENTER);
+   text ("Press P to load a dance", width/2, height/2);
 }
 
 /*---------------------------------------------------------------
@@ -293,7 +302,8 @@ void keyPressed() {
     if (phase == "dance") {
       if (recordMode == false) { //If we're not recording, allow user to load a dance when P pressed
         if (key == 'p' || key =='P') {
-          selectInput("Select the Dance you wish to load", "readCsv");
+          //selectInput("Select the Dance you wish to load", "readCsv");
+          playVideo(recordingName);
         }
       }
     }
@@ -320,6 +330,10 @@ void keyPressed() {
       }
     }
 
+}
+
+void playVideo(String filename){
+  readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
 }
 
 
