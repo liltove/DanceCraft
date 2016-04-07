@@ -13,10 +13,6 @@ Minim minim; //audio context
 int track = 1; //initial track number
 String trackNum; //holds track number for calling from file
 
-PImage welcomelogin, welcomebg, dancecraft, onedancer, multidancers,
-myrecords, quitgame, question, dancebg, switchOn, diamond, play, arrow,
-picture1, picture2, picture3, endPicture, whiteBackground, congratulations;
-
 PFont font;
 
 String phase, mode;
@@ -60,27 +56,10 @@ int numIterationsCompleted = 0; //Used to drawback skeletons
 
 void setup() {
   smooth();
-  phase = "dance";
+  phase = "title";
   size(width,height);
   font=createFont("Arial", 48);
   textFont(font);
-  
-  
-  //load all images needed for the UI
-  welcomelogin = loadImage("elements/1_welcome_login.jpg");
-  welcomebg = loadImage("elements/welcomebg.png");
-  dancecraft = loadImage("elements/dancecraft3.png");
-  onedancer = loadImage("elements/onedancer.png");
-  multidancers = loadImage("elements/multidancers.png");
-  myrecords = loadImage("elements/myrecords.png");
-  quitgame = loadImage("elements/quitgame.png");
-  question = loadImage("elements/question.png");
-  dancebg = loadImage("elements/dancebg.jpg");
-  switchOn = loadImage("elements/switch_on.png");
-  diamond = loadImage("elements/diamond.png");
-  play = loadImage("elements/play.png");
-  arrow = loadImage("elements/arrow.png");
-  congratulations = loadImage("elements/congratulations.png");
 
   count = 0;
   response = 0;
@@ -145,15 +124,9 @@ void drawDanceScreen() {
   textSize(30);
   fill(0);
   
-  textSize(32);
-  textAlign(CENTER);
-  text ("FANCY DANCECRAFT TITLE", width/2, height/5);
-   
   textAlign(LEFT);
   time = (nf(mins, 2) + ":" + nf(secs, 2));
 
-  //image(quitgame, width*.11, height*.95, 49*2.5, 12*2.5);
-  //image(arrow, width*.04, height*.03, 206*.2,93*.2);
   fill(255,255,255,75);
   rectMode(CORNER);
   noStroke();
@@ -165,8 +138,19 @@ void drawDanceScreen() {
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectDance();
-  
-  int y = 0;
+}
+
+/*---------------------------------------------------------------
+Draw the main title screen.
+----------------------------------------------------------------*/
+void drawTitleScreen() {
+   background(255); //makes background white
+   textSize(32);
+   textAlign(CENTER);
+   fill(0); //fills in letters black
+   text ("FANCY DANCECRAFT TITLE", width/2, height/5); //puts title in top center of screen
+
+   int y = 0;
   // ADDING BUTTONS
   
   // go throgh each button
@@ -203,21 +187,8 @@ void drawDanceScreen() {
     textAlign(CENTER, CENTER);
     text(buttonNames[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
   }
-}
-
-/*---------------------------------------------------------------
-Draw the main title screen.
-----------------------------------------------------------------*/
-void drawTitleScreen() {
-   background(255); //makes background white
-   text("DanceCraft",175,50); //puts title in top center of screen
-   //text("Enter Your Name",200,200);
-   //image(welcomelogin,0,0,width,height);
-   fill(0); //fills in letters black
-   //textSize(30);
-//   text(username+(frameCount/10 % 2 == 0 ? "_" : ""), 247,264);
-//   typingUsername = true;
-   toggleRecordMode();
+   
+   //toggleRecordMode();
 }
 
 /*---------------------------------------------------------------
@@ -226,7 +197,7 @@ Moves the program into recording mode.
 void toggleRecordMode () {
       //Switch to recording mode if you're pressing SHIFT and ctrl
       // keysPressed is an array containing a boolean at the keyCode for SHIFT (16) and CTRL (17)
-      if (keysPressed==' '  && recordMode == false  && allowRecordModeActivationAgain == true) {
+      if (keysPressed[16]  && recordMode == false  && allowRecordModeActivationAgain == true) {
         recordMode = true;
         allowRecordModeActivationAgain = false;
         println("Record Mode Activated");
@@ -264,6 +235,8 @@ void mouseReleased() {
     // checks to see if the mouse is currently hovering over it
     // and if the mouse press event started on that button
     if(buttonIsOver[i] && buttonIsPressed[i]) {
+      //enter the "dance" phase of the program
+      phase = "dance";
       // if so, then start the next video 
       playVideo(danceFileNames[i]);
     }
@@ -331,6 +304,7 @@ void keyPressed() {
 }
 
 void playVideo(String filename){
+  //read the file specified
   readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
 }
 
