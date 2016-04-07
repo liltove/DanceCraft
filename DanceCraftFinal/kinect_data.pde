@@ -100,45 +100,20 @@ void kinectDance(){
     }
   } // (int i =0; i < userMap.length; i++)
 
-
   // update any changed pixels
   updatePixels();
 
   //get the list of users
   int[] users = kinect.getUsers();
   
-  //CHANGE TO SILHOUETTE
   for(int i = 0; i < users.length; i++)
    {
      //check if the user has skeleton
     if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
       //Draw skeleton on top of player as they play
-     drawSkeleton(users[i]);
+     //drawSkeleton(users[i]);
      }
    }
-
-//MOVE TO UI STUFF
-  /*if (recordMode == true) {
-    //Do stuff we're currently doing like drawing the skeleton and saving it.
-
-   //iterate through each users
-   for(int i = 0; i < users.length; i++)
-   {
-     //check if the user has skeleton
-    if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
-      //Draw skeleton on top of player as they play
-     drawSkeleton(users[i]);
-     }
-   }
- }else{
-   background(255);
-   fill(0);
-   textSize(32);
-   textAlign(CENTER);
-   text ("Press P to load a dance", width/2, height/2);
- 
- }*/
-
 } // void draw()
 
 /*---------------------------------------------------------------
