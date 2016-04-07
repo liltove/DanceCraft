@@ -27,6 +27,22 @@ String recordingsFolder = "data"; // this is the folder that kinect skeleton rec
 String recordingName = "better_dance_recording.csv"; // this is the file to temporarily use for the target recording to play
 String fileName = new String();
 
+
+int width = 640; // window width
+int height = 480; // window height
+// BUTTON VARIABLES
+color rectColor = color(50, 55, 100);
+color rectHighlightColor = color(150, 155, 155);
+color rectPressedColor = color(100, 105, 155);
+int buttonWidth = 74;
+int buttonHeight = 35;
+int distanceFromLeft = (width/2) - (buttonWidth/2);
+int distanceFromTop = (height/5) * 2; //  distance from top to start drawing buttons;
+int distanceBetweenButtons = 33;
+String[] buttonNames = {"One", "Two", "Three"}; // array of button names;
+String[] danceFileNames= {"better_dance_recording.csv", "good_dance_recording.csv", "csvPoseData.csv"}; // array of associated File names to go with buttons
+Boolean[] buttonIsPressed = {false, false, false};
+Boolean[] buttonIsOver = {false, false, false};
 Boolean [] keysPressed = new Boolean[20];
 
 Boolean typingUsername, music, figure, animationPlaying, animation2playing, showPoints, showResponses, showEncouragements;
@@ -45,7 +61,7 @@ int numIterationsCompleted = 0; //Used to drawback skeletons
 void setup() {
   smooth();
   phase = "dance";
-  size(640,480);
+  size(width,height);
   font=createFont("Arial", 48);
   textFont(font);
   
@@ -76,7 +92,7 @@ void setup() {
   cp5 = new ControlP5(this);
   
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  kinectSetup();
+  //kinectSetup();
   
   minim = new Minim(this);
   //musicSetup();
@@ -128,6 +144,11 @@ void drawDanceScreen() {
 
   textSize(30);
   fill(0);
+  
+  textSize(32);
+  textAlign(CENTER);
+  text ("FANCY DANCECRAFT TITLE", width/2, height/5);
+   
   textAlign(LEFT);
   time = (nf(mins, 2) + ":" + nf(secs, 2));
 
@@ -145,11 +166,43 @@ void drawDanceScreen() {
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectDance();
   
-   background(255);
-   fill(0);
-   textSize(32);
-   textAlign(CENTER);
-   text ("Press P to load a dance", width/2, height/2);
+  int y = 0;
+  // ADDING BUTTONS
+  
+  // go throgh each button
+  for (int i = 0; i < buttonNames.length; i++) {
+    
+    // calculate the distance of that button from the top of the screen
+    y = distanceFromTop + buttonHeight*i + distanceBetweenButtons*i;
+    
+    // if the cursor is currently hovering over the button
+    if (mouseX >= distanceFromLeft && mouseX <= distanceFromLeft+buttonWidth && 
+    mouseY >= y && mouseY <= y+buttonHeight) {
+      // check to see if the button is NOT currently pressed
+      if(!buttonIsPressed[i]) {
+        // then color it as highlighted
+        fill(rectHighlightColor);
+      } else {
+        // if the button is being pressed, then color it as pressed
+        fill(rectPressedColor);
+      }
+      // and mark that the mouse is currently over that button
+      buttonIsOver[i] = true;
+    } else { // if the mouse isn't over this button
+      // reset the color
+      fill(rectColor);
+      // mark that the mouse is NOT over this button
+      buttonIsOver[i] = false;
+    }
+    
+    stroke(255);
+    rect(distanceFromLeft, y, buttonWidth, buttonHeight);
+    
+    fill(255);
+    textSize(18);
+    textAlign(CENTER, CENTER);
+    text(buttonNames[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
+  }
 }
 
 /*---------------------------------------------------------------
@@ -192,88 +245,33 @@ void toggleRecordMode () {
 Senses when mouse is clicked and does appropriate action.
 ----------------------------------------------------------------*/
 void mousePressed() {
-  if (phase=="title") {
-    if (mouseX>455 && mouseX<528 && mouseY>240 && mouseY<273) {
-      phase = "option";
-    }
-    else if (mouseX>151 && mouseX<345 && mouseY>354 && mouseY<400) {
-      username = "";
-      phase = "option";
-    }
-    else if (mouseX>383 && mouseX<491 && mouseY>354 && mouseY<400) {
-      phase = "quit";
-    }
-  }
-  else if (phase=="option") {
-    if (mouseX>196 && mouseX<443 && mouseY>236 && mouseY<314) {
-      mode = "onePlayer";
-      phase = "dance";
-      startTime = millis();
-    }
-    else if (mouseX>196 && mouseX<443 && mouseY>274 && mouseY<377) {
-      mode = "twoPlayer";
-      phase = "dance";
-      username = "Team";
-      startTime = millis();
-    }
-    else if (mouseX>4 && mouseX<48 && mouseY>6 && mouseY<26) {
-      imageMode(CORNER);
-      textAlign(LEFT);
-      phase = "login";
-    }
-    else if (mouseX>10 && mouseX<132 && mouseY>444 && mouseY<473) {
-      phase = "quit";
-    }
-    else if (mouseX>10 && mouseX<132 && mouseY>405 && mouseY<435) {
-      phase = "records";
-    }
-    else if (mouseX>620 && mouseX<636 && mouseY>6 && mouseY<38) {
-      phase = "info";
-    }
-  }
-  else if (phase=="dance") {
-    if (mouseX>83 && mouseX<98 && mouseY>54 && mouseY<69) {
-      music = !music;
-    }
-    else if (mouseX>83 && mouseX<98 && mouseY>74 && mouseY<89) {
-      figure = !figure;
-    }
-    else if (mouseX>4 && mouseX<48 && mouseY>6 && mouseY<26) {
-      phase = "option";
-    }
-    else if (mouseX>10 && mouseX<132 && mouseY>405 && mouseY<435) {
-      save("pictures/endPicture.png");
-      phase = "records";
-    }
-    else if (mouseX>10 && mouseX<132 && mouseY>444 && mouseY<473) {
-      save("pictures/endPicture.png");
-      phase = "quit";
-    }
-  }
-  else if (phase=="quit") {
-    if (mouseX>221 && mouseX<421 && mouseY>256 && mouseY<307) {
-      imageMode(CORNER);
-      textAlign(LEFT);
-      phase = "title";
-    }
-  }
-  else if (phase=="info") {
-    if (mouseX>4 && mouseX<48 && mouseY>6 && mouseY<26) {
-      phase = "option";
-    }
-    else if (mouseX>268 && mouseX<372 && mouseY>421 && mouseY<467) {
-      phase = "option";
-    }
-  }
-  else if (phase=="records") {
-    if (mouseX>4 && mouseX<48 && mouseY>6 && mouseY<26) {
-      phase = "option";
-
+  
+  // go through each button
+  for (int i = 0; i < buttonNames.length; i++) {
+    // check to see if the mouse is currently hovering over the button
+    if(buttonIsOver[i]) {
+      // if so then mark this button as pressed
+      buttonIsPressed[i] = true;
     }
   }
   //println(mouseX,mouseY);
 }
 
+void mouseReleased() {
+  
+  // goes through each button
+  for (int i = 0; i < buttonNames.length; i++) {
+    // checks to see if the mouse is currently hovering over it
+    // and if the mouse press event started on that button
+    if(buttonIsOver[i] && buttonIsPressed[i]) {
+      // if so, then start the next video 
+      playVideo(danceFileNames[i]);
+    }
+    // clear the button presse flag under all instances, because the mouse is released
+    // and we're ready for the next mouse event
+    buttonIsPressed[i] = false;
+  }
+}
 /*---------------------------------------------------------------
 Detects when a key has been pressed and does appropriate action.
 ----------------------------------------------------------------*/
