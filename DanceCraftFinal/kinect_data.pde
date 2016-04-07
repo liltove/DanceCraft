@@ -84,6 +84,9 @@ void kinectDance(){
 
    // prepare the color pixels
   loadPixels();
+  
+  //Create black color to turn user into a shadow
+  color black = color (0,0,0);
   // get pixels for the user tracked
   userMapping = kinect.userMap();
 
@@ -92,12 +95,10 @@ void kinectDance(){
   for (int i =0; i < userMapping.length; i++) {
     // if the pixel is part of the user
     if (userMapping[i] != 0) {
-
-      // set the sketch pixel to the rgb camera pixel
-      pixels[i] = rgbImage.pixels[i];
-    } // if (userMap[i] != 0)
-
-   } // (int i =0; i < userMap.length; i++)
+      // set the pixel color of the part of the display that is the user to black
+      pixels[i] = black;
+    }
+  } // (int i =0; i < userMap.length; i++)
 
 
   // update any changed pixels

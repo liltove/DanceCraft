@@ -73,7 +73,7 @@ void setup() {
   cp5 = new ControlP5(this);
   
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //kinectSetup();
+  kinectSetup();
   
   minim = new Minim(this);
   //musicSetup();
@@ -109,9 +109,6 @@ void draw() {
   else if (phase=="record"){
     //Branch to the recording screen, to record teacher's dances
     //THIS MIGHT LOOK DIFFERENT THAN THE DANCE PHASE?
-  }
-  else if (phase=="quit") {
-    drawQuitScreen();
   }
 }
 
