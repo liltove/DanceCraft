@@ -383,15 +383,22 @@ void draw3dold() {
 }
 
 void animation(){
-
+  int magnitude = 30;
 
   int i = (int)k%52;
   
     PVector orgv = model.getVertex(i);
     PVector tmpv = new PVector();
-    tmpv.x = orgv.x+ random(-20,20); // Z -  is backwards, + is forwards
-    tmpv.y = orgv.y+ random(-20,20); // up and down + is down, - is up
-    tmpv.z = orgv.z+ random(-20,20); // * (abs(cos(.2)) * 0.3 - 1.0); + is left, - is right
+    if((k-(int)k)>.98) {
+      tmpv.x = orgv.x; // Z -  is backwards, + is forwards
+      tmpv.y = orgv.y; // up and down + is down, - is up
+      tmpv.z = orgv.z; // * (abs(cos(.2)) * 0.3 - 1.0); + is left, - is right
+    }
+    else {
+      tmpv.x = orgv.x+ random(-1*magnitude,magnitude); // Z -  is backwards, + is forwards
+      tmpv.y = orgv.y+ random(-1*magnitude,magnitude); // up and down + is down, - is up
+      tmpv.z = orgv.z+ random(-1*magnitude,magnitude); // * (abs(cos(.2)) * 0.3 - 1.0); + is left, - is right
+    }
     tmpmodel.setVertex(i, tmpv);
 
 //  for(int i = 0; i < model.getVertexCount(); i++){
