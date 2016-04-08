@@ -3,7 +3,7 @@ import ddf.minim.*;
 import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
-
+import saito.objloader.*;
 import controlP5.*;
 
 ControlP5 cp5;
@@ -22,7 +22,6 @@ String desktopPath = "\\records/";
 String recordingsFolder = "data"; // this is the folder that kinect skeleton recordings is in
 String recordingName = "better_dance_recording.csv"; // this is the file to temporarily use for the target recording to play
 String fileName = new String();
-
 
 int width = 640; // window width
 int height = 480; // window height
@@ -55,10 +54,25 @@ int count;
 int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 
+// 3D Model stuff
+OBJModel model;
+OBJModel tmpmodel;
+String modelsFolder = "models";
+String modelName = "steve.obj";
+float rotX;
+float rotY;
+
+float normLength = -25;
+
+float k = 0.0;
+PVector pos;
+
+
+
 void setup() {
   smooth();
   phase = "title";
-  size(width,height);
+  size(width,height, P3D);
   font=createFont("Arial", 48);
   textFont(font);
 
@@ -85,6 +99,14 @@ void setup() {
   }
   //randomTrack();
   //soundtrack.play();
+  // 3D Model stuff
+    model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
+    tmpmodel = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
+    model.scale(25);
+    model.translateToCenter();
+    tmpmodel.scale(25);
+    tmpmodel.translateToCenter();
+    pos = new PVector();
 }
 
 /*---------------------------------------------------------------
@@ -104,6 +126,8 @@ void draw() {
     } else {
       drawDanceScreen();
     }
+  } else if(phase=="model"){
+    draw3d(); 
   }
   else if (phase=="record"){
     //Branch to the recording screen, to record teacher's dances
@@ -263,6 +287,8 @@ void keyPressed() {
       recordMode = false;
       allowRecordModeActivationAgain = false;
       println("Record Mode Deactivated");
+    } else if(key == 'm' || key =='M') {
+       phase = "model"; 
     }
   }
     // Listen for user pressing the "L" key.  Sets typingFileName to TRUE.  Prompts user to pick location.
@@ -307,7 +333,138 @@ void keyReleased(){
    }
 } //End of KeyPressed function
 
+/// BEGIN 3d stuff
+void draw3d(){
+   background(255);
+  noStroke();
+//  pushMatrix();
+  translate(width / 2, height / 2, 0); 
+  rotateY(PI*1.5);
+  tmpmodel.draw();
+//  popMatrix();
+  animation();
+}
 
+void draw3dold() {
+  lights();
+
+    pos.x = sin(radians(frameCount)) * 200;
+    pos.y = cos(radians(frameCount)) * 200;  
+
+    pushMatrix();
+
+    translate(width / 2, height / 2, 0); 
+
+    rotateX(rotY);
+    rotateY(rotX);
+
+    pushMatrix();
+    
+    drawPoint(pos);
+
+    popMatrix();
+
+    //rotateY(PI*1.5);
+    //we have to get the faces out of each segment.
+    // a segment is all verts of the one material
+    for (int j = 0; j < model.getSegmentCount(); j++) {
+
+        Segment segment = model.getSegment(j);
+        Face[] faces = segment.getFaces();
+
+        drawFaces( faces );
+
+        drawNormals( faces );
+        
+    }
+    
+    popMatrix();
+}
+
+void animation(){
+
+
+  int i = (int)k%52;
+  
+    PVector orgv = model.getVertex(i);
+    PVector tmpv = new PVector();
+    tmpv.x = orgv.x+ random(-20,20); // Z -  is backwards, + is forwards
+    tmpv.y = orgv.y+ random(-20,20); // up and down + is down, - is up
+    tmpv.z = orgv.z+ random(-20,20); // * (abs(cos(.2)) * 0.3 - 1.0); + is left, - is right
+    tmpmodel.setVertex(i, tmpv);
+
+//  for(int i = 0; i < model.getVertexCount(); i++){
+//    PVector orgv = model.getVertex(i);
+//    PVector tmpv = new PVector();
+//    tmpv.x = orgv.x * (abs(sin(i*0.2)) * 0.3 + 1.0);
+//    tmpv.y = orgv.y * (abs(cos(i*0.4)) * 0.3 + 1.0);
+//    tmpv.z = orgv.z * (abs(cos(i/5)) * 0.3 + 1.0);
+//    tmpmodel.setVertex(i, tmpv);
+//  }
+  k+=0.01;
+}
+
+
+void drawFaces(Face[] fc) {
+
+    // draw faces
+    noStroke();
+
+    beginShape(QUADS);
+
+    for (int i = 0; i < fc.length; i++)
+    {
+        PVector[] vs = fc[i].getVertices();
+        PVector[] ns = fc[i].getNormals();
+
+        // if the majority of the face is pointing to the position we draw it.
+        if(fc[i].isFacingPosition(pos)) {
+
+            for (int k = 0; k < vs.length; k++) {
+                normal(ns[k].x, ns[k].y, ns[k].z);
+                vertex(vs[k].x, vs[k].y, vs[k].z);
+            }
+        }
+    }
+    endShape();
+}
+
+
+
+void drawNormals( Face[] fc ) {
+
+    beginShape(LINES);
+    // draw face normals
+    for (int i = 0; i < fc.length; i++) {
+        PVector v = fc[i].getCenter();
+        PVector n = fc[i].getNormal();
+
+        // scale the alpha of the stroke by the facing amount.
+        // 0.0 = directly facing away
+        // 1.0 = directly facing 
+        // in truth this is the dot product normalized
+        stroke(255, 0, 255, 255.0 * fc[i].getFacingAmount(pos));
+
+        vertex(v.x, v.y, v.z);
+        vertex(v.x + (n.x * normLength), v.y + (n.y * normLength), v.z + (n.z * normLength));
+    }
+    endShape();
+}
+
+
+void drawPoint(PVector p){
+ 
+    translate(p.x, p.y, p.z);
+
+    noStroke();
+    ellipse(0,0,20,20);
+    rotateX(HALF_PI);
+    ellipse(0,0,20,20);
+    rotateY(HALF_PI);
+    ellipse(0,0,20,20);   
+    
+}
+// END 3D STUFF
 
 
 
