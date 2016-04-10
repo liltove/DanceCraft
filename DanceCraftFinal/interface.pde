@@ -118,3 +118,23 @@ void drawTitleScreen() {
    
    //toggleRecordMode();
 }
+
+/*---------------------------------------------------------------
+Draw String to screen
+----------------------------------------------------------------*/
+void drawMessage(String message){
+  clearScreen();
+  textSize(32);
+  textAlign(CENTER);
+  fill(0); //fills in letters black
+  println("Print message: " + message);
+  text (message, width/2, height/5); //puts message in top center of screen
+}
+
+/*---------------------------------------------------------------
+Clear everything from screen
+----------------------------------------------------------------*/
+void clearScreen(){
+ background(255); 
+}
+

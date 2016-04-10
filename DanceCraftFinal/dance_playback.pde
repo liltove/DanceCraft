@@ -132,7 +132,11 @@ void playVideo(String filename){
   while (!dancePlayback) {
     dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
   }
+  playBack (numIterationsCompleted); //play back the skeletons
+  numIterationsCompleted++;
 }
+
+
 
 /*--------------------------------------------------------------
 assigns the appropriate list of filenames depending on the current day selected
@@ -162,13 +166,26 @@ logic for playing through the list of files
   //loop until reach every current file name in array
   for (int i = 0; i < danceFileNames.length; i++) {
       playVideo(danceFileNames[i]);
-      playBack (numIterationsCompleted); //play back the skeletons
-      numIterationsCompleted++;
   }
   
-  //THIS IS WHERE THE LOGIC FOR PLAYING AND RECORDING THE CHOREOGRAPHIES NEEDS TO GO
+  drawMessage("Choreography");
+  // *****THIS IS WHERE THE LOGIC FOR PLAYING AND RECORDING THE CHOREOGRAPHIES NEEDS TO GO****
+  //play first 8 counts (from teacher)
+  playVideo(danceChoreoFiles[0]);
+  
+  //record next 8 counts from user
+  drawMessage("Press SPACE to begin recording.");
+  
+  //play third 8 counts from teacher
+  
+  //record next 8 counts from user
+  
+  //play all 32 counts together
+//  for (int i = 0; i < danceChoreoFiles.length; i++) {
+//    playVideo(danceChoreoFiles[i]);
+//  }
   
   //when all done playing the dances, go back to title screen
-  phase = "title";
+  //phase = "title";
 
  }
