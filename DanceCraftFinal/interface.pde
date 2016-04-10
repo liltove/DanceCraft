@@ -40,8 +40,6 @@ Draw the dance screen. Calls the animation/background image. Calls Kinect class.
 ----------------------------------------------------------------*/
 void drawDanceScreen() {
   background(255);
-
-  typingUsername = false;
   int passedTime = millis() - startTime;
   int secs = passedTime/1000 %60;
   int mins = passedTime/1000/60;
@@ -67,7 +65,7 @@ void drawDanceScreen() {
   //check to see if the user is either watching a recording or is recording their dances
   //if they are not doing either of these things, then exit to main menu
   if (recordMode == false && dancePlayback == false){
-     phase = "title"; 
+     phase = "title";
   }
 }
 
@@ -81,6 +79,9 @@ void drawTitleScreen() {
    fill(0); //fills in letters black
    text ("FANCY DANCECRAFT TITLE", width/2, height/5); //puts title in top center of screen
 
+  //if on title screen, then set day back to 0
+  currentDaySelected = 0;
+  
    int y = 0;
   // ADDING BUTTONS
   

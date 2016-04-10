@@ -36,6 +36,7 @@ int background;
 //int count;
 //int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
+int currentDaySelected = 0; //which day is selected to play appropriate dance files
 
 // 3D Model stuff
 /*OBJModel model;
@@ -162,6 +163,9 @@ void mouseReleased() {
     // checks to see if the mouse is currently hovering over it
     // and if the mouse press event started on that button
     if(buttonIsOver[i] && buttonIsPressed[i]) {
+      //update days to set which day is selected
+      currentDaySelected = i+1;
+      println(currentDaySelected);
       //enter the "dance" phase of the program
       phase = "dance";
       // if so, then start the next video 
