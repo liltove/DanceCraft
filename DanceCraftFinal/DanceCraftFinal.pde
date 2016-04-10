@@ -161,9 +161,6 @@ void mouseReleased() {
       fileForDaySelected();
       //enter the "dance" phase of the program
       phase = "dance";
-      // if so, then start the next video 
-      //playVideo(danceFileNames[i]);
-      //playDances();
     }
     // clear the button presse flag under all instances, because the mouse is released
     // and we're ready for the next mouse event

@@ -163,11 +163,9 @@ logic for playing through the list of files
   //loop through each csv file in the current day's dances
   //loop until reach every current file name in array
   for (int i = 0; i < danceFileNames.length; i++) {
-    //while (!dancePlayback) {
       playVideo(danceFileNames[i]);
       playBack (numIterationsCompleted); //play back the skeletons
       numIterationsCompleted++;
-    //}
   }
   
   //when all done playing the dances, go back to title screen
