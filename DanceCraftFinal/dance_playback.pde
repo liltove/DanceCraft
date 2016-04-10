@@ -85,6 +85,7 @@ void playBack(Integer rowNum)
   } else {
     dancePlayback = false;
     numIterationsCompleted = 0;
+    currentDanceSegment++; //increment position of dance segment to next one after this dance is complete
   }
 }
 
@@ -159,17 +160,31 @@ void fileForDaySelected(){
 logic for playing through the list of files
 --------------------------------------------------------------*/
  void playDances(){
-  //enter dance phase
-  phase = "dance";
-  
   //loop through each csv file in the current day's dances
   //loop until reach every current file name in array
   for (int i = 0; i < danceFileNames.length; i++) {
       playVideo(danceFileNames[i]);
   }
   
+  //if all segments of first part of dance complete, go to choreography
+  if (currentDanceSegment == danceFileNames.length){
+   println("first segment of dance finished"); 
+  }
+
+  //when all done playing the dances, go back to title screen
+  //phase = "title";
+
+ }
+ 
+ /*--------------------------------------------------------------
+Play the choreography section of the dance
+--------------------------------------------------------------*/
+Boolean playChoreo(){
+    //BEGIN CHOREOGRAPHY SECTION OF DANCE
   drawMessage("Choreography");
-  // *****THIS IS WHERE THE LOGIC FOR PLAYING AND RECORDING THE CHOREOGRAPHIES NEEDS TO GO****
+  delay(200); //wait a couple seconds before beginning section
+  clearScreen(); //get rid of message
+  
   //play first 8 counts (from teacher)
   playVideo(danceChoreoFiles[0]);
   
@@ -181,11 +196,8 @@ logic for playing through the list of files
   //record next 8 counts from user
   
   //play all 32 counts together
-//  for (int i = 0; i < danceChoreoFiles.length; i++) {
-//    playVideo(danceChoreoFiles[i]);
-//  }
-  
-  //when all done playing the dances, go back to title screen
-  //phase = "title";
-
- }
+  for (int i = 0; i < danceChoreoFiles.length; i++) {
+    playVideo(danceChoreoFiles[i]);
+  }  
+    return true;
+}

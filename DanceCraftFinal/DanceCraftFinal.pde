@@ -37,6 +37,7 @@ int background;
 //int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
+int currentDanceSegment = 0; //which segment of the dance are we on
 
 // 3D Model stuff
 /*OBJModel model;
@@ -116,6 +117,7 @@ void draw() {
     drawTitleScreen();
   } else if (phase=="dance") {
       drawDanceScreen();
+      playDances();
   }
 }
 

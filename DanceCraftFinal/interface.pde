@@ -59,8 +59,6 @@ void drawDanceScreen() {
   textSize(18);
   textAlign(LEFT);
 
-  playDances();
-
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectDance();
 }
@@ -115,8 +113,6 @@ void drawTitleScreen() {
     textAlign(CENTER, CENTER);
     text(buttonNames[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
   }
-   
-   //toggleRecordMode();
 }
 
 /*---------------------------------------------------------------
