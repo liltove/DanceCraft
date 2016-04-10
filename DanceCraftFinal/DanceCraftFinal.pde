@@ -38,6 +38,7 @@ int background;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
 int currentDanceSegment = 0; //which segment of the dance are we on
+int currentChoreoSegment = 0; //which segment of choreo are we on
 
 // 3D Model stuff
 /*OBJModel model;
@@ -68,7 +69,7 @@ void setup() {
   cp5 = new ControlP5(this);
   
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-   //kinectSetup();
+  //kinectSetup();
 
   minim = new Minim(this);
   //musicSetup();

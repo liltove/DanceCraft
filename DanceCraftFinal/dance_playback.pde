@@ -9,7 +9,7 @@ float midWidth = 320 * 4; //middle width of the left half screen
 float midHeight = 720; //middle height of the left haft screen
 
 String[] danceFileNames= {"prewarmUp.csv", "mirror.csv"};
-String[] danceChoreoFiles= {"combo1_first8.csv", "combo1_first8.csv", "combo1_third8.csv", "combo1_third8.csv"};
+String[] danceChoreoFiles= {"combo1_first8.csv", "bird_first8.csv", "combo1_third8.csv", "bird_third8.csv"};
 
 /*--------------------------------------------------------------
 reads the csv and retrieves the joint coordinate information
@@ -85,7 +85,14 @@ void playBack(Integer rowNum)
   } else {
     dancePlayback = false;
     numIterationsCompleted = 0;
-    currentDanceSegment++; //increment position of dance segment to next one after this dance is complete
+    
+    if (currentDanceSegment < danceFileNames.length){
+       currentDanceSegment++; 
+       println("Dance Segment: " + currentDanceSegment);
+    } else {
+       currentChoreoSegment++;
+      println("Choreo Segment: " + currentChoreoSegment); 
+    }
   }
 }
 
@@ -162,42 +169,70 @@ logic for playing through the list of files
  void playDances(){
   //loop through each csv file in the current day's dances
   //loop until reach every current file name in array
-  for (int i = 0; i < danceFileNames.length; i++) {
-      playVideo(danceFileNames[i]);
+  if (currentDanceSegment < danceFileNames.length){
+    for (int i = 0; i < danceFileNames.length; i++) {
+        playVideo(danceFileNames[i]);
+    }
   }
   
   //if all segments of first part of dance complete, go to choreography
-  if (currentDanceSegment == danceFileNames.length){
-   println("first segment of dance finished"); 
+  if ((currentDanceSegment == danceFileNames.length) && (currentChoreoSegment == 0)){
+    //BEGIN CHOREOGRAPHY SECTION OF DANCE
+    if (!dancePlayback){
+      drawMessage("Choreography");
+    }
+    playChoreo(0);
+  } else if ((currentDanceSegment == danceFileNames.length) && (currentChoreoSegment == 1)){
+   //record next 8 counts from user
+     if (!dancePlayback){
+      drawMessage("Press SPACE to begin recording.");
+     }
+    
+    //wait for user to press the space bar, record, and then play back the dance
+    
+    
+   //playChoreo(currentChoreoSegment); //call choreography function
+  } else if ((currentDanceSegment == danceFileNames.length) && (currentChoreoSegment == 2)){
+    //play third 8 counts from teacher
+    playChoreo(2); //call choreography function    
   }
+     if ((currentChoreoSegment-danceChoreoFiles.length) < danceChoreoFiles.length){
+    //play all 32 counts together
+    for (int i = 0; i < danceChoreoFiles.length; i++) {
+      playVideo(danceChoreoFiles[i]);
+    }
+  } 
+  
 
   //when all done playing the dances, go back to title screen
-  //phase = "title";
+  if (currentDanceSegment >= danceFileNames.length && currentChoreoSegment >= danceChoreoFiles.length * 2){
+    phase = "title";
+    currentDanceSegment = 0; //reset segment count
+  }
 
  }
  
  /*--------------------------------------------------------------
 Play the choreography section of the dance
 --------------------------------------------------------------*/
-Boolean playChoreo(){
-    //BEGIN CHOREOGRAPHY SECTION OF DANCE
-  drawMessage("Choreography");
-  delay(200); //wait a couple seconds before beginning section
-  clearScreen(); //get rid of message
-  
-  //play first 8 counts (from teacher)
-  playVideo(danceChoreoFiles[0]);
-  
-  //record next 8 counts from user
-  drawMessage("Press SPACE to begin recording.");
-  
-  //play third 8 counts from teacher
-  
-  //record next 8 counts from user
-  
-  //play all 32 counts together
-  for (int i = 0; i < danceChoreoFiles.length; i++) {
-    playVideo(danceChoreoFiles[i]);
-  }  
-    return true;
+void playChoreo(int segmentNum){
+//  
+  if (currentChoreoSegment < danceChoreoFiles.length){ //check to see what segment we are on
+    //play first 8 counts (from teacher)
+    playVideo(danceChoreoFiles[segmentNum]);
+    
+    //record next 8 counts from user
+//    drawMessage("Press SPACE to begin recording.");
+//    clearScreen();
+    
+    //wait for user to press the space bar, record, and then play back the dance
+    
+    
+    //playVideo(danceChoreoFiles[2]);
+    
+    //record next 8 counts from user
+    
+    //wait for user to press the space bar, record, and then play back the dance
+     
+  }
 }
