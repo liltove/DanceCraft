@@ -165,11 +165,13 @@ void mouseReleased() {
     if(buttonIsOver[i] && buttonIsPressed[i]) {
       //update days to set which day is selected
       currentDaySelected = i+1;
-      println(currentDaySelected);
+      //make sure filenames are up to date
+      fileForDaySelected();
       //enter the "dance" phase of the program
-      phase = "dance";
+      //phase = "dance";
       // if so, then start the next video 
-      playVideo(danceFileNames[i]);
+      //playVideo(danceFileNames[i]);
+      playDances();
     }
     // clear the button presse flag under all instances, because the mouse is released
     // and we're ready for the next mouse event

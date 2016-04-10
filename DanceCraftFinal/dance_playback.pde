@@ -7,6 +7,12 @@ float offsetX; //The offset x of the skeleton
 float offsetY; // The offset y of the skeleton
 float midWidth = 320 * 4; //middle width of the left half screen
 float midHeight = 720; //middle height of the left haft screen
+
+String[] danceFileNames= {"prewarmUp.csv", "mirror.csv", "combo1_first8.csv", "combo1_third8.csv"};
+
+/*--------------------------------------------------------------
+reads the csv and retrieves the joint coordinate information
+--------------------------------------------------------------*/
 void readCsv(String selection)
 {
   //read the csv file if something has been selected
@@ -50,6 +56,9 @@ void readCsv(String selection)
   }
 }
 
+/*--------------------------------------------------------------
+draws the points of each of the joints
+--------------------------------------------------------------*/
 void playBack(Integer rowNum)
 {
   if (rowNum < skel_data.length) {  //Compare number passed to function and make sure its less than the length of the array of skeleton data
@@ -78,6 +87,9 @@ void playBack(Integer rowNum)
   }
 }
 
+/*--------------------------------------------------------------
+draws the points based on the coordinates
+--------------------------------------------------------------*/
 void drawBack(PVector skeA, PVector skeB)
 {
 
@@ -110,3 +122,37 @@ float alignY(PVector skeA)
 {
   return skeA.y + midHeight;
 }
+
+
+/*--------------------------------------------------------------
+assigns the appropriate list of filenames depending on the current day selected
+--------------------------------------------------------------*/
+void fileForDaySelected(){
+  
+ if (currentDaySelected == 1) {
+   danceFileNames[2] = "combo1_first8.csv";
+   danceFileNames[3] = "combo1_third8.csv";
+ } else if (currentDaySelected == 2) {
+   danceFileNames[2] = "bird_first8.csv";
+   danceFileNames[3] = "bird_third8.csv";
+ } else if (currentDaySelected == 3) {
+   danceFileNames[2] = "car_first8.csv";
+   danceFileNames[3] = "car_third8.csv";   
+ }
+}
+
+/*--------------------------------------------------------------
+logic for playing through the list of files
+--------------------------------------------------------------*/
+ void playDances(){
+  //enter dance phase
+  phase = "dance";
+  
+  //loop until reach every current file name in array
+  for (int i = 0; i < danceFileNames.length; i++) {
+    playVideo(danceFileNames[i]);
+  }
+  
+  //when all done playing the dances, go back to title screen
+  //phase = "title";
+ }
