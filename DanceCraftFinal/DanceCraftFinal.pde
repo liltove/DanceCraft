@@ -115,29 +115,8 @@ void draw() {
   if (phase=="title") {
     drawTitleScreen();
   } else if (phase=="dance") {
-    //Branch to playback recorded dance
-    if (dancePlayback == true) {
-      background(255);  //Clear background
-      playBack (numIterationsCompleted); //play back the skeletons
-      numIterationsCompleted++;
-    } else {
       drawDanceScreen();
-    }
-  } /*else if(phase=="model"){
-    draw3d(); 
-  }*/
-  else if (phase=="record"){
-    //Branch to the recording screen, to record teacher's dances
-    //THIS MIGHT LOOK DIFFERENT THAN THE DANCE PHASE?
   }
-}
-
-/*---------------------------------------------------------------
-Takes in the name of the csv skeleton file you want to play back and plays it
-----------------------------------------------------------------*/
-void playVideo(String filename){
-  //read the file specified
-  readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
 }
 
 /*---------------------------------------------------------------
@@ -156,8 +135,7 @@ void mousePressed() {
   //println(mouseX,mouseY);
 }
 
-void mouseReleased() {
-  
+void mouseReleased() {  
   // goes through each button
   for (int i = 0; i < buttonNames.length; i++) {
     // checks to see if the mouse is currently hovering over it
@@ -168,10 +146,7 @@ void mouseReleased() {
       //make sure filenames are up to date
       fileForDaySelected();
       //enter the "dance" phase of the program
-      //phase = "dance";
-      // if so, then start the next video 
-      //playVideo(danceFileNames[i]);
-      playDances();
+      phase = "dance";
     }
     // clear the button presse flag under all instances, because the mouse is released
     // and we're ready for the next mouse event
@@ -183,21 +158,7 @@ void mouseReleased() {
 Detects when a key has been pressed and does appropriate action.
 ----------------------------------------------------------------*/
 void keyPressed() {
-  //println("Key pressed is --->" + key);
-  //println ("Key code is ---->" + keyCode);
-  //Key code for shift key is 16 and ctrl is 17
-
-  //Check to see the phase of the game
-  /*if (phase == "dance") {
-    if (recordMode == false) { //If we're not recording, allow user to load a dance when P pressed
-      if (key == 'p' || key =='P') {
-        //selectInput("Select the Dance you wish to load", "readCsv");
-        playVideo(recordingName);
-      }
-    }
-  }*/
-  
-   //Switch to recording mode if you're pressing SPACE
+  //Switch to recording mode if you're pressing SPACE
   if (keyPressed){
     if (key == ' ' && phase == "dance" && recordMode == false  && allowRecordModeActivationAgain == true){
       recordMode = true;
@@ -214,28 +175,6 @@ void keyPressed() {
        phase = "model"; 
     }
   }
-    // Listen for user pressing the "L" key.  Sets typingFileName to TRUE.  Prompts user to pick location.
-   /* if(key=='l'|| key=='L') {
-      isPaused = true;
-      typingFileName = true;
-      text("Name Your Dance",200,200);
-      //Create box to type in
-      cp5.addTextfield ("input")
-        .clear()
-        .setPosition (width/2, (height/2)-40)
-        .setSize (200,80)
-        .setFocus(true);
-    }
-
-    //Capture the input
-    if (typingFileName == true) {
-      if (key == ENTER){
-        fileName = cp5.get(Textfield.class, "input").getText();
-        typingFileName = false;
-        selectFolder("Where do you wish to save your dance?", "saveSkeletonTable");
-      }
-    }*/
-
 }
 
 

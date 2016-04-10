@@ -14,7 +14,7 @@ String[] danceChoreoFiles= {"combo1_first8.csv", "combo1_first8.csv", "combo1_th
 /*--------------------------------------------------------------
 reads the csv and retrieves the joint coordinate information
 --------------------------------------------------------------*/
-void readCsv(String selection)
+Boolean readCsv(String selection)
 {
   //read the csv file if something has been selected
   if (selection != null) {
@@ -49,11 +49,11 @@ void readCsv(String selection)
     }
     //println ("For loop finished!");
     //Ready to start dance Playback
-    dancePlayback = true;
     println("Exiting readCSV function");
-
+    return true;
   } else {
     println ("No file selected or incorrect file type.  Must be CSV.");
+    return false;
   }
 }
 
@@ -124,6 +124,19 @@ float alignY(PVector skeA)
   return skeA.y + midHeight;
 }
 
+/*---------------------------------------------------------------
+Takes in the name of the csv skeleton file you want to play back and plays it
+----------------------------------------------------------------*/
+void playVideo(String filename){
+  //read the file specified
+  while (!dancePlayback) {
+    dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
+  }
+  playBack (numIterationsCompleted); //play back the skeletons
+  numIterationsCompleted++;
+}
+
+
 
 /*--------------------------------------------------------------
 assigns the appropriate list of filenames depending on the current day selected
@@ -132,13 +145,13 @@ void fileForDaySelected(){
   
  if (currentDaySelected == 1) {
    danceChoreoFiles[0] = "combo1_first8.csv";
-   danceFileNames[2] = "combo1_third8.csv";
+   danceChoreoFiles[2] = "combo1_third8.csv";
  } else if (currentDaySelected == 2) {
    danceChoreoFiles[0] = "bird_first8.csv";
-   danceFileNames[2] = "bird_third8.csv";
+   danceChoreoFiles[2] = "bird_third8.csv";
  } else if (currentDaySelected == 3) {
    danceChoreoFiles[0] = "car_first8.csv";
-   danceFileNames[2] = "car_third8.csv";   
+   danceChoreoFiles[2] = "car_third8.csv";   
  }
 }
 
@@ -149,11 +162,30 @@ logic for playing through the list of files
   //enter dance phase
   phase = "dance";
   
+  //loop through each csv file in the current day's dances
   //loop until reach every current file name in array
   for (int i = 0; i < danceFileNames.length; i++) {
-    playVideo(danceFileNames[i]);
+      playVideo(danceFileNames[i]);
   }
+  
+  drawMessage("Choreography");
+  // *****THIS IS WHERE THE LOGIC FOR PLAYING AND RECORDING THE CHOREOGRAPHIES NEEDS TO GO****
+  //play first 8 counts (from teacher)
+  playVideo(danceChoreoFiles[0]);
+  
+  //record next 8 counts from user
+  drawMessage("Press SPACE to begin recording.");
+  
+  //play third 8 counts from teacher
+  
+  //record next 8 counts from user
+  
+  //play all 32 counts together
+//  for (int i = 0; i < danceChoreoFiles.length; i++) {
+//    playVideo(danceChoreoFiles[i]);
+//  }
   
   //when all done playing the dances, go back to title screen
   //phase = "title";
+
  }

@@ -59,14 +59,10 @@ void drawDanceScreen() {
   textSize(18);
   textAlign(LEFT);
 
+  playDances();
+
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectDance();
-  
-  //check to see if the user is either watching a recording or is recording their dances
-  //if they are not doing either of these things, then exit to main menu
-  if (recordMode == false && dancePlayback == false){
-     phase = "title";
-  }
 }
 
 /*---------------------------------------------------------------
@@ -122,3 +118,23 @@ void drawTitleScreen() {
    
    //toggleRecordMode();
 }
+
+/*---------------------------------------------------------------
+Draw String to screen
+----------------------------------------------------------------*/
+void drawMessage(String message){
+  clearScreen();
+  textSize(32);
+  textAlign(CENTER);
+  fill(0); //fills in letters black
+  println("Print message: " + message);
+  text (message, width/2, height/5); //puts message in top center of screen
+}
+
+/*---------------------------------------------------------------
+Clear everything from screen
+----------------------------------------------------------------*/
+void clearScreen(){
+ background(255); 
+}
+
