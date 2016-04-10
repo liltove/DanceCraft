@@ -157,7 +157,7 @@
 //  // box(width, height, depth);
 //  box(200, 5, 200);
 //
-//  // affiche le rep�re Ox,Oy,Oz
+//  // affiche le repere Ox,Oy,Oz
 //
 //  //---- Ox
 //  stroke(rouge);
@@ -238,13 +238,13 @@
 //    cameraZ+=5;
 //    break;
 //  case CODED :
-//    if (keyCode == UP) { 			// si touche Haut appuy�e
+//    if (keyCode == UP) { 			// si touche Haut appuyee
 //      cameraY-=5;
-//    } else if (keyCode == DOWN) {	// si touche BAS appuy�e
+//    } else if (keyCode == DOWN) {	// si touche BAS appuyee
 //      cameraY+=5;
-//    } else if (keyCode == LEFT) {	// si touche GAUCHE appuy�e
+//    } else if (keyCode == LEFT) {	// si touche GAUCHE appuyee
 //      cameraX-=5;
-//    } else if (keyCode == RIGHT) {	// si touche DROITE appuy�e
+//    } else if (keyCode == RIGHT) {	// si touche DROITE appuyee
 //      cameraX+=5;
 //    }
 //    break;

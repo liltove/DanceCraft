@@ -92,7 +92,7 @@ public class ZZMaterial {
 	public static ZZMaterial textureByName(ArrayList<ZZMaterial> l, String n) {
 		/***************************************************************
 		 * 
-		 *  retourne le materiel ayant le nom recherch� dans une liste
+		 *  retourne le materiel ayant le nom recherche dans une liste
 		 * 
 		 ***************************************************************/
 		

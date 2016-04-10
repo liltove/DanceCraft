@@ -57,7 +57,7 @@ class ZZoint extends ZZector {
 	public int getParent() {
     	/***************************************************************
     	 * 
-    	 *  retourne le code valeur du joint p�re
+    	 *  retourne le code valeur du joint pere
     	 * 
     	 ***************************************************************/
     	

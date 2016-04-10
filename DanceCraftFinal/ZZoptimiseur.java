@@ -9,7 +9,7 @@ public class ZZoptimiseur {
 	public ZZoptimiseur(int qtEch, ZZoint[] initial) {
    	 	/***************************************************************
    	 	 * 
-   	 	 *  constructeur par d�faut
+   	 	 *  constructeur par defaut
    	 	 * 
    	 	 ***************************************************************/
     	
@@ -41,7 +41,7 @@ public class ZZoptimiseur {
     	
 		if (cptEch!=0) {							//****************************************
 			arrivee = ZZoint.add(ech, arrivee);		//
-		} else {									//	on somme toutes les donn�es entrantes
+		} else {									//	on somme toutes les donnees entrantes
 			arrivee = ech;							//
 		}											//****************************************
 

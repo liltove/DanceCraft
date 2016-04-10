@@ -66,7 +66,7 @@ class ZZModel {
 			groups[i] = new ArrayList<Integer>();
 		}
 		
-		// v�rification du type de fichier
+		// verification du type de fichier
 		if(!(filename.contains(".obj"))) {
 			PApplet.println("Chargement du modele : attention, il se peut que " + filename + " soit incompatible");
 		}
@@ -194,7 +194,7 @@ class ZZModel {
     public void scale(float s) {
     	/***************************************************************
     	 * 
-    	 *	change la taille du mod�le
+    	 *	change la taille du modele
     	 * 
     	 ***************************************************************/
 
@@ -209,7 +209,7 @@ class ZZModel {
     public void rotateX2(float angle) {	// deprecated : ne modifie pas les vertices mais joue sur la matrice
     	/***************************************************************
     	 * 
-    	 *	rotation du mod�le autour de l'axe X
+    	 *	rotation du modele autour de l'axe X
     	 * 
     	 ***************************************************************/
       
@@ -221,7 +221,7 @@ class ZZModel {
     public void rotateX(float angle) {
     	/***************************************************************
     	 * 
-    	 *	rotation du mod�le autour de l'axe X
+    	 *	rotation du modle autour de l'axe X
     	 * 
     	 ***************************************************************/
     	
@@ -231,7 +231,7 @@ class ZZModel {
     public void rotateY(float angle) {
     	/***************************************************************
     	 * 
-    	 *	rotation du mod�le autour de l'axe Y
+    	 *	rotation du modele autour de l'axe Y
     	 * 
     	 ***************************************************************/
     	
@@ -241,7 +241,7 @@ class ZZModel {
     public void rotateZ(float angle) {
     	/***************************************************************
     	 * 
-    	 *	rotation du mod�le autour de l'axe Z
+    	 *	rotation du modele autour de l'axe Z
     	 * 
     	 ***************************************************************/
     	
@@ -251,7 +251,7 @@ class ZZModel {
     public void rotateAround(PVector center, float theta, float phi, float epsilon) {
     	/***************************************************************
     	 * 
-    	 *	rotation du mod�le autour d'un point
+    	 *	rotation du modele autour d'un point
     	 * 
     	 ***************************************************************/
     	
@@ -266,7 +266,7 @@ class ZZModel {
     public void rotatePart(int part, float theta, float phi, float epsilon) {
     	/***************************************************************
     	 * 
-    	 *  fait tourner toute une partie du mod�le
+    	 *  fait tourner toute une partie du modele
     	 * 
     	 ***************************************************************/
       
@@ -290,7 +290,7 @@ class ZZModel {
     public void rotatePart(int part, float theta, float phi) {
 	    /***************************************************************
 	     * 
-	     *  fait tourner toute une partie du mod�le
+	     *  fait tourner toute une partie du modele
 	     * 
 	     ***************************************************************/
       
@@ -310,7 +310,7 @@ class ZZModel {
     public void rotateY2(float angle) { // deprecated : ne modifie pas les vertices mais joue sur la matrice 
     	/***************************************************************
     	 * 
-    	 *  rotation du mod�le autour de l'axe Y
+    	 *  rotation du modele autour de l'axe Y
     	 * 
     	 ***************************************************************/
       
@@ -321,7 +321,7 @@ class ZZModel {
     public void rotateZ2(float angle) { // deprecated : ne modifie pas les vertices mais joue sur la matrice
     	/***************************************************************
     	 * 
-    	 *	rotation du mod�le autour de l'axe Z
+    	 *	rotation du modele autour de l'axe Z
     	 * 
     	 ***************************************************************/
       
@@ -332,7 +332,7 @@ class ZZModel {
     public void translate2(float x, float y, float z) { // deprecated : ne modifie pas les vertices mais joue sur la matrice
     	/***************************************************************
     	 * 
-    	 *	translation du mod�le
+    	 *	translation du modele
     	 * 
     	 ***************************************************************/
 
@@ -343,7 +343,7 @@ class ZZModel {
     public void translate(float x, float y, float z) { // deprecated : ne modifie pas les vertices mais joue sur la matrice
     	/***************************************************************
     	 * 
-    	 *	translation du mod�le
+    	 *	translation du modele
     	 * 
     	 ***************************************************************/
 
@@ -358,7 +358,7 @@ class ZZModel {
     public void translate(PVector zz) {
     	/***************************************************************
     	 * 
-    	 *	translation du mod�le
+    	 *	translation du modele
     	 * 
     	 ***************************************************************/
 
@@ -368,7 +368,7 @@ class ZZModel {
     public PShape getChild(String target) {
     	/***************************************************************
     	 * 
-    	 *	retourne le sous groupe target du mod�le
+    	 *	retourne le sous groupe target du modele
     	 * 
     	 ***************************************************************/
       
@@ -378,7 +378,7 @@ class ZZModel {
     public PShape[] getChildren() {
     	/***************************************************************
     	 * 
-    	 *	retourne le sous groupe target du mod�le
+    	 *	retourne le sous groupe target du modele
     	 * 
     	 ***************************************************************/
       
@@ -388,7 +388,7 @@ class ZZModel {
     public int getVertexCount() {
     	/***************************************************************
     	 * 
-    	 *	retourne le sous groupe target du mod�le
+    	 *	retourne le sous groupe target du modele
     	 * 
     	 ***************************************************************/
       
