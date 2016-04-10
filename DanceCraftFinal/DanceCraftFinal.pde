@@ -116,13 +116,13 @@ void draw() {
     drawTitleScreen();
   } else if (phase=="dance") {
     //Branch to playback recorded dance
-    if (dancePlayback == true) {
-      background(255);  //Clear background
-      playBack (numIterationsCompleted); //play back the skeletons
-      numIterationsCompleted++;
-    } else {
+    //if (dancePlayback == true) {
+//      background(255);  //Clear background
+//      playBack (numIterationsCompleted); //play back the skeletons
+//      numIterationsCompleted++;
+    //} else {
       drawDanceScreen();
-    }
+    //}
   } /*else if(phase=="model"){
     draw3d(); 
   }*/
@@ -160,10 +160,10 @@ void mouseReleased() {
       //make sure filenames are up to date
       fileForDaySelected();
       //enter the "dance" phase of the program
-      //phase = "dance";
+      phase = "dance";
       // if so, then start the next video 
       //playVideo(danceFileNames[i]);
-      playDances();
+      //playDances();
     }
     // clear the button presse flag under all instances, because the mouse is released
     // and we're ready for the next mouse event

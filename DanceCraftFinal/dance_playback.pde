@@ -14,7 +14,7 @@ String[] danceChoreoFiles= {"combo1_first8.csv", "combo1_first8.csv", "combo1_th
 /*--------------------------------------------------------------
 reads the csv and retrieves the joint coordinate information
 --------------------------------------------------------------*/
-void readCsv(String selection)
+Boolean readCsv(String selection)
 {
   //read the csv file if something has been selected
   if (selection != null) {
@@ -49,13 +49,13 @@ void readCsv(String selection)
     }
     //println ("For loop finished!");
     //Ready to start dance Playback
-    dancePlayback = true;
+    //dancePlayback = true;
     println("Exiting readCSV function");
-    //return true;
+    return true;
 
   } else {
     println ("No file selected or incorrect file type.  Must be CSV.");
-    //return false;
+    return false;
   }
 }
 
@@ -132,7 +132,7 @@ Takes in the name of the csv skeleton file you want to play back and plays it
 void playVideo(String filename){
   //read the file specified
   while (!dancePlayback) {
-    readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
+    dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
   }
 }
 
@@ -165,11 +165,13 @@ logic for playing through the list of files
   for (int i = 0; i < danceFileNames.length; i++) {
     //while (!dancePlayback) {
       playVideo(danceFileNames[i]);
+      playBack (numIterationsCompleted); //play back the skeletons
+      numIterationsCompleted++;
     //}
   }
   
   //when all done playing the dances, go back to title screen
-  //phase = "title";
+  phase = "title";
 //  //check to see if the user is either watching a recording or is recording their dances
 //  //if they are not doing either of these things, then exit to main menu
 //  if (recordMode == false && dancePlayback == false){

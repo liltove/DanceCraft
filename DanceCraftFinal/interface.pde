@@ -59,14 +59,10 @@ void drawDanceScreen() {
   textSize(18);
   textAlign(LEFT);
 
+  playDances();
+
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectDance();
-  
-//  //check to see if the user is either watching a recording or is recording their dances
-//  //if they are not doing either of these things, then exit to main menu
-//  if (recordMode == false && dancePlayback == false){
-//     phase = "title";
-//  }
 }
 
 /*---------------------------------------------------------------
