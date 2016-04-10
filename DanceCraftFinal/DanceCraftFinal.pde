@@ -132,6 +132,14 @@ void draw() {
 }
 
 /*---------------------------------------------------------------
+Takes in the name of the csv skeleton file you want to play back and plays it
+----------------------------------------------------------------*/
+void playVideo(String filename){
+  //read the file specified
+  readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
+}
+
+/*---------------------------------------------------------------
 Senses when mouse is clicked and does appropriate action.
 ----------------------------------------------------------------*/
 void mousePressed() {
@@ -164,6 +172,7 @@ void mouseReleased() {
     buttonIsPressed[i] = false;
   }
 }
+
 /*---------------------------------------------------------------
 Detects when a key has been pressed and does appropriate action.
 ----------------------------------------------------------------*/
@@ -221,11 +230,6 @@ void keyPressed() {
       }
     }*/
 
-}
-
-void playVideo(String filename){
-  //read the file specified
-  readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
 }
 
 
