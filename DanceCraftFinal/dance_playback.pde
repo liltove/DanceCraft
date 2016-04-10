@@ -51,9 +51,11 @@ void readCsv(String selection)
     //Ready to start dance Playback
     dancePlayback = true;
     println("Exiting readCSV function");
+    //return true;
 
   } else {
     println ("No file selected or incorrect file type.  Must be CSV.");
+    //return false;
   }
 }
 
@@ -124,6 +126,15 @@ float alignY(PVector skeA)
   return skeA.y + midHeight;
 }
 
+/*---------------------------------------------------------------
+Takes in the name of the csv skeleton file you want to play back and plays it
+----------------------------------------------------------------*/
+void playVideo(String filename){
+  //read the file specified
+  while (!dancePlayback) {
+    readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
+  }
+}
 
 /*--------------------------------------------------------------
 assigns the appropriate list of filenames depending on the current day selected
@@ -132,13 +143,13 @@ void fileForDaySelected(){
   
  if (currentDaySelected == 1) {
    danceChoreoFiles[0] = "combo1_first8.csv";
-   danceFileNames[2] = "combo1_third8.csv";
+   danceChoreoFiles[2] = "combo1_third8.csv";
  } else if (currentDaySelected == 2) {
    danceChoreoFiles[0] = "bird_first8.csv";
-   danceFileNames[2] = "bird_third8.csv";
+   danceChoreoFiles[2] = "bird_third8.csv";
  } else if (currentDaySelected == 3) {
    danceChoreoFiles[0] = "car_first8.csv";
-   danceFileNames[2] = "car_third8.csv";   
+   danceChoreoFiles[2] = "car_third8.csv";   
  }
 }
 
@@ -149,11 +160,19 @@ logic for playing through the list of files
   //enter dance phase
   phase = "dance";
   
+  //loop through each csv file in the current day's dances
   //loop until reach every current file name in array
   for (int i = 0; i < danceFileNames.length; i++) {
-    playVideo(danceFileNames[i]);
+    //while (!dancePlayback) {
+      playVideo(danceFileNames[i]);
+    //}
   }
   
   //when all done playing the dances, go back to title screen
   //phase = "title";
+//  //check to see if the user is either watching a recording or is recording their dances
+//  //if they are not doing either of these things, then exit to main menu
+//  if (recordMode == false && dancePlayback == false){
+//     phase = "title";
+//  }
  }
