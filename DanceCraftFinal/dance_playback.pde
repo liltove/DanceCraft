@@ -8,7 +8,8 @@ float offsetY; // The offset y of the skeleton
 float midWidth = 320 * 4; //middle width of the left half screen
 float midHeight = 720; //middle height of the left haft screen
 
-String[] danceFileNames= {"prewarmUp.csv", "mirror.csv", "combo1_first8.csv", "combo1_third8.csv"};
+String[] danceFileNames= {"prewarmUp.csv", "mirror.csv"};
+String[] danceChoreoFiles= {"combo1_first8.csv", "combo1_first8.csv", "combo1_third8.csv", "combo1_third8.csv"};
 
 /*--------------------------------------------------------------
 reads the csv and retrieves the joint coordinate information
@@ -46,7 +47,7 @@ void readCsv(String selection)
         i++;
       }
     }
-    println ("For loop finished!");
+    //println ("For loop finished!");
     //Ready to start dance Playback
     dancePlayback = true;
     println("Exiting readCSV function");
@@ -130,14 +131,14 @@ assigns the appropriate list of filenames depending on the current day selected
 void fileForDaySelected(){
   
  if (currentDaySelected == 1) {
-   danceFileNames[2] = "combo1_first8.csv";
-   danceFileNames[3] = "combo1_third8.csv";
+   danceChoreoFiles[0] = "combo1_first8.csv";
+   danceFileNames[2] = "combo1_third8.csv";
  } else if (currentDaySelected == 2) {
-   danceFileNames[2] = "bird_first8.csv";
-   danceFileNames[3] = "bird_third8.csv";
+   danceChoreoFiles[0] = "bird_first8.csv";
+   danceFileNames[2] = "bird_third8.csv";
  } else if (currentDaySelected == 3) {
-   danceFileNames[2] = "car_first8.csv";
-   danceFileNames[3] = "car_third8.csv";   
+   danceChoreoFiles[0] = "car_first8.csv";
+   danceFileNames[2] = "car_third8.csv";   
  }
 }
 
