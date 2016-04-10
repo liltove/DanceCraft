@@ -49,10 +49,8 @@ Boolean readCsv(String selection)
     }
     //println ("For loop finished!");
     //Ready to start dance Playback
-    //dancePlayback = true;
     println("Exiting readCSV function");
     return true;
-
   } else {
     println ("No file selected or incorrect file type.  Must be CSV.");
     return false;
@@ -168,11 +166,9 @@ logic for playing through the list of files
       numIterationsCompleted++;
   }
   
+  //THIS IS WHERE THE LOGIC FOR PLAYING AND RECORDING THE CHOREOGRAPHIES NEEDS TO GO
+  
   //when all done playing the dances, go back to title screen
   phase = "title";
-//  //check to see if the user is either watching a recording or is recording their dances
-//  //if they are not doing either of these things, then exit to main menu
-//  if (recordMode == false && dancePlayback == false){
-//     phase = "title";
-//  }
+
  }
