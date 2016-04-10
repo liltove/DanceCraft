@@ -3,7 +3,7 @@ import ddf.minim.*;
 import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
-import saito.objloader.*; 
+//import saito.objloader.*; 
 // https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/saitoobjloader/OBJLoader.zip
 import controlP5.*;
 import java.util.ArrayList;
@@ -25,11 +25,9 @@ String recordingsFolder = "data"; // this is the folder that kinect skeleton rec
 String recordingName = "better_dance_recording.csv"; // this is the file to temporarily use for the target recording to play
 String fileName = new String();
 
-int width = 640; // window width
-int height = 480; // window height
 
 // BUTTON VARIABLES
-color rectColor = color(50, 55, 100);
+/*color rectColor = color(50, 55, 100);
 color rectHighlightColor = color(150, 155, 155);
 color rectPressedColor = color(100, 105, 155);
 int buttonWidth = 74;
@@ -41,7 +39,7 @@ String[] buttonNames = {"One", "Two", "Three"}; // array of button names;
 String[] danceFileNames= {"better_dance_recording.csv", "good_dance_recording.csv", "csvPoseData.csv"}; // array of associated File names to go with buttons
 Boolean[] buttonIsPressed = {false, false, false};
 Boolean[] buttonIsOver = {false, false, false};
-Boolean [] keysPressed = new Boolean[20];
+Boolean [] keysPressed = new Boolean[20];*/
 
 Boolean typingUsername, music, figure, animationPlaying, animation2playing, showPoints, showResponses, showEncouragements;
 Boolean isPaused = false;
@@ -52,8 +50,8 @@ Boolean allowRecordModeActivationAgain = true;
 
 int startTime;
 int background;
-int count;
-int response;
+//int count;
+//int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 
 // 3D Model stuff
@@ -79,29 +77,16 @@ PVector pos;
 
 void setup() {
   smooth();
-  frame.setTitle("DanceCraft"); //sets window title
+  drawScreen();
   phase = "title";
-  size(width,height, P3D);
-  font=createFont("Arial", 48);
-  textFont(font);
-
-  count = 0;
-  response = 0;
-  username = "";
-  typingUsername = false;
-  music = true;
+  //music = true;
   figure = true;
   
   cp5 = new ControlP5(this);
   
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //if (zzKinect.available()) {
-    kinectSetup();
-  //} else {
-    // println ("NO KINECT DETECTED."); 
-  //}
-  
-  
+   kinectSetup();
+
   minim = new Minim(this);
   //musicSetup();
 
