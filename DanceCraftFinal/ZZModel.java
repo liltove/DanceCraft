@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 import javax.print.attribute.standard.JobOriginatingUserName;
 
-import KinectPV2.Skeleton;
+//import KinectPV2.Skeleton;
 import SimpleOpenNI.SimpleOpenNI;
 
 import com.jogamp.opengl.util.texture.Texture;
@@ -83,7 +83,7 @@ class ZZModel {
 					float[] line = PApplet.parseFloat(file[i].substring(3).split(" "));
 					vertiTexture.add(new ZZector(line[0], 1-line[1]));	// attention inversion de opengl
 				} else if(file[i].contains("mtllib ")) {	// chargement des textures
-					materiel = ZZMaterial.loadMaterials(app, "./data/"+file[i].split(" ")[1]);
+					materiel = ZZMaterial.loadMaterials(app, "./modeldata/"+file[i].split(" ")[1]);
 					for (int j = 0; j < materiel.size(); j++) {
 						materiel.get(j).texture = app.loadImage(materiel.get(j).map_Kd);
 					}
@@ -415,7 +415,7 @@ class ZZModel {
     	
     	if(lines != null) {
     		for (int i = 0; i < lines.length; i++) {
-    			retour.add(new ZZModel(a, "./data/"+lines[i]+".obj"));
+    			retour.add(new ZZModel(a, "./modeldata/"+lines[i]+".obj"));
     		}
     		PApplet.println("Chargement de la base de donnees : termine");
     	} else {

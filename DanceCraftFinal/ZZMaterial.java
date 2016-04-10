@@ -61,7 +61,7 @@ public class ZZMaterial {
 				} else if(lines[i].contains("illum ")) {
 					retour.get(nbOfMaterials).illum = PApplet.parseInt(lines[i].split(" ")[1]);
 				} else if(lines[i].contains("map_Kd ")) {
-					retour.get(nbOfMaterials).map_Kd = "./data/";
+					retour.get(nbOfMaterials).map_Kd = "./modeldata/";
 					retour.get(nbOfMaterials).map_Kd += lines[i].split(" ")[1];
 				} else if(lines[i].contains("Kd ")) {
 					float[] tmp = PApplet.parseFloat(lines[i].split(" "));

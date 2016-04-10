@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-import KinectPV2.KJoint;
+//import KinectPV2.KJoint;
 import processing.core.*;
 
 class ZZoint extends ZZector {
@@ -34,17 +34,17 @@ class ZZoint extends ZZector {
     	this(o[0], o[1], o[2], p, c);
     }
     
-    public ZZoint(KJoint k) {
+    //public ZZoint(KJoint k) {
     	/***************************************************************
     	 * 
     	 *  constructeur a partir d'un KJoint (KinectPV2)
     	 * 
     	 ***************************************************************/
     	
-    	this(k.getX(), k.getY(), k.getZ(), -1, null);
-    	state = k.getState();
-    	type = k.getType();
-    }
+//    	this(k.getX(), k.getY(), k.getZ(), -1, null);
+//    	state = k.getState();
+//    	type = k.getType();
+//    }
     
     public ZZoint(float[] o, int p) {
     	this(o, p, null);

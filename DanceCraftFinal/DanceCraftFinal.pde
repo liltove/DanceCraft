@@ -6,6 +6,7 @@ import ddf.minim.effects.*;
 import saito.objloader.*; 
 // https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/saitoobjloader/OBJLoader.zip
 import controlP5.*;
+import java.util.ArrayList;
 
 ControlP5 cp5;
 
@@ -56,12 +57,18 @@ int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 
 // 3D Model stuff
-OBJModel model;
+/*OBJModel model;
 OBJModel tmpmodel;
 String modelsFolder = "models";
 String modelName = "steve.obj";
 float rotX;
-float rotY;
+float rotY;*/
+protected ZZModel clone;        // modele courant
+protected ZZkinect zzKinect;        // capteur kinect
+protected ArrayList<ZZModel> avatars;  // modeles
+protected ZZoptimiseur better;      // optimisation
+final int NBCAPT = 3;  // nombre de captures pour moyennage
+
 
 float normLength = -25;
 
@@ -72,6 +79,7 @@ PVector pos;
 
 void setup() {
   smooth();
+  frame.setTitle("DanceCraft"); //sets window title
   phase = "title";
   size(width,height, P3D);
   font=createFont("Arial", 48);
@@ -87,7 +95,12 @@ void setup() {
   cp5 = new ControlP5(this);
   
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //kinectSetup();
+  //if (zzKinect.available()) {
+    kinectSetup();
+  //} else {
+    // println ("NO KINECT DETECTED."); 
+  //}
+  
   
   minim = new Minim(this);
   //musicSetup();
@@ -98,16 +111,33 @@ void setup() {
   for (int i = 0; i < keysPressed.length; i++) {
     keysPressed[i] = false;
   }
+  
   //randomTrack();
   //soundtrack.play();
+  
   // 3D Model stuff
-    model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
+    /*model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
     tmpmodel = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
     model.scale(25);
     model.translateToCenter();
     tmpmodel.scale(25);
     tmpmodel.translateToCenter();
-    pos = new PVector();
+    pos = new PVector();*/
+    avatars = ZZModel.loadModels(this, "./modeldata/avatars.bdd");
+    
+    // recuperation du premier clone pour affichage
+    clone = avatars.get(0);
+
+    // Orientation et echelle du modele
+    for (int i = 0; i < avatars.size (); i++) {
+      avatars.get(i).scale(64);
+      avatars.get(i).rotateY(PI);
+      avatars.get(i).rotateX(PI);
+      avatars.get(i).initBasis();
+    }
+    
+    // initiallisation de l'optimiseur, NOT SURE IF WE NEED THIS OPTIMIZER OR NOT LEAVING FOR NOW
+  better = new ZZoptimiseur(NBCAPT, clone.getSkeleton().getJoints());
 }
 
 /*---------------------------------------------------------------
@@ -117,8 +147,7 @@ void draw() {
   
   if (phase=="title") {
     drawTitleScreen();
-  }
-  else if (phase=="dance") {
+  } else if (phase=="dance") {
     //Branch to playback recorded dance
     if (dancePlayback == true) {
       background(255);  //Clear background
@@ -127,9 +156,9 @@ void draw() {
     } else {
       drawDanceScreen();
     }
-  } else if(phase=="model"){
+  } /*else if(phase=="model"){
     draw3d(); 
-  }
+  }*/
   else if (phase=="record"){
     //Branch to the recording screen, to record teacher's dances
     //THIS MIGHT LOOK DIFFERENT THAN THE DANCE PHASE?
@@ -335,7 +364,7 @@ void keyReleased(){
 } //End of KeyPressed function
 
 /// BEGIN 3d stuff
-void draw3d(){
+/*void draw3d(){
    background(255);
   noStroke();
 //  pushMatrix();
@@ -344,9 +373,9 @@ void draw3d(){
   tmpmodel.draw();
 //  popMatrix();
   animation();
-}
+}*/
 
-void draw3dold() {
+/*void draw3dold() {
   lights();
 
     pos.x = sin(radians(frameCount)) * 200;
@@ -380,9 +409,9 @@ void draw3dold() {
     }
     
     popMatrix();
-}
+}*/
 
-void animation(){
+/*void animation(){
   int magnitude = 30;
 
   int i = (int)k%52;
@@ -410,10 +439,10 @@ void animation(){
 //    tmpmodel.setVertex(i, tmpv);
 //  }
   k+=0.01;
-}
+}*/
 
 
-void drawFaces(Face[] fc) {
+/*void drawFaces(Face[] fc) {
 
     // draw faces
     noStroke();
@@ -471,7 +500,7 @@ void drawPoint(PVector p){
     rotateY(HALF_PI);
     ellipse(0,0,20,20);   
     
-}
+}*/
 // END 3D STUFF
 
 
