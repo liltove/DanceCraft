@@ -181,9 +181,14 @@ logic for playing through the list of files
   } else if ((currentDanceSegment == danceFileNames.length) && ((currentChoreoSegment == 1) || (currentChoreoSegment == 3))){
     //wait for record mode
     if (recordMode){
-      //record the kids
-      currentChoreoSegment++;
-      //
+      //countdown to the recording
+      if (waitingToRecord){
+        countdownRecord();
+        
+        //record the kids
+        //currentChoreoSegment++;
+        //
+      }
     } else {
       drawMessage("Press SPACE to begin recording.");
     }
@@ -195,11 +200,9 @@ logic for playing through the list of files
   
   //when all done reset counters and go back to title screen
   if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length){
-    
     phase = "title";
     currentDanceSegment = 0; //reset segment count
     currentChoreoSegment = 0; //reset choreo segment count  
   }
-
  }
 

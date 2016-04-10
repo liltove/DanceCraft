@@ -37,9 +37,10 @@ int background;
 //int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
-int currentDanceSegment = 0; //which segment of the dance are we on
+int currentDanceSegment = 2; //which segment of the dance are we on
 int currentChoreoSegment = 0; //which segment of choreo are we on
 int playthroughChoreo = 0; //final play through of all choreo files
+Boolean waitingToRecord = false; //waiting on record mode
 
 // 3D Model stuff
 /*OBJModel model;
@@ -166,6 +167,7 @@ void keyPressed() {
   if (keyPressed){
     if (key == ' ' && phase == "dance" && recordMode == false  && allowRecordModeActivationAgain == true){
       recordMode = true;
+      waitingToRecord = true;
       allowRecordModeActivationAgain = false;
       println("Record Mode Activated");
       //Draw red circle indicatiing that we are recording

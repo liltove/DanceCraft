@@ -24,6 +24,8 @@ String[] buttonNames = {"One", "Two", "Three"}; // array of button names;
 Boolean[] buttonIsPressed = {false, false, false};
 Boolean[] buttonIsOver = {false, false, false};
 Boolean [] keysPressed = new Boolean[20];
+String[] countdownTimer = {"5", "4", "3", "2", "1"};
+int countdownReady = 0;
 
 /*---------------------------------------------------------------
 Draws the right screen size with other set parameters
@@ -132,5 +134,19 @@ Clear everything from screen
 ----------------------------------------------------------------*/
 void clearScreen(){
  background(255); 
+}
+
+/*---------------------------------------------------------------
+Clear everything from screen
+----------------------------------------------------------------*/
+void countdownRecord(){
+  if (countdownReady < countdownTimer.length){
+    drawMessage(countdownTimer[countdownReady]);
+    delay(800);
+    countdownReady++;
+  } else {
+    waitingToRecord = false;
+    
+  }
 }
 
