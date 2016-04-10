@@ -6,6 +6,10 @@ Imports
 /*---------------------------------------------------------------
 Variables
 ----------------------------------------------------------------*/
+//SET SIZE OF WINDOW
+int width = 640; // window width
+int height = 480; // window height
+
 // BUTTON VARIABLES
 color rectColor = color(50, 55, 100);
 color rectHighlightColor = color(150, 155, 155);
@@ -21,11 +25,6 @@ Boolean[] buttonIsPressed = {false, false, false};
 Boolean[] buttonIsOver = {false, false, false};
 Boolean [] keysPressed = new Boolean[20];
 
-//SET SIZE OF WINDOW
-int width = 640; // window width
-int height = 480; // window height
-
-
 /*---------------------------------------------------------------
 Draws the right screen size with other set parameters
 ----------------------------------------------------------------*/
@@ -34,4 +33,91 @@ void drawScreen(){
   size(width,height, P3D);
   font=createFont("Arial", 48);
   textFont(font); 
+}
+
+/*---------------------------------------------------------------
+Draw the dance screen. Calls the animation/background image. Calls Kinect class.
+----------------------------------------------------------------*/
+void drawDanceScreen() {
+  background(255);
+
+  typingUsername = false;
+  int passedTime = millis() - startTime;
+  int secs = passedTime/1000 %60;
+  int mins = passedTime/1000/60;
+
+  textSize(30);
+  fill(0);
+  
+  textAlign(LEFT);
+  time = (nf(mins, 2) + ":" + nf(secs, 2));
+
+  fill(255,255,255,75);
+  rectMode(CORNER);
+  noStroke();
+  rect(82,51,15,15,7);
+  rect(82,71,15,15,7);
+  fill(255);
+  textSize(18);
+  textAlign(LEFT);
+
+  //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
+  //kinectDance();
+  
+  //check to see if the user is either watching a recording or is recording their dances
+  //if they are not doing either of these things, then exit to main menu
+  if (recordMode == false && dancePlayback == false){
+     phase = "title"; 
+  }
+}
+
+/*---------------------------------------------------------------
+Draw the main title screen.
+----------------------------------------------------------------*/
+void drawTitleScreen() {
+   background(255); //makes background white
+   textSize(32);
+   textAlign(CENTER);
+   fill(0); //fills in letters black
+   text ("FANCY DANCECRAFT TITLE", width/2, height/5); //puts title in top center of screen
+
+   int y = 0;
+  // ADDING BUTTONS
+  
+  // go throgh each button
+  for (int i = 0; i < buttonNames.length; i++) {
+    
+    // calculate the distance of that button from the top of the screen
+    y = distanceFromTop + buttonHeight*i + distanceBetweenButtons*i;
+    
+    // if the cursor is currently hovering over the button
+    if (mouseX >= distanceFromLeft && mouseX <= distanceFromLeft+buttonWidth && 
+    mouseY >= y && mouseY <= y+buttonHeight) {
+      // check to see if the button is NOT currently pressed
+      if(!buttonIsPressed[i]) {
+        // then color it as highlighted
+        fill(rectHighlightColor);
+      } else {
+        // if the button is being pressed, then color it as pressed
+        fill(rectPressedColor);
+      }
+      // and mark that the mouse is currently over that button
+      buttonIsOver[i] = true;
+    } else { // if the mouse isn't over this button
+      // reset the color
+      fill(rectColor);
+      // mark that the mouse is NOT over this button
+      buttonIsOver[i] = false;
+    }
+    
+    stroke(255);
+    rect(distanceFromLeft, y, buttonWidth, buttonHeight);
+    
+    fill(255);
+    textSize(18);
+    textAlign(CENTER, CENTER);
+    text(buttonNames[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
+  }
+   
+   //toggleRecordMode();
 }

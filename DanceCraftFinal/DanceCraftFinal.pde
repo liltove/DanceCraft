@@ -11,7 +11,6 @@ import java.util.ArrayList;
 ControlP5 cp5;
 
 Minim minim; //audio context
-//audio context
 int track = 1; //initial track number
 String trackNum; //holds track number for calling from file
 
@@ -24,22 +23,6 @@ String desktopPath = "\\records/";
 String recordingsFolder = "data"; // this is the folder that kinect skeleton recordings is in
 String recordingName = "better_dance_recording.csv"; // this is the file to temporarily use for the target recording to play
 String fileName = new String();
-
-
-// BUTTON VARIABLES
-/*color rectColor = color(50, 55, 100);
-color rectHighlightColor = color(150, 155, 155);
-color rectPressedColor = color(100, 105, 155);
-int buttonWidth = 74;
-int buttonHeight = 35;
-int distanceFromLeft = (width/2) - (buttonWidth/2);
-int distanceFromTop = (height/5) * 2; //  distance from top to start drawing buttons;
-int distanceBetweenButtons = 33;
-String[] buttonNames = {"One", "Two", "Three"}; // array of button names;
-String[] danceFileNames= {"better_dance_recording.csv", "good_dance_recording.csv", "csvPoseData.csv"}; // array of associated File names to go with buttons
-Boolean[] buttonIsPressed = {false, false, false};
-Boolean[] buttonIsOver = {false, false, false};
-Boolean [] keysPressed = new Boolean[20];*/
 
 Boolean typingUsername, music, figure, animationPlaying, animation2playing, showPoints, showResponses, showEncouragements;
 Boolean isPaused = false;
@@ -73,8 +56,6 @@ float normLength = -25;
 float k = 0.0;
 PVector pos;
 
-
-
 void setup() {
   smooth();
   drawScreen();
@@ -85,7 +66,7 @@ void setup() {
   cp5 = new ControlP5(this);
   
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-   kinectSetup();
+   //kinectSetup();
 
   minim = new Minim(this);
   //musicSetup();
@@ -149,94 +130,6 @@ void draw() {
     //THIS MIGHT LOOK DIFFERENT THAN THE DANCE PHASE?
   }
 }
-
-/*---------------------------------------------------------------
-Draw the dance screen. Calls the animation/background image. Calls Kinect class.
-----------------------------------------------------------------*/
-void drawDanceScreen() {
-  background(255);
-
-  typingUsername = false;
-  int passedTime = millis() - startTime;
-  int secs = passedTime/1000 %60;
-  int mins = passedTime/1000/60;
-
-  textSize(30);
-  fill(0);
-  
-  textAlign(LEFT);
-  time = (nf(mins, 2) + ":" + nf(secs, 2));
-
-  fill(255,255,255,75);
-  rectMode(CORNER);
-  noStroke();
-  rect(82,51,15,15,7);
-  rect(82,71,15,15,7);
-  fill(255);
-  textSize(18);
-  textAlign(LEFT);
-
-  //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //kinectDance();
-  
-  //check to see if the user is either watching a recording or is recording their dances
-  //if they are not doing either of these things, then exit to main menu
-  if (recordMode == false && dancePlayback == false){
-     phase = "title"; 
-  }
-}
-
-/*---------------------------------------------------------------
-Draw the main title screen.
-----------------------------------------------------------------*/
-void drawTitleScreen() {
-   background(255); //makes background white
-   textSize(32);
-   textAlign(CENTER);
-   fill(0); //fills in letters black
-   text ("FANCY DANCECRAFT TITLE", width/2, height/5); //puts title in top center of screen
-
-   int y = 0;
-  // ADDING BUTTONS
-  
-  // go throgh each button
-  for (int i = 0; i < buttonNames.length; i++) {
-    
-    // calculate the distance of that button from the top of the screen
-    y = distanceFromTop + buttonHeight*i + distanceBetweenButtons*i;
-    
-    // if the cursor is currently hovering over the button
-    if (mouseX >= distanceFromLeft && mouseX <= distanceFromLeft+buttonWidth && 
-    mouseY >= y && mouseY <= y+buttonHeight) {
-      // check to see if the button is NOT currently pressed
-      if(!buttonIsPressed[i]) {
-        // then color it as highlighted
-        fill(rectHighlightColor);
-      } else {
-        // if the button is being pressed, then color it as pressed
-        fill(rectPressedColor);
-      }
-      // and mark that the mouse is currently over that button
-      buttonIsOver[i] = true;
-    } else { // if the mouse isn't over this button
-      // reset the color
-      fill(rectColor);
-      // mark that the mouse is NOT over this button
-      buttonIsOver[i] = false;
-    }
-    
-    stroke(255);
-    rect(distanceFromLeft, y, buttonWidth, buttonHeight);
-    
-    fill(255);
-    textSize(18);
-    textAlign(CENTER, CENTER);
-    text(buttonNames[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
-  }
-   
-   //toggleRecordMode();
-}
-
 
 /*---------------------------------------------------------------
 Senses when mouse is clicked and does appropriate action.
