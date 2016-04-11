@@ -80,7 +80,7 @@ void setup() {
   smooth();
   drawScreen();
   phase = "title";
-  music = true;
+  //music = true;
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
@@ -95,10 +95,14 @@ void setup() {
   for (int i = 0; i < keysPressed.length; i++) {
     keysPressed[i] = false;
   }
+<<<<<<< HEAD
 
   //randomTrack();
   //soundtrack.play();
 
+=======
+  
+>>>>>>> kate-working
   // 3D Model stuff
     /*model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
     tmpmodel = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
@@ -137,6 +141,7 @@ void draw() {
   } else if (phase=="dance") {
       drawDanceScreen();
       playDances();
+      musicPlay();
   }
 }
 
@@ -162,12 +167,18 @@ void mouseReleased() {
     // checks to see if the mouse is currently hovering over it
     // and if the mouse press event started on that button
     if(buttonIsOver[i] && buttonIsPressed[i]) {
+      //if it's tutorial, play the tutorial video, else select the day
+     if(buttonNames[i].equals("Tutorial")){
+       println("Tutorial pressed");
+     }
+     else{
       //update days to set which day is selected
       currentDaySelected = i+1;
       //make sure filenames are up to date
       fileForDaySelected();
       //enter the "dance" phase of the program
       phase = "dance";
+    }
     }
     // clear the button presse flag under all instances, because the mouse is released
     // and we're ready for the next mouse event

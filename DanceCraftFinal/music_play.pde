@@ -9,25 +9,28 @@ String trackNum; //holds track number for calling from file
 void musicSetup(){
   //start the music player
   minim = new Minim(this);
+  getTrack(track);
 }
 
 void musicPlay(){
-  //calls a random track from the music folder
-    //randomTrack();
-    getTrack(track);
+    //getTrack(track);
     soundtrack.play();
     
 //loop of music playing
-  while(music){ 
+  if (music){ 
     //plays the music
     if(!soundtrack.isPlaying()){
       soundtrack.pause();
       soundtrack.rewind();
-      randomTrack();
       soundtrack.play();
     }
   }
 }//Boolean music
+
+//pause music
+void pauseMusic(){
+ soundtrack.pause(); 
+}
 
 void stop()
 {
@@ -39,7 +42,8 @@ void stop()
 void getTrack(int track){
   //trackNum = "music/"+track+".mp3";
   //soundtrack = minim.loadFile(trackNum, 2048);
-  soundtrack = minim.loadFile("ferrisWheel.mp3", 2048);
+  soundtrack = minim.loadFile("music/ferrisWheel.mp3", 2048);
+  println("playing music.");
 }
 
 void randomTrack(){
