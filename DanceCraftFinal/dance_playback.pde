@@ -175,11 +175,9 @@ logic for playing through the list of files
   //loop until reach every current file name in array
   if (currentDanceSegment < danceFileNames.length){
     playVideo(danceFileNames[currentDanceSegment]);
-  }
-  
-  if ((currentDanceSegment == danceFileNames.length) && ((currentChoreoSegment == 0) || (currentChoreoSegment == 2))){ 
+  } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2){ 
     playVideo(danceChoreoFiles[currentChoreoSegment]); 
-  } else if ((currentDanceSegment == danceFileNames.length) && ((currentChoreoSegment == 1) || (currentChoreoSegment == 3))){
+  } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3){
     //wait for record mode
     if (recordMode){
       //countdown to the recording
@@ -193,18 +191,20 @@ logic for playing through the list of files
     } else {
       drawMessage("Press SPACE to begin recording.");
     }
-  }
-  
-  if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length && playthroughChoreo < danceChoreoFiles.length){
-    playVideo(danceFileNames[playthroughChoreo]);
+  } else if (playthroughChoreo < danceChoreoFiles.length){
+    playVideo(danceChoreoFiles[playthroughChoreo]);
   }
   
   //when all done reset counters and go back to title screen
-  if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length){
-    phase = "title";
+  if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length && playthroughChoreo == danceChoreoFiles.length){
+   
     currentDanceSegment = 0; //reset segment count
     currentChoreoSegment = 0; //reset choreo segment count 
-   music = false; 
+    println("Dance Segment: " + currentDanceSegment);
+    println("Choreo Segment: " + currentChoreoSegment); 
+    pauseMusic();
+   music = false;
+   phase = "title"; 
   }
  }
 
