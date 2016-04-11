@@ -71,7 +71,7 @@ void setup() {
   cp5 = new ControlP5(this);
   
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //kinectSetup();
+  kinectSetup();
 
   minim = new Minim(this);
   musicSetup();
@@ -187,6 +187,8 @@ void keyPressed() {
     } else if (key == ' ' && phase == "dance" && recordMode == true && allowRecordModeActivationAgain == true ) {
       recordMode = false;
       allowRecordModeActivationAgain = false;
+      //save recorded table to file
+      //saveSkeletonTable("test");
       println("Record Mode Deactivated");
     } else if(key == 'm' || key =='M') {
        phase = "model"; 
