@@ -284,25 +284,13 @@ logic for playing through the list of files
   //loop until reach every current file name in array
   if (currentDanceSegment < danceFileNames.length){
     playVideo(danceFileNames[currentDanceSegment]);
-  } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2){ 
+  } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2){
     playVideo(danceChoreoFiles[currentChoreoSegment]); 
   } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3){
      //countdown to the recording
     if (recordMode && waitingToRecord){
       countdownRecord();
     } else if (!recordMode && waitingToRecord){
-  } else if ((currentDanceSegment == danceFileNames.length) && ((currentChoreoSegment == 1) || (currentChoreoSegment == 3))){
-    //wait for record mode
-    if (recordMode){
-      //countdown to the recording
-      if (waitingToRecord){
-        countdownRecord();
-        
-        //record the kids
-        //currentChoreoSegment++;
-        //
-      }
-    } else {
       drawMessage("Press SPACE to begin recording.");
     } else if (!recordMode && !waitingToRecord){
       currentChoreoSegment++;
