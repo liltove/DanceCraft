@@ -40,7 +40,8 @@ int currentDaySelected = 0; //which day is selected to play appropriate dance fi
 int currentDanceSegment = 2; //which segment of the dance are we on
 int currentChoreoSegment = 0; //which segment of choreo are we on
 int playthroughChoreo = 0; //final play through of all choreo files
-Boolean waitingToRecord = false; //waiting on record mode
+Boolean waitingToRecord = true; //waiting on record mode
+Boolean recorded = false;
 
 // 3D Model stuff
 /*OBJModel model;

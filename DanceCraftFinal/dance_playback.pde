@@ -178,18 +178,15 @@ logic for playing through the list of files
   } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2){ 
     playVideo(danceChoreoFiles[currentChoreoSegment]); 
   } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3){
-    //wait for record mode
-    if (recordMode){
-      //countdown to the recording
-      if (waitingToRecord){
-        countdownRecord();
-        
-        //record the kids
-        currentChoreoSegment++;
-        //
-      }
-    } else {
+     //countdown to the recording
+    if (recordMode && waitingToRecord){
+      countdownRecord();
+    } else if (!recordMode && waitingToRecord){
       drawMessage("Press SPACE to begin recording.");
+    } else if (!recordMode && !waitingToRecord){
+      currentChoreoSegment++;
+      waitingToRecord = true; 
+      countdownReady = 0;
     }
   } else if (playthroughChoreo < danceChoreoFiles.length){
     playVideo(danceChoreoFiles[playthroughChoreo]);

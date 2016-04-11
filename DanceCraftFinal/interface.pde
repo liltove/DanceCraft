@@ -146,6 +146,8 @@ void countdownRecord(){
     drawMessage(countdownTimer[countdownReady]);
     delay(800);
     countdownReady++;
+  }else if (countdownReady == countdownTimer.length){
+    waitingToRecord = false;
   }
 }
 
