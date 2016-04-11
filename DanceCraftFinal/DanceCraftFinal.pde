@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 ControlP5 cp5;
 
-Minim minim; //audio context
-int track = 1; //initial track number
-String trackNum; //holds track number for calling from file
+//Minim minim; //audio context
+//int track = 1; //initial track number
+//String trackNum; //holds track number for calling from file
 
 PFont font;
 
@@ -76,14 +76,14 @@ void setup() {
   smooth();
   drawScreen();
   phase = "title";
-  //music = true;
+  music = true;
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectSetup();
 
   minim = new Minim(this);
-  //musicSetup();
+  musicSetup();
 
   background = 0;
 
