@@ -95,14 +95,7 @@ void setup() {
   for (int i = 0; i < keysPressed.length; i++) {
     keysPressed[i] = false;
   }
-<<<<<<< HEAD
-
-  //randomTrack();
-  //soundtrack.play();
-
-=======
   
->>>>>>> kate-working
   // 3D Model stuff
     /*model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
     tmpmodel = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
