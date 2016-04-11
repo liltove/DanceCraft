@@ -24,7 +24,6 @@ String recordingsFolder = "data"; // this is the folder that kinect skeleton rec
 String recordingName = "better_dance_recording.csv"; // this is the file to temporarily use for the target recording to play
 String fileName = new String();
 
-
 Boolean typingUsername, music, figure, animationPlaying, animation2playing, showPoints, showResponses, showEncouragements;
 Boolean isPaused = false;
 Boolean typingFileName = false;
@@ -80,11 +79,7 @@ void setup() {
 
   minim = new Minim(this);
   musicSetup();
-<<<<<<< HEAD
   tutorial = new Movie(this, "elements/bee.mov");
-=======
-  movieSetup();
->>>>>>> FETCH_HEAD
 
   background = 0;
 
@@ -134,13 +129,7 @@ void draw() {
     //drawMovie();
       
   }
-  else if (phase =="tutorial"){
-      image(tutorial,0,0);
-      moviePlay();
-  }   
 }
-
-
 
 /*---------------------------------------------------------------
 Senses when mouse is clicked and does appropriate action.
@@ -167,13 +156,7 @@ void mouseReleased() {
       //if it's tutorial, play the tutorial video, else select the day
      if(buttonNames[i].equals("Tutorial")){
        println("Tutorial pressed");
-<<<<<<< HEAD
        phase = "tutorial";
-=======
-       phase= "tutorial";
-       phase="title";
-       
->>>>>>> FETCH_HEAD
      }
      else{
       //update days to set which day is selected
