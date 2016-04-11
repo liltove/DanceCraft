@@ -17,7 +17,7 @@ void musicPlay(){
     soundtrack.play();
     
 //loop of music playing
-  while(music){ 
+  if (music){ 
     //plays the music
     if(!soundtrack.isPlaying()){
       soundtrack.pause();

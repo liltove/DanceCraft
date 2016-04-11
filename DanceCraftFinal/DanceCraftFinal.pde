@@ -65,7 +65,7 @@ void setup() {
   smooth();
   drawScreen();
   phase = "title";
-  music = true;
+  //music = true;
   figure = true;
   
   cp5 = new ControlP5(this);
@@ -118,7 +118,7 @@ void draw() {
   } else if (phase=="dance") {
       drawDanceScreen();
       playDances();
-      //musicPlay();
+      musicPlay();
   }
 }
 

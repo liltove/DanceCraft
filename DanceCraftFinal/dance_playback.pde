@@ -170,7 +170,8 @@ void fileForDaySelected(){
 logic for playing through the list of files
 --------------------------------------------------------------*/
  void playDances(){
-  //loop through each csv file in the current day's dances
+  music = true;
+   //loop through each csv file in the current day's dances
   //loop until reach every current file name in array
   if (currentDanceSegment < danceFileNames.length){
     playVideo(danceFileNames[currentDanceSegment]);
@@ -202,7 +203,8 @@ logic for playing through the list of files
   if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length){
     phase = "title";
     currentDanceSegment = 0; //reset segment count
-    currentChoreoSegment = 0; //reset choreo segment count  
+    currentChoreoSegment = 0; //reset choreo segment count 
+   music = false; 
   }
  }
 
