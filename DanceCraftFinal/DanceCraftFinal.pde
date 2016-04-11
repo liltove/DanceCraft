@@ -79,7 +79,7 @@ void setup() {
 
   minim = new Minim(this);
   musicSetup();
-  tutorial = new Movie(this, "elements/bee.mov");
+  movieSetup();
 
   background = 0;
 
@@ -117,7 +117,6 @@ void setup() {
 Detect which phase of the program we are in and call appropriate draw function.
 ----------------------------------------------------------------*/
 void draw() {
-  
   if (phase=="title") {
     drawTitleScreen();
   } else if (phase=="dance") {
@@ -125,8 +124,8 @@ void draw() {
       playDances();
       musicPlay();
   } else if (phase=="tutorial"){
-    drawDanceScreen();  
-    //drawMovie();
+    //drawDanceScreen();  
+    drawMovie();
       
   }
 }
@@ -157,6 +156,11 @@ void mouseReleased() {
      if(buttonNames[i].equals("Tutorial")){
        println("Tutorial pressed");
        phase = "tutorial";
+       
+      buttonIsPressed[i] = false;
+      buttonIsOver[i] = false;
+      tutorial.jump(0);
+      tutorial.play();
      }
      else{
       //update days to set which day is selected
