@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 ControlP5 cp5;
 
-Minim minim; //audio context
-int track = 1; //initial track number
-String trackNum; //holds track number for calling from file
+//Minim minim; //audio context
+//int track = 1; //initial track number
+//String trackNum; //holds track number for calling from file
 
 PFont font;
 
@@ -146,11 +146,6 @@ void mouseReleased() {
     // checks to see if the mouse is currently hovering over it
     // and if the mouse press event started on that button
     if(buttonIsOver[i] && buttonIsPressed[i]) {
-     //if it's tutorial, play the tutorial video, else select the day
-     if(buttonNames[i].equals("Tutorial")){
-       println("Tutorial pressed");
-     }
-     else{
       //update days to set which day is selected
       currentDaySelected = i+1;
       //make sure filenames are up to date
@@ -158,7 +153,6 @@ void mouseReleased() {
       //enter the "dance" phase of the program
       phase = "dance";
     }
-   }
     // clear the button presse flag under all instances, because the mouse is released
     // and we're ready for the next mouse event
     buttonIsPressed[i] = false;
