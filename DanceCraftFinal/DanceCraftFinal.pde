@@ -65,7 +65,7 @@ void setup() {
   smooth();
   drawScreen();
   phase = "title";
-  //music = true;
+  music = true;
   figure = true;
   
   cp5 = new ControlP5(this);
@@ -74,7 +74,7 @@ void setup() {
   //kinectSetup();
 
   minim = new Minim(this);
-  //musicSetup();
+  musicSetup();
 
   background = 0;
 
