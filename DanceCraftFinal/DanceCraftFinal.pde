@@ -170,9 +170,6 @@ void keyPressed() {
       waitingToRecord = true;
       allowRecordModeActivationAgain = false;
       println("Record Mode Activated");
-      //Draw red circle indicatiing that we are recording
-      fill (189, 41, 2);
-      ellipse (width-20, 20, 10, 10);
     } else if (key == ' ' && phase == "dance" && recordMode == true && allowRecordModeActivationAgain == true ) {
       recordMode = false;
       allowRecordModeActivationAgain = false;

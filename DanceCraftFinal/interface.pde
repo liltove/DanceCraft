@@ -60,6 +60,8 @@ void drawDanceScreen() {
   fill(255);
   textSize(18);
   textAlign(LEFT);
+  
+  recordIndicator();
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectDance();
@@ -144,9 +146,18 @@ void countdownRecord(){
     drawMessage(countdownTimer[countdownReady]);
     delay(800);
     countdownReady++;
-  } else {
-    waitingToRecord = false;
-    
   }
 }
+
+/*---------------------------------------------------------------
+Display a RED dot when RecordMode is true
+----------------------------------------------------------------*/
+void recordIndicator(){
+  if (recordMode){
+    //Draw red circle indicatiing that we are recording
+    fill (189, 41, 2);
+    ellipse (width-20, 20, 20, 20);
+  }
+}
+
 

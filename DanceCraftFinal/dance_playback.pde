@@ -186,7 +186,7 @@ logic for playing through the list of files
         countdownRecord();
         
         //record the kids
-        //currentChoreoSegment++;
+        currentChoreoSegment++;
         //
       }
     } else {
