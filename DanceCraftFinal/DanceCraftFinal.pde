@@ -43,6 +43,9 @@ int playthroughChoreo = 0; //final play through of all choreo files
 Boolean waitingToRecord = true; //waiting on record mode
 Boolean recorded = false;
 
+//holds tutorial movie
+Movie tutorial;
+
 // 3D Model stuff
 /*OBJModel model;
 OBJModel tmpmodel;
@@ -76,6 +79,7 @@ void setup() {
 
   minim = new Minim(this);
   musicSetup();
+  tutorial = new Movie(this, "elements/bee.mov");
 
   background = 0;
 
@@ -120,6 +124,10 @@ void draw() {
       drawDanceScreen();
       playDances();
       musicPlay();
+  } else if (phase=="tutorial"){
+    drawDanceScreen();  
+    //drawMovie();
+      
   }
 }
 
@@ -148,6 +156,7 @@ void mouseReleased() {
       //if it's tutorial, play the tutorial video, else select the day
      if(buttonNames[i].equals("Tutorial")){
        println("Tutorial pressed");
+       phase = "tutorial";
      }
      else{
       //update days to set which day is selected
