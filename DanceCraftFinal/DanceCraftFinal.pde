@@ -83,9 +83,6 @@ void setup() {
     keysPressed[i] = false;
   }
   
-  //randomTrack();
-  //soundtrack.play();
-  
   // 3D Model stuff
     /*model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
     tmpmodel = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
@@ -121,6 +118,7 @@ void draw() {
   } else if (phase=="dance") {
       drawDanceScreen();
       playDances();
+      //musicPlay();
   }
 }
 
