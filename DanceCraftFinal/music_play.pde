@@ -12,8 +12,6 @@ void musicSetup(){
 }
 
 void musicPlay(){
-  //calls a random track from the music folder
-    //randomTrack();
     getTrack(track);
     soundtrack.play();
     
@@ -23,7 +21,6 @@ void musicPlay(){
     if(!soundtrack.isPlaying()){
       soundtrack.pause();
       soundtrack.rewind();
-      randomTrack();
       soundtrack.play();
     }
   }
