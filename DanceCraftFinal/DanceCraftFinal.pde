@@ -81,11 +81,7 @@ void setup() {
   minim = new Minim(this);
   musicSetup();
 <<<<<<< HEAD
-<<<<<<< HEAD
   tutorial = new Movie(this, "elements/bee.mov");
-=======
-  movieSetup();
->>>>>>> FETCH_HEAD
 =======
   movieSetup();
 >>>>>>> FETCH_HEAD
@@ -172,13 +168,7 @@ void mouseReleased() {
      if(buttonNames[i].equals("Tutorial")){
        println("Tutorial pressed");
 <<<<<<< HEAD
-<<<<<<< HEAD
        phase = "tutorial";
-=======
-       phase= "tutorial";
-       phase="title";
-       
->>>>>>> FETCH_HEAD
 =======
        phase= "tutorial";
        phase="title";
