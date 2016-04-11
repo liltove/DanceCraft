@@ -46,9 +46,12 @@ Boolean waitingToRecord = false; //waiting on record mode
 String currentDay = String.valueOf(day());
 String currentMonth = String.valueOf(month());
 String currentYear = String.valueOf(year());
+String currentHour = String.valueOf (hour());
+String currentMinute = String.valueOf (minute());
+String currentSecond = String.valueOf (second());
+String currentTime = currentHour + currentMinute + currentSecond;
 String currentDate = currentMonth + "_" + currentDay + "_" + currentYear;
-PrintWriter logFile = createWriter("DanceCraftUserLog" + currentDate + ".txt");
-DCDisposeHandler dh; //Instance of class that allows for code to be run upon exit
+PrintWriter logFile;
 
 
 // 3D Model stuff
@@ -71,8 +74,9 @@ float k = 0.0;
 PVector pos;
 
 void setup() {
-
+  logFile = createWriter(dataPath("") + "/DanceCraftUserLog" + currentDate + "_" + currentTime + ".txt");
   beginWritingLogFile(); //Begin creationg of log file for DC researchers
+  println ("Data Path is: " + dataPath(""));
   smooth();
   drawScreen();
   phase = "title";
@@ -118,7 +122,7 @@ void setup() {
 
     // initiallisation de l'optimiseur, NOT SURE IF WE NEED THIS OPTIMIZER OR NOT LEAVING FOR NOW
   better = new ZZoptimiseur(NBCAPT, clone.getSkeleton().getJoints());
-  
+
   //Function defined at end of this file that allows for code after program quit to run
   prepareExitHandler();
 }
