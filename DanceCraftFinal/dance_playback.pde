@@ -62,26 +62,135 @@ draws the points of each of the joints
 --------------------------------------------------------------*/
 void playBack(Integer rowNum)
 {
+  println("playing " + rowNum);
   if (rowNum < skel_data.length) {  //Compare number passed to function and make sure its less than the length of the array of skeleton data
     //println ("Drawing!" + ' ' + rowNum);
     offsetX = alignX(skel_data[0][8]);
     offsetY = alignY(skel_data[0][8]);
-    drawBack(skel_data[rowNum][0], skel_data[rowNum][1]); //Head and neck
-    drawBack(skel_data[rowNum][1], skel_data[rowNum][2]); //Neck and left shoulder
-    drawBack(skel_data[rowNum][2], skel_data[rowNum][4]); //Left shoulder and Left elbow
-    drawBack(skel_data[rowNum][4], skel_data[rowNum][6]); //Left elbow and left hand
-    drawBack(skel_data[rowNum][1], skel_data[rowNum][3]); //Neck and right shoulder
-    drawBack(skel_data[rowNum][3], skel_data[rowNum][5]); //Right shoulder and right elbow
-    drawBack(skel_data[rowNum][5], skel_data[rowNum][7]); //Right elbow and right hand
-    drawBack(skel_data[rowNum][2], skel_data[rowNum][8]); //Left shoulder and TORSO
-    drawBack(skel_data[rowNum][3], skel_data[rowNum][8]); //Right shoulder and TORSO
-    drawBack(skel_data[rowNum][8], skel_data[rowNum][9]); //Torso and left Hip
-    drawBack(skel_data[rowNum][9], skel_data[rowNum][11]); //Left hip and left Knee
-    drawBack(skel_data[rowNum][11], skel_data[rowNum][13]); //left knee and left foot
-    drawBack(skel_data[rowNum][8], skel_data[rowNum][10]); ///Torso and right hip
-    drawBack(skel_data[rowNum][10], skel_data[rowNum][12]); //Right hip and right knee
-    drawBack(skel_data[rowNum][12], skel_data[rowNum][14]); //Right knee and right foot
-    drawBack(skel_data[rowNum][10], skel_data[rowNum][9]); //Right hip and left hip
+//    public final static int WAIST          = 0;
+//    public final static int ROOT          = 1;
+//    public final static int NECK         = 2;
+//    public final static int HEAD          = 3;
+//    public final static int SHOULDER_LEFT    = 4;
+//    public final static int ELBOW_LEFT      = 5;
+//    public final static int WRIST_LEFT      = 6;
+//    public final static int HAND_LEFT      = 7;
+//    public final static int SHOULDER_RIGHT  = 8;
+//    public final static int ELBOW_RIGHT      = 9;
+//    public final static int WRIST_RIGHT      = 10;
+//    public final static int HAND_RIGHT      = 11;
+//    public final static int HIP_LEFT      = 12;
+//    public final static int KNEE_LEFT      = 13;
+//    public final static int ANKLE_LEFT      = 14;
+//    public final static int FOOT_LEFT      = 15;
+//    public final static int HIP_RIGHT      = 16;
+//    public final static int KNEE_RIGHT      = 17;
+//    public final static int ANKLE_RIGHT      = 18;
+//    public final static int FOOT_RIGHT      = 19;
+//    public final static int TORSO          = 20;
+//    public final static int INDEX_LEFT      = 21;
+//    public final static int THUMB_LEFT      = 22;
+//    public final static int INDEX_RIGHT      = 23;
+//    public final static int THUMB_RIGHT      = 24;
+//    
+//    drawBack(skel_data[rowNum][0], skel_data[rowNum][1]); //Head and neck
+//    drawBack(skel_data[rowNum][1], skel_data[rowNum][2]); //Neck and left shoulder
+//    drawBack(skel_data[rowNum][2], skel_data[rowNum][4]); //Left shoulder and Left elbow
+//    drawBack(skel_data[rowNum][4], skel_data[rowNum][6]); //Left elbow and left hand
+//    drawBack(skel_data[rowNum][1], skel_data[rowNum][3]); //Neck and right shoulder
+//    drawBack(skel_data[rowNum][3], skel_data[rowNum][5]); //Right shoulder and right elbow
+//    drawBack(skel_data[rowNum][5], skel_data[rowNum][7]); //Right elbow and right hand
+//    drawBack(skel_data[rowNum][2], skel_data[rowNum][8]); //Left shoulder and TORSO
+//    drawBack(skel_data[rowNum][3], skel_data[rowNum][8]); //Right shoulder and TORSO
+//    drawBack(skel_data[rowNum][8], skel_data[rowNum][9]); //Torso and left Hip
+//    drawBack(skel_data[rowNum][9], skel_data[rowNum][11]); //Left hip and left Knee
+//    drawBack(skel_data[rowNum][11], skel_data[rowNum][13]); //left knee and left foot
+//    drawBack(skel_data[rowNum][8], skel_data[rowNum][10]); ///Torso and right hip
+//    drawBack(skel_data[rowNum][10], skel_data[rowNum][12]); //Right hip and right knee
+//    drawBack(skel_data[rowNum][12], skel_data[rowNum][14]); //Right knee and right foot
+//    drawBack(skel_data[rowNum][10], skel_data[rowNum][9]); //Right hip and left hip
+    
+      pushMatrix();
+    ZZoint[] zzpoint = new ZZoint[25];
+// stuff grabbed from prev data
+zzpoint[ZZkeleton.HEAD] = new ZZoint(skel_data[rowNum][0]);
+zzpoint[ZZkeleton.NECK] = new ZZoint(skel_data[rowNum][1]);
+zzpoint[ZZkeleton.SHOULDER_LEFT] = new ZZoint(skel_data[rowNum][2]);
+zzpoint[ZZkeleton.SHOULDER_RIGHT] = new ZZoint(skel_data[rowNum][3]);
+zzpoint[ZZkeleton.ELBOW_LEFT] = new ZZoint(skel_data[rowNum][4]);
+zzpoint[ZZkeleton.ELBOW_RIGHT] = new ZZoint(skel_data[rowNum][5]);
+zzpoint[ZZkeleton.HAND_LEFT] = new ZZoint(skel_data[rowNum][6]);
+zzpoint[ZZkeleton.HAND_RIGHT] = new ZZoint(skel_data[rowNum][7]);
+zzpoint[ZZkeleton.TORSO] = new ZZoint(skel_data[rowNum][8]);
+zzpoint[ZZkeleton.HIP_LEFT] = new ZZoint(skel_data[rowNum][9]);
+zzpoint[ZZkeleton.HIP_RIGHT] = new ZZoint(skel_data[rowNum][10]);
+zzpoint[ZZkeleton.KNEE_LEFT] = new ZZoint(skel_data[rowNum][11]);
+zzpoint[ZZkeleton.KNEE_RIGHT] = new ZZoint(skel_data[rowNum][12]);
+zzpoint[ZZkeleton.FOOT_LEFT] = new ZZoint(skel_data[rowNum][13]);
+zzpoint[ZZkeleton.FOOT_RIGHT] = new ZZoint(skel_data[rowNum][14]);
+
+//zzpoint[ZZkeleton.HEAD] = new ZZoint(skel_data[rowNum][0]);
+//zzpoint[ZZkeleton.NECK] = new ZZoint(skel_data[rowNum][1]);
+//zzpoint[ZZkeleton.SHOULDER_LEFT] = new ZZoint(skel_data[rowNum][3]);
+//zzpoint[ZZkeleton.SHOULDER_RIGHT] = new ZZoint(skel_data[rowNum][2]);
+//zzpoint[ZZkeleton.ELBOW_LEFT] = new ZZoint(skel_data[rowNum][5]);
+//zzpoint[ZZkeleton.ELBOW_RIGHT] = new ZZoint(skel_data[rowNum][4]);
+//zzpoint[ZZkeleton.HAND_LEFT] = new ZZoint(skel_data[rowNum][7]);
+//zzpoint[ZZkeleton.HAND_RIGHT] = new ZZoint(skel_data[rowNum][6]);
+//zzpoint[ZZkeleton.TORSO] = new ZZoint(skel_data[rowNum][8]);
+//zzpoint[ZZkeleton.HIP_LEFT] = new ZZoint(skel_data[rowNum][10]);
+//zzpoint[ZZkeleton.HIP_RIGHT] = new ZZoint(skel_data[rowNum][9]);
+//zzpoint[ZZkeleton.KNEE_LEFT] = new ZZoint(skel_data[rowNum][12]);
+//zzpoint[ZZkeleton.KNEE_RIGHT] = new ZZoint(skel_data[rowNum][11]);
+//zzpoint[ZZkeleton.FOOT_LEFT] = new ZZoint(skel_data[rowNum][14]);
+//zzpoint[ZZkeleton.FOOT_RIGHT] = new ZZoint(skel_data[rowNum][13]);
+
+
+// generated stuff
+//zzpoint[ZZkeleton.WAIST] = new ZZoint(skel_data[rowNum][15],-1,null);
+
+zzpoint[ZZkeleton.WAIST] = zzpoint[ZZkeleton.HIP_LEFT].copy();
+      zzpoint[ZZkeleton.WAIST].avg(zzpoint[ZZkeleton.HIP_RIGHT]);
+//zzpoint[ZZkeleton.ROOT] = new ZZoint(skel_data[rowNum][16],-1,null);
+zzpoint[ZZkeleton.ROOT] = zzpoint[ZZkeleton.WAIST].copy();
+      zzpoint[ZZkeleton.ROOT].avg(zzpoint[ZZkeleton.TORSO]);
+zzpoint[ZZkeleton.WRIST_LEFT] = zzpoint[ZZkeleton.HAND_LEFT];
+zzpoint[ZZkeleton.WRIST_RIGHT] = zzpoint[ZZkeleton.HAND_RIGHT];
+
+zzpoint[ZZkeleton.ANKLE_LEFT] = zzpoint[ZZkeleton.FOOT_LEFT];
+zzpoint[ZZkeleton.ANKLE_RIGHT] = zzpoint[ZZkeleton.FOOT_RIGHT];
+zzpoint[ZZkeleton.INDEX_LEFT] = zzpoint[ZZkeleton.HAND_LEFT];
+zzpoint[ZZkeleton.THUMB_LEFT] = zzpoint[ZZkeleton.HAND_RIGHT];
+zzpoint[ZZkeleton.INDEX_RIGHT] = zzpoint[ZZkeleton.HAND_LEFT];
+zzpoint[ZZkeleton.THUMB_RIGHT] = zzpoint[ZZkeleton.HAND_RIGHT];
+
+// generated stuff
+//zzpoint[ZZkeleton.WAIST] = new ZZoint(skel_data[rowNum][15],-1,null);
+//zzpoint[ZZkeleton.ROOT] = new ZZoint(skel_data[rowNum][16],-1,null);
+//zzpoint[ZZkeleton.WRIST_LEFT] = new ZZoint(skel_data[rowNum][17],-1,null);
+//zzpoint[ZZkeleton.WRIST_RIGHT] = new ZZoint(skel_data[rowNum][18],-1,null);
+
+//zzpoint[ZZkeleton.ANKLE_LEFT] = new ZZoint(skel_data[rowNum][19],-1,null);
+//zzpoint[ZZkeleton.ANKLE_RIGHT] = new ZZoint(skel_data[rowNum][20],-1,null);
+//zzpoint[ZZkeleton.INDEX_LEFT] = new ZZoint(skel_data[rowNum][21],-1,null);
+//zzpoint[ZZkeleton.THUMB_LEFT] = new ZZoint(skel_data[rowNum][22],-1,null);
+//zzpoint[ZZkeleton.INDEX_RIGHT] = new ZZoint(skel_data[rowNum][23],-1,null);
+//zzpoint[ZZkeleton.THUMB_RIGHT] = new ZZoint(skel_data[rowNum][24],-1,null);
+better.addEch(zzpoint);
+      pushMatrix();
+      //-zzKinect.getWidth()/2, -zzKinect.getHeight()/2, -800
+//translate(width / 2, height / 2, 0); 
+      popMatrix();
+//      if (better.dataAvailable()) {    // si on a des donnees optimisees disponibles
+//        clone.move(better.getOptimizedValue());  // on fait bouger l'avatar
+//        println("BETTER??");
+//      }
+    clone.move(zzpoint);
+      clone.translate(width / 2, (height / 2)+100, 0); 
+      clone.draw();
+      popMatrix();
+      
+//      vision();
   } else {
     dancePlayback = false;
     numIterationsCompleted = 0;
@@ -177,11 +286,26 @@ logic for playing through the list of files
     playVideo(danceFileNames[currentDanceSegment]);
   } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2){ 
     playVideo(danceChoreoFiles[currentChoreoSegment]); 
+<<<<<<< Updated upstream
   } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3){
      //countdown to the recording
     if (recordMode && waitingToRecord){
       countdownRecord();
     } else if (!recordMode && waitingToRecord){
+=======
+  } else if ((currentDanceSegment == danceFileNames.length) && ((currentChoreoSegment == 1) || (currentChoreoSegment == 3))){
+    //wait for record mode
+    if (recordMode){
+      //countdown to the recording
+      if (waitingToRecord){
+        countdownRecord();
+        
+        //record the kids
+        //currentChoreoSegment++;
+        //
+      }
+    } else {
+>>>>>>> Stashed changes
       drawMessage("Press SPACE to begin recording.");
     } else if (!recordMode && !waitingToRecord){
       currentChoreoSegment++;
