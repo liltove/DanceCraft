@@ -10,10 +10,6 @@ import java.util.ArrayList;
 
 ControlP5 cp5;
 
-//Minim minim; //audio context
-//int track = 1; //initial track number
-//String trackNum; //holds track number for calling from file
-
 PFont font;
 
 String phase, mode;
@@ -350,50 +346,3 @@ void drawPoint(PVector p){
     
 }*/
 // END 3D STUFF
-
-
-
-//creates the static background
-//void backgrnd(){
-  //if(background == 0){
-    //background = int(random(4)) + 1;
-    //String dncbg = "elements/" + background + ".png";
-    //dancebg = loadImage(dncbg);
-    //image(dancebg,width/2,height/2,width,height);
-  //}
-//}
-
-//void musicPlay(){
-//  //calls a random track from the music folder
-//    randomTrack();
-//    soundtrack.play();
-//
-////loop of music playing
-//  while(music == true){
-//    //plays the music
-//    if(!soundtrack.isPlaying()){
-//      soundtrack.pause();
-//      soundtrack.rewind();
-//      randomTrack();
-//      soundtrack.play();
-//    }
-//  }
-//}//Boolean music
-//
-//void stop()
-//{
-//  soundtrack.close();
-//  minim.stop();
-//  super.stop();
-//}
-//
-//void getTrack(int track){
-//  trackNum = "music/"+track+".mp3";
-//  soundtrack = minim.loadFile(trackNum, 2048);
-//}
-//
-//void randomTrack(){
-//  track = int(random(23)) + 1;
-//  println("Now playing track number: " + track);
-//  getTrack(track);
-//}
