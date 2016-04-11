@@ -286,13 +286,11 @@ logic for playing through the list of files
     playVideo(danceFileNames[currentDanceSegment]);
   } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2){ 
     playVideo(danceChoreoFiles[currentChoreoSegment]); 
-<<<<<<< Updated upstream
   } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3){
      //countdown to the recording
     if (recordMode && waitingToRecord){
       countdownRecord();
     } else if (!recordMode && waitingToRecord){
-=======
   } else if ((currentDanceSegment == danceFileNames.length) && ((currentChoreoSegment == 1) || (currentChoreoSegment == 3))){
     //wait for record mode
     if (recordMode){
@@ -305,7 +303,6 @@ logic for playing through the list of files
         //
       }
     } else {
->>>>>>> Stashed changes
       drawMessage("Press SPACE to begin recording.");
     } else if (!recordMode && !waitingToRecord){
       currentChoreoSegment++;
