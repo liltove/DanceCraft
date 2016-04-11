@@ -85,6 +85,7 @@ void kinectDance(){
    // prepare the color pixels
   loadPixels();
   
+  tint(255, 127);  // Display at half opacity
   //Create black color to turn user into a shadow
   color black = color (0,0,0);
   // get pixels for the user tracked
