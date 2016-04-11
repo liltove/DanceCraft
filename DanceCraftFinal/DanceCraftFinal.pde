@@ -3,7 +3,7 @@ import ddf.minim.*;
 import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
-//import saito.objloader.*; 
+//import saito.objloader.*;
 // https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/saitoobjloader/OBJLoader.zip
 import controlP5.*;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ PFont font;
 String phase, mode;
 String [] files;
 String username, time;
-String desktopPath = "\\records/"; 
+String desktopPath = "\\records/";
 String recordingsFolder = "data"; // this is the folder that kinect skeleton recordings is in
 String recordingName = "better_dance_recording.csv"; // this is the file to temporarily use for the target recording to play
 String fileName = new String();
@@ -37,6 +37,15 @@ int background;
 //int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
+
+//Logging stuff
+String currentDay = String.valueOf(day());
+String currentMonth = String.valueOf(month());
+String currentYear = String.valueOf(year());
+String currentDate = currentMonth + "_" + currentDay + "_" + currentYear;
+PrintWriter logFile = createWriter("DanceCraftUserLog" + currentDate + ".txt");
+DCDisposeHandler dh; //Instance of class that allows for code to be run upon exit
+
 
 // 3D Model stuff
 /*OBJModel model;
@@ -58,14 +67,14 @@ float k = 0.0;
 PVector pos;
 
 void setup() {
+
+  beginWritingLogFile(); //Begin creationg of log file for DC researchers
   smooth();
   drawScreen();
   phase = "title";
   //music = true;
   figure = true;
-  
-  cp5 = new ControlP5(this);
-  
+
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
    //kinectSetup();
 
@@ -78,10 +87,10 @@ void setup() {
   for (int i = 0; i < keysPressed.length; i++) {
     keysPressed[i] = false;
   }
-  
+
   //randomTrack();
   //soundtrack.play();
-  
+
   // 3D Model stuff
     /*model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
     tmpmodel = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
@@ -91,7 +100,7 @@ void setup() {
     tmpmodel.translateToCenter();
     pos = new PVector();*/
     avatars = ZZModel.loadModels(this, "./modeldata/avatars.bdd");
-    
+
     // recuperation du premier clone pour affichage
     clone = avatars.get(0);
 
@@ -102,16 +111,19 @@ void setup() {
       avatars.get(i).rotateX(PI);
       avatars.get(i).initBasis();
     }
-    
+
     // initiallisation de l'optimiseur, NOT SURE IF WE NEED THIS OPTIMIZER OR NOT LEAVING FOR NOW
   better = new ZZoptimiseur(NBCAPT, clone.getSkeleton().getJoints());
+  
+  //Function defined at end of this file that allows for code after program quit to run
+  prepareExitHandler();
 }
 
 /*---------------------------------------------------------------
 Detect which phase of the program we are in and call appropriate draw function.
 ----------------------------------------------------------------*/
 void draw() {
-  
+
   if (phase=="title") {
     drawTitleScreen();
   } else if (phase=="dance") {
@@ -123,7 +135,7 @@ void draw() {
 Senses when mouse is clicked and does appropriate action.
 ----------------------------------------------------------------*/
 void mousePressed() {
-  
+
   // go through each button
   for (int i = 0; i < buttonNames.length; i++) {
     // check to see if the mouse is currently hovering over the button
@@ -135,7 +147,7 @@ void mousePressed() {
   //println(mouseX,mouseY);
 }
 
-void mouseReleased() {  
+void mouseReleased() {
   // goes through each button
   for (int i = 0; i < buttonNames.length; i++) {
     // checks to see if the mouse is currently hovering over it
@@ -172,7 +184,7 @@ void keyPressed() {
       allowRecordModeActivationAgain = false;
       println("Record Mode Deactivated");
     } else if(key == 'm' || key =='M') {
-       phase = "model"; 
+       phase = "model";
     }
   }
 }
@@ -188,14 +200,27 @@ void keyReleased(){
    if (!keysPressed[16] || !keysPressed[17]) {
      allowRecordModeActivationAgain = true;
    }
-} //End of KeyPressed function
+} //End of KeyPressed function  //Methods
+
+
+void prepareExitHandler () {
+ Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+   public void run () {
+     System.out.println("SHUTDOWN HOOK");
+     closeLogFile();
+// application exit code here
+     }
+   }));
+}
+
+
 
 /// BEGIN 3d stuff
 /*void draw3d(){
    background(255);
   noStroke();
 //  pushMatrix();
-  translate(width / 2, height / 2, 0); 
+  translate(width / 2, height / 2, 0);
   rotateY(PI*1.5);
   tmpmodel.draw();
 //  popMatrix();
@@ -206,17 +231,17 @@ void keyReleased(){
   lights();
 
     pos.x = sin(radians(frameCount)) * 200;
-    pos.y = cos(radians(frameCount)) * 200;  
+    pos.y = cos(radians(frameCount)) * 200;
 
     pushMatrix();
 
-    translate(width / 2, height / 2, 0); 
+    translate(width / 2, height / 2, 0);
 
     rotateX(rotY);
     rotateY(rotX);
 
     pushMatrix();
-    
+
     drawPoint(pos);
 
     popMatrix();
@@ -232,9 +257,9 @@ void keyReleased(){
         drawFaces( faces );
 
         drawNormals( faces );
-        
+
     }
-    
+
     popMatrix();
 }*/
 
@@ -242,7 +267,7 @@ void keyReleased(){
   int magnitude = 30;
 
   int i = (int)k%52;
-  
+
     PVector orgv = model.getVertex(i);
     PVector tmpv = new PVector();
     if((k-(int)k)>.98) {
@@ -305,7 +330,7 @@ void drawNormals( Face[] fc ) {
 
         // scale the alpha of the stroke by the facing amount.
         // 0.0 = directly facing away
-        // 1.0 = directly facing 
+        // 1.0 = directly facing
         // in truth this is the dot product normalized
         stroke(255, 0, 255, 255.0 * fc[i].getFacingAmount(pos));
 
@@ -317,7 +342,7 @@ void drawNormals( Face[] fc ) {
 
 
 void drawPoint(PVector p){
- 
+
     translate(p.x, p.y, p.z);
 
     noStroke();
@@ -325,8 +350,8 @@ void drawPoint(PVector p){
     rotateX(HALF_PI);
     ellipse(0,0,20,20);
     rotateY(HALF_PI);
-    ellipse(0,0,20,20);   
-    
+    ellipse(0,0,20,20);
+
 }*/
 // END 3D STUFF
 
