@@ -9,7 +9,7 @@ float midWidth = 320 * 4; //middle width of the left half screen
 float midHeight = 720; //middle height of the left haft screen
 
 String[] danceFileNames= {"prewarmUp.csv", "mirror.csv"};
-String[] danceChoreoFiles= {"combo1_first8.csv", "combo1_first8.csv", "combo1_third8.csv", "combo1_third8.csv"};
+String[] danceChoreoFiles= {"combo1_first8.csv", "bird_first8.csv", "combo1_third8.csv", "bird_third8.csv"};
 
 /*--------------------------------------------------------------
 reads the csv and retrieves the joint coordinate information
@@ -85,6 +85,17 @@ void playBack(Integer rowNum)
   } else {
     dancePlayback = false;
     numIterationsCompleted = 0;
+    
+    if (currentDanceSegment < danceFileNames.length){
+       currentDanceSegment++; 
+       println("Dance Segment: " + currentDanceSegment);
+    } else if (currentChoreoSegment < danceChoreoFiles.length) {
+       currentChoreoSegment++;
+      println("Choreo Segment: " + currentChoreoSegment); 
+    } else {
+      playthroughChoreo++;
+      println("Choreo Playthrough: " + playthroughChoreo);      
+    }
   }
 }
 
@@ -129,7 +140,7 @@ Takes in the name of the csv skeleton file you want to play back and plays it
 ----------------------------------------------------------------*/
 void playVideo(String filename){
   //read the file specified
-  while (!dancePlayback) {
+  if (!dancePlayback) {
     dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
   }
   playBack (numIterationsCompleted); //play back the skeletons
@@ -159,33 +170,39 @@ void fileForDaySelected(){
 logic for playing through the list of files
 --------------------------------------------------------------*/
  void playDances(){
-  //enter dance phase
-  phase = "dance";
-  
   //loop through each csv file in the current day's dances
   //loop until reach every current file name in array
-  for (int i = 0; i < danceFileNames.length; i++) {
-      playVideo(danceFileNames[i]);
+  if (currentDanceSegment < danceFileNames.length){
+    playVideo(danceFileNames[currentDanceSegment]);
   }
   
-  drawMessage("Choreography");
-  // *****THIS IS WHERE THE LOGIC FOR PLAYING AND RECORDING THE CHOREOGRAPHIES NEEDS TO GO****
-  //play first 8 counts (from teacher)
-  playVideo(danceChoreoFiles[0]);
+  if ((currentDanceSegment == danceFileNames.length) && ((currentChoreoSegment == 0) || (currentChoreoSegment == 2))){ 
+    playVideo(danceChoreoFiles[currentChoreoSegment]); 
+  } else if ((currentDanceSegment == danceFileNames.length) && ((currentChoreoSegment == 1) || (currentChoreoSegment == 3))){
+    //wait for record mode
+    if (recordMode){
+      //countdown to the recording
+      if (waitingToRecord){
+        countdownRecord();
+        
+        //record the kids
+        currentChoreoSegment++;
+        //
+      }
+    } else {
+      drawMessage("Press SPACE to begin recording.");
+    }
+  }
   
-  //record next 8 counts from user
-  drawMessage("Press SPACE to begin recording.");
+  if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length && playthroughChoreo < danceChoreoFiles.length){
+    playVideo(danceFileNames[playthroughChoreo]);
+  }
   
-  //play third 8 counts from teacher
-  
-  //record next 8 counts from user
-  
-  //play all 32 counts together
-//  for (int i = 0; i < danceChoreoFiles.length; i++) {
-//    playVideo(danceChoreoFiles[i]);
-//  }
-  
-  //when all done playing the dances, go back to title screen
-  //phase = "title";
-
+  //when all done reset counters and go back to title screen
+  if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length){
+    phase = "title";
+    currentDanceSegment = 0; //reset segment count
+    currentChoreoSegment = 0; //reset choreo segment count  
+  }
  }
+

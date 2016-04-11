@@ -12,7 +12,7 @@ public interface ZZkinect {
 	
 	public ZZoint[] getSkeleton();
 	
-	public ZZoint[] getSkeleton(int numUser);		// permet de r�cup�rer le squelette
+	public ZZoint[] getSkeleton(int numUser);		// permet de recuperer le squelette
 
 	public boolean isTrackingSkeleton(int skelNum); // permet de savoir si le squelette skelNum est traque
 	

@@ -114,7 +114,7 @@ class ZZkeleton {
     public void load(String filename) {
     	/***************************************************************
    	 	 * 
-   	 	 *	charge le squelette � partir d'un fichier .sk
+   	 	 *	charge le squelette e partir d'un fichier .sk
    	 	 * 
    	 	 ***************************************************************/
      
@@ -129,7 +129,7 @@ class ZZkeleton {
 		try {
 			fichier = new FileInputStream(filename);
 		} catch (FileNotFoundException e) {
-			PApplet.println("Chargement du mod�le : le fichier " + filename + " n'existe pas.");
+			PApplet.println("Chargement du modele : le fichier " + filename + " n'existe pas.");
 		}
 		file = PApplet.loadStrings(fichier);
      
@@ -157,7 +157,7 @@ class ZZkeleton {
     public void loadBVH(PApplet a, String filename) {
     	/***************************************************************
    	 	 * 
-   	 	 *	charge le squelette � partir d'un fichier .bvh
+   	 	 *	charge le squelette e partir d'un fichier .bvh
    	 	 * 
    	 	 ***************************************************************/
      
@@ -212,7 +212,7 @@ class ZZkeleton {
 	 					 if(tree[0]!=-1) {
 	 						 joints[tree[0]].addChild(tree[1]);
 	 					 }
-	 				 } else if(coords[0] == father[0] && coords[1] == father[1] && coords[2] == father[2]) { // on se trouve � la racine
+	 				 } else if(coords[0] == father[0] && coords[1] == father[1] && coords[2] == father[2]) { // on se trouve e la racine
 	 					 tree[1] = tree[0];
 	 					 tree[0] = joints[tree[0]].getParent();
 	 				 }
@@ -229,9 +229,9 @@ class ZZkeleton {
 	 			 index++;
 	 		 }
 	 		 this.rotateY(PApplet.PI);	// rotation pour correspondre au modele
-	 		 PApplet.println("Chargement du squelette : termin�");
+	 		 PApplet.println("Chargement du squelette : termine");
 	 	 } else {
-	 		 PApplet.println("Chargement du squelette : erreur � l'ouverture du fichier " + filename);
+	 		 PApplet.println("Chargement du squelette : erreur e l'ouverture du fichier " + filename);
 	 	 }
     }
      
@@ -278,7 +278,7 @@ class ZZkeleton {
     public String toString() {
    	 	/***************************************************************
    	 	 * 
-   	 	 *  toString permettant l'affichage des donn�es du squelette
+   	 	 *  toString permettant l'affichage des donnees du squelette
    	 	 * 
    	 	 ***************************************************************/
     	

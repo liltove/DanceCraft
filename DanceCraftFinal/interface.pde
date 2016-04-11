@@ -24,6 +24,8 @@ String[] buttonNames = {"One", "Two", "Three"}; // array of button names;
 Boolean[] buttonIsPressed = {false, false, false};
 Boolean[] buttonIsOver = {false, false, false};
 Boolean [] keysPressed = new Boolean[20];
+String[] countdownTimer = {"5", "4", "3", "2", "1"};
+int countdownReady = 0;
 
 /*---------------------------------------------------------------
 Draws the right screen size with other set parameters
@@ -58,8 +60,8 @@ void drawDanceScreen() {
   fill(255);
   textSize(18);
   textAlign(LEFT);
-
-  playDances();
+  
+  recordIndicator();
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   //kinectDance();
@@ -115,8 +117,6 @@ void drawTitleScreen() {
     textAlign(CENTER, CENTER);
     text(buttonNames[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
   }
-   
-   //toggleRecordMode();
 }
 
 /*---------------------------------------------------------------
@@ -137,4 +137,27 @@ Clear everything from screen
 void clearScreen(){
  background(255); 
 }
+
+/*---------------------------------------------------------------
+Clear everything from screen
+----------------------------------------------------------------*/
+void countdownRecord(){
+  if (countdownReady < countdownTimer.length){
+    drawMessage(countdownTimer[countdownReady]);
+    delay(800);
+    countdownReady++;
+  }
+}
+
+/*---------------------------------------------------------------
+Display a RED dot when RecordMode is true
+----------------------------------------------------------------*/
+void recordIndicator(){
+  if (recordMode){
+    //Draw red circle indicatiing that we are recording
+    fill (189, 41, 2);
+    ellipse (width-20, 20, 20, 20);
+  }
+}
+
 

@@ -90,7 +90,7 @@ class ZZkinectV1 implements ZZkinect {
 					kinectV1.getJointPositionSkeleton(numUser, realNum, jointPos);
 					retour[i] = new ZZoint(jointPos);
 					retour[i].mult((float) -0.5);
-					retour[i].z += 500;		// correction de proximit�
+					retour[i].z += 500;		// correction de proximite
 					kinectV1.getJointOrientationSkeleton(numUser, realNum, retour[i].orientation);
 				} else {
 					retour[i] = null;
@@ -298,7 +298,7 @@ class ZZkinectV1 implements ZZkinect {
 		if (getVersion()!=0) {
 			out += "Kinect version " + getVersion() + " ouverte en " + getWidth() + " x " + getHeight();
 		} else {
-			out += "Kinect non initialis�e";
+			out += "Kinect non initialisee";
 		}
 		
 		return out;

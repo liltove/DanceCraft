@@ -37,6 +37,10 @@ int background;
 //int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
+int currentDanceSegment = 2; //which segment of the dance are we on
+int currentChoreoSegment = 0; //which segment of choreo are we on
+int playthroughChoreo = 0; //final play through of all choreo files
+Boolean waitingToRecord = false; //waiting on record mode
 
 //Logging stuff
 String currentDay = String.valueOf(day());
@@ -76,7 +80,7 @@ void setup() {
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-   //kinectSetup();
+  //kinectSetup();
 
   minim = new Minim(this);
   //musicSetup();
@@ -128,6 +132,7 @@ void draw() {
     drawTitleScreen();
   } else if (phase=="dance") {
       drawDanceScreen();
+      playDances();
   }
 }
 
@@ -174,11 +179,9 @@ void keyPressed() {
   if (keyPressed){
     if (key == ' ' && phase == "dance" && recordMode == false  && allowRecordModeActivationAgain == true){
       recordMode = true;
+      waitingToRecord = true;
       allowRecordModeActivationAgain = false;
       println("Record Mode Activated");
-      //Draw red circle indicatiing that we are recording
-      fill (189, 41, 2);
-      ellipse (width-20, 20, 10, 10);
     } else if (key == ' ' && phase == "dance" && recordMode == true && allowRecordModeActivationAgain == true ) {
       recordMode = false;
       allowRecordModeActivationAgain = false;
