@@ -8,6 +8,7 @@ float offsetY; // The offset y of the skeleton
 float midWidth = 320 * 4; //middle width of the left half screen
 float midHeight = 720; //middle height of the left haft screen
 
+
 String[] danceFileNames= {"prewarmUp.csv", "mirror.csv"};
 String[] danceChoreoFiles= {"combo1_first8.csv", "bird_first8.csv", "combo1_third8.csv", "bird_third8.csv"};
 
@@ -39,7 +40,9 @@ Boolean readCsv(String selection)
       skel_data[i][index].x = row.getFloat("x");
       skel_data[i][index].y = row.getFloat("y");
       skel_data[i][index].z = row.getFloat("z");
+
       //println ("FINAL Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
+
       //println ("Table row count is ---->" + table.getRowCount());
       //once the iteration has read all 14 joint, it starts recording a new skeleton
       if (index == 14)
@@ -85,16 +88,16 @@ void playBack(Integer rowNum)
   } else {
     dancePlayback = false;
     numIterationsCompleted = 0;
-    
+
     if (currentDanceSegment < danceFileNames.length){
-       currentDanceSegment++; 
+       currentDanceSegment++;
        println("Dance Segment: " + currentDanceSegment);
     } else if (currentChoreoSegment < danceChoreoFiles.length) {
        currentChoreoSegment++;
-      println("Choreo Segment: " + currentChoreoSegment); 
+      println("Choreo Segment: " + currentChoreoSegment);
     } else {
       playthroughChoreo++;
-      println("Choreo Playthrough: " + playthroughChoreo);      
+      println("Choreo Playthrough: " + playthroughChoreo);
     }
   }
 }
@@ -106,6 +109,7 @@ void drawBack(PVector skeA, PVector skeB)
 {
 
    //Set color of skeleton "bones" to black
+
   stroke(0);
   //Set weight of line
   strokeWeight (5);
@@ -135,6 +139,7 @@ float alignY(PVector skeA)
   return skeA.y + midHeight;
 }
 
+
 /*---------------------------------------------------------------
 Takes in the name of the csv skeleton file you want to play back and plays it
 ----------------------------------------------------------------*/
@@ -153,7 +158,7 @@ void playVideo(String filename){
 assigns the appropriate list of filenames depending on the current day selected
 --------------------------------------------------------------*/
 void fileForDaySelected(){
-  
+
  if (currentDaySelected == 1) {
    danceChoreoFiles[0] = "combo1_first8.csv";
    danceChoreoFiles[2] = "combo1_third8.csv";
@@ -162,7 +167,7 @@ void fileForDaySelected(){
    danceChoreoFiles[2] = "bird_third8.csv";
  } else if (currentDaySelected == 3) {
    danceChoreoFiles[0] = "car_first8.csv";
-   danceChoreoFiles[2] = "car_third8.csv";   
+   danceChoreoFiles[2] = "car_third8.csv";
  }
 }
 
@@ -175,15 +180,15 @@ logic for playing through the list of files
   //loop until reach every current file name in array
   if (currentDanceSegment < danceFileNames.length){
     playVideo(danceFileNames[currentDanceSegment]);
-  } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2){ 
-    playVideo(danceChoreoFiles[currentChoreoSegment]); 
+  } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2){
+    playVideo(danceChoreoFiles[currentChoreoSegment]);
   } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3){
     //wait for record mode
     if (recordMode){
       //countdown to the recording
       if (waitingToRecord){
         countdownRecord();
-        
+
         //record the kids
         currentChoreoSegment++;
         //
@@ -194,17 +199,16 @@ logic for playing through the list of files
   } else if (playthroughChoreo < danceChoreoFiles.length){
     playVideo(danceChoreoFiles[playthroughChoreo]);
   }
-  
+
   //when all done reset counters and go back to title screen
   if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length && playthroughChoreo == danceChoreoFiles.length){
-   
+
     currentDanceSegment = 0; //reset segment count
-    currentChoreoSegment = 0; //reset choreo segment count 
+    currentChoreoSegment = 0; //reset choreo segment count
     println("Dance Segment: " + currentDanceSegment);
-    println("Choreo Segment: " + currentChoreoSegment); 
+    println("Choreo Segment: " + currentChoreoSegment);
     pauseMusic();
    music = false;
-   phase = "title"; 
+   phase = "title";
   }
  }
-

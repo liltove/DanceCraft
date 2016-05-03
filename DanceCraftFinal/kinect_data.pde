@@ -33,6 +33,7 @@ String poseDataLocation = "data/csvPoseData.csv";
 String anglesLocation = "data/csvAngles.csv";
 float threshold = 50;
 
+
 float[][] poseJointArray;
 PVector[][] skel_data;
 
@@ -43,6 +44,7 @@ Table tableAngles;
 Table loadedSkelTable = new Table();
 
 PVector[] j1;
+
 
 
 /*---------------------------------------------------------------
@@ -84,7 +86,7 @@ void kinectDance(){
 
    // prepare the color pixels
   loadPixels();
-  
+
   //Create black color to turn user into a shadow
   color black = color (0,0,0);
   // get pixels for the user tracked
@@ -105,7 +107,7 @@ void kinectDance(){
 
   //get the list of users
   int[] users = kinect.getUsers();
-  
+
   for(int i = 0; i < users.length; i++)
    {
      //check if the user has skeleton
@@ -213,6 +215,82 @@ void drawSkeleton (int userId) {
 /*-------------------------------------------------
 Draw the joint bubbles on the skeleton on the player skeleton
 -----------------------------------------------------*/
+void drawJoint (int userId, int jointID) {
+  PVector joint = new PVector();
+  float confidence = kinect.getJointPositionSkeleton(userId, jointID, joint);
+  if (confidence < 0.5) {
+    return;
+  }
+  PVector convertedJoint = new PVector();
+  kinect.convertRealWorldToProjective (joint, convertedJoint);
+  ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
+}
+
+
+
+//Save the Skeleton Data to a specific location
+void saveSkeletonTable(File selection) {
+  dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
+  saveTable(table, dataLocation + "/" + fileName + ".csv", "csv"); //Write table to location
+  cp5.remove("input"); //ControlP5 controller removes text input box from dance screen
+  typingFileName = false;
+  isPaused = false;
+}
+
+
+/*-------------------------------------------------
+Draw a rudimentary skeleton on top of the player
+-----------------------------------------------------*/
+
+void drawSkeleton (int userId) {
+	//Set color of skeleton "bones" to black
+	stroke(128, 0, 128);
+	//Set weight of line
+	strokeWeight (5);
+
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_RIGHT_ELBOW);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW, SimpleOpenNI.SKEL_RIGHT_HAND);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_LEFT_HIP);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_HIP, SimpleOpenNI.SKEL_LEFT_KNEE);
+        kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_KNEE, SimpleOpenNI.SKEL_LEFT_FOOT);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_RIGHT_HIP);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_RIGHT_KNEE);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);
+	kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_LEFT_HIP);
+
+  noStroke();
+
+  fill(255,0,0);
+
+  //Begin drawing the joints of the skeleton
+
+  drawJoint(userId, SimpleOpenNI.SKEL_HEAD);
+  drawJoint(userId, SimpleOpenNI.SKEL_NECK);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_ELBOW);
+  drawJoint(userId, SimpleOpenNI.SKEL_NECK);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW);
+  drawJoint(userId,SimpleOpenNI.SKEL_TORSO);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HIP);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_KNEE);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_HIP);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_FOOT);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_KNEE);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HIP);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_FOOT);
+  drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_HAND);
+  drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HAND);
+
+}
+
 void drawJoint (int userId, int jointID) {
   PVector joint = new PVector();
   float confidence = kinect.getJointPositionSkeleton(userId, jointID, joint);

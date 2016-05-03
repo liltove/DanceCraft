@@ -10,9 +10,37 @@ import java.util.ArrayList;
 
 ControlP5 cp5;
 
+
 //Minim minim; //audio context
 //int track = 1; //initial track number
 //String trackNum; //holds track number for calling from file
+//Holds animation movie
+Movie animation;
+Movie animation2;
+Movie animation3;
+
+
+//AudioPlayer player;
+//AudioPlayer soundtrack;
+AudioPlayer feedback;
+AudioPlayer exercise1;
+AudioPlayer exercise2;
+AudioPlayer exercise3;
+AudioPlayer exercise4;
+AudioPlayer exercise5;
+AudioPlayer tryAgain;
+AudioPlayer nextExercise;
+AudioPlayer greatJob;
+
+
+Minim minim;//audio context
+//audio context
+int track = 1; //initial track number
+String trackNum; //holds track number for calling from file
+
+PImage welcomelogin, welcomebg, dancecraft, onedancer, multidancers,
+myrecords, quitgame, question, dancebg, switchOn, diamond, play, arrow,
+picture1, picture2, picture3, endPicture, whiteBackground, congratulations;
 
 PFont font;
 
@@ -30,6 +58,7 @@ Boolean typingFileName = false;
 Boolean recordMode = false; //is program currently recording?
 Boolean dancePlayback = false; //is program currently playing back a recording?
 Boolean allowRecordModeActivationAgain = true;
+
 
 int startTime;
 int background;
@@ -50,7 +79,9 @@ String currentHour = String.valueOf (hour());
 String currentMinute = String.valueOf (minute());
 String currentSecond = String.valueOf (second());
 String currentTime = currentHour + currentMinute + currentSecond;
+String currentTimeWithColons = currentHour + ":" + currentMinute + ":" + currentSecond;
 String currentDate = currentMonth + "_" + currentDay + "_" + currentYear;
+StopWatchTimer totalTime = new StopWatchTimer();
 PrintWriter logFile;
 
 
@@ -76,7 +107,6 @@ PVector pos;
 void setup() {
   logFile = createWriter(dataPath("") + "/DanceCraftUserLog" + currentDate + "_" + currentTime + ".txt");
   beginWritingLogFile(); //Begin creationg of log file for DC researchers
-  println ("Data Path is: " + dataPath(""));
   smooth();
   drawScreen();
   phase = "title";
@@ -95,7 +125,7 @@ void setup() {
   for (int i = 0; i < keysPressed.length; i++) {
     keysPressed[i] = false;
   }
-  
+
   // 3D Model stuff
     /*model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
     tmpmodel = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
@@ -142,7 +172,6 @@ void draw() {
 Senses when mouse is clicked and does appropriate action.
 ----------------------------------------------------------------*/
 void mousePressed() {
-
   // go through each button
   for (int i = 0; i < buttonNames.length; i++) {
     // check to see if the mouse is currently hovering over the button
@@ -167,6 +196,10 @@ void mouseReleased() {
      else{
       //update days to set which day is selected
       currentDaySelected = i+1;
+      //Write information to log file
+      logFile.println ("Time: " + currentTimeWithColons + "--" + "User has selected the dance sequence for Day " + currentDaySelected + "\n");
+      //Create a timer to keep track of the fact the user has clicked on one of the dances
+      totalTime.start();
       //make sure filenames are up to date
       fileForDaySelected();
       //enter the "dance" phase of the program
@@ -218,6 +251,8 @@ void prepareExitHandler () {
  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
    public void run () {
      System.out.println("SHUTDOWN HOOK");
+     totalTime.stop();
+     logFile.println ("Total time user has played: " + totalTime.getSeconds() + " seconds");
      closeLogFile();
 // application exit code here
      }
@@ -268,7 +303,6 @@ void prepareExitHandler () {
         drawFaces( faces );
 
         drawNormals( faces );
-
     }
 
     popMatrix();
