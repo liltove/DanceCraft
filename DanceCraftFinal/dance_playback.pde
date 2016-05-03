@@ -175,7 +175,6 @@ void drawBack(PVector skeA, PVector skeB)
 {
 
   //Set color of skeleton "bones" to black
->>>>>>> kate-working
   stroke(0);
   //Set weight of line
   strokeWeight (5);
