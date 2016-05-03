@@ -1,13 +1,13 @@
 //import SimpleOpenNI.*;
-//import KinectPV2.*;
+////import KinectPV2.*;
 //import java.util.ArrayList;
 //
-//protected ZZModel clone;				// modele courant
-//protected ArrayList<ZZModel> avatars;	// modeles
-//protected ZZkinect zzKinect;				// capteur kinect
-//protected ZZbackground fond;			// fond de scene
-//protected ZZoptimiseur better;			// optimisation
-//final int NBCAPT = 3;					// nombre de captures pour moyennage
+////protected ZZModel clone;				// modele courant
+////protected ArrayList<ZZModel> avatars;	// modeles
+////protected ZZkinect zzKinect;				// capteur kinect
+////protected ZZbackground fond;			// fond de scene
+////protected ZZoptimiseur better;			// optimisation
+////final int NBCAPT = 3;					// nombre de captures pour moyennage
 //protected boolean debug;				// activation du mode debug
 //protected PShape debugSphere;			// spheres de debugage
 //protected PShape surprise;				// sabre laser
@@ -74,6 +74,7 @@
 //
 //  // initiallisation de l'optimiseur
 //  better = new ZZoptimiseur(NBCAPT, clone.getSkeleton().getJoints());
+//  */
 //}
 //
 //public void ZZdraw() {
@@ -84,7 +85,7 @@
 //   	 ***************************************************************/
 //
 //  background(100);	// efface l'ecran
-//  fond.draw(); 		// affiche le background
+////  fond.draw(); 		// affiche le background
 //
 //  if (debug) {
 //    debugTools();
@@ -210,10 +211,10 @@
 //    clone = avatars.get(suiv);
 //    break;
 //  case 'f' :	// changer de fond
-//    fond.next();
+////    fond.next();
 //    break;
 //  case 'g' :	// active/desactive le fond
-//    fond.activate();
+////    fond.activate();
 //    break;
 //  case ' ' :
 //    test1 = !test1;

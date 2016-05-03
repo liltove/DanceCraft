@@ -62,9 +62,14 @@ void drawDanceScreen() {
   textAlign(LEFT);
   
   recordIndicator();
-
-  //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //kinectDance();
+  
+  if (phase == "tutorial"){
+     image(tutorial, 0, 0, 340, 300);
+     tutorial.read(); 
+  } else if (phase == "dance"){
+     //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
+     kinectDance(); 
+  }
 }
 
 /*---------------------------------------------------------------
@@ -146,6 +151,8 @@ void countdownRecord(){
     drawMessage(countdownTimer[countdownReady]);
     delay(800);
     countdownReady++;
+  }else if (countdownReady == countdownTimer.length){
+    waitingToRecord = false;
   }
 }
 

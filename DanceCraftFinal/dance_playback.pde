@@ -1,20 +1,25 @@
 /*
 This file contains the functions necessary for playing back "dances" recorded
-by the user.
-*/
+ by the user.
+ */
 //-------------------------------------------------------------//
 float offsetX; //The offset x of the skeleton
 float offsetY; // The offset y of the skeleton
 float midWidth = 320 * 4; //middle width of the left half screen
 float midHeight = 720; //middle height of the left haft screen
 
+String[] danceFileNames= {
+  "prewarmUp.csv", "mirror.csv"
+};
+String[] danceChoreoFiles= {
+  "combo1_first8.csv", "bird_first8.csv", "combo1_third8.csv", "bird_third8.csv"
+};
 
-String[] danceFileNames= {"prewarmUp.csv", "mirror.csv"};
-String[] danceChoreoFiles= {"combo1_first8.csv", "bird_first8.csv", "combo1_third8.csv", "bird_third8.csv"};
+boolean useModel = false;
 
 /*--------------------------------------------------------------
-reads the csv and retrieves the joint coordinate information
---------------------------------------------------------------*/
+ reads the csv and retrieves the joint coordinate information
+ --------------------------------------------------------------*/
 Boolean readCsv(String selection)
 {
   //read the csv file if something has been selected
@@ -26,7 +31,7 @@ Boolean readCsv(String selection)
     int i = 0; //count the number of skeletons that are read
     int index; //count the join of the i skeleton that are read
     //iterate through each row of the table
-    for (TableRow row : loadedSkelTable.rows()) {
+    for (TableRow row : loadedSkelTable.rows ()) {
       //println (row);
       //get the joint position
       index = row.getInt("joint");
@@ -61,39 +66,100 @@ Boolean readCsv(String selection)
 }
 
 /*--------------------------------------------------------------
-draws the points of each of the joints
---------------------------------------------------------------*/
+ draws the points of each of the joints
+ --------------------------------------------------------------*/
 void playBack(Integer rowNum)
 {
+  println("playing " + rowNum);
   if (rowNum < skel_data.length) {  //Compare number passed to function and make sure its less than the length of the array of skeleton data
     //println ("Drawing!" + ' ' + rowNum);
     offsetX = alignX(skel_data[0][8]);
     offsetY = alignY(skel_data[0][8]);
-    drawBack(skel_data[rowNum][0], skel_data[rowNum][1]); //Head and neck
-    drawBack(skel_data[rowNum][1], skel_data[rowNum][2]); //Neck and left shoulder
-    drawBack(skel_data[rowNum][2], skel_data[rowNum][4]); //Left shoulder and Left elbow
-    drawBack(skel_data[rowNum][4], skel_data[rowNum][6]); //Left elbow and left hand
-    drawBack(skel_data[rowNum][1], skel_data[rowNum][3]); //Neck and right shoulder
-    drawBack(skel_data[rowNum][3], skel_data[rowNum][5]); //Right shoulder and right elbow
-    drawBack(skel_data[rowNum][5], skel_data[rowNum][7]); //Right elbow and right hand
-    drawBack(skel_data[rowNum][2], skel_data[rowNum][8]); //Left shoulder and TORSO
-    drawBack(skel_data[rowNum][3], skel_data[rowNum][8]); //Right shoulder and TORSO
-    drawBack(skel_data[rowNum][8], skel_data[rowNum][9]); //Torso and left Hip
-    drawBack(skel_data[rowNum][9], skel_data[rowNum][11]); //Left hip and left Knee
-    drawBack(skel_data[rowNum][11], skel_data[rowNum][13]); //left knee and left foot
-    drawBack(skel_data[rowNum][8], skel_data[rowNum][10]); ///Torso and right hip
-    drawBack(skel_data[rowNum][10], skel_data[rowNum][12]); //Right hip and right knee
-    drawBack(skel_data[rowNum][12], skel_data[rowNum][14]); //Right knee and right foot
-    drawBack(skel_data[rowNum][10], skel_data[rowNum][9]); //Right hip and left hip
+
+    if (!useModel) {
+      drawBack(skel_data[rowNum][0], skel_data[rowNum][1]); //Head and neck
+      drawBack(skel_data[rowNum][1], skel_data[rowNum][2]); //Neck and left shoulder
+      drawBack(skel_data[rowNum][2], skel_data[rowNum][4]); //Left shoulder and Left elbow
+      drawBack(skel_data[rowNum][4], skel_data[rowNum][6]); //Left elbow and left hand
+      drawBack(skel_data[rowNum][1], skel_data[rowNum][3]); //Neck and right shoulder
+      drawBack(skel_data[rowNum][3], skel_data[rowNum][5]); //Right shoulder and right elbow
+      drawBack(skel_data[rowNum][5], skel_data[rowNum][7]); //Right elbow and right hand
+      drawBack(skel_data[rowNum][2], skel_data[rowNum][8]); //Left shoulder and TORSO
+      drawBack(skel_data[rowNum][3], skel_data[rowNum][8]); //Right shoulder and TORSO
+      drawBack(skel_data[rowNum][8], skel_data[rowNum][9]); //Torso and left Hip
+      drawBack(skel_data[rowNum][9], skel_data[rowNum][11]); //Left hip and left Knee
+      drawBack(skel_data[rowNum][11], skel_data[rowNum][13]); //left knee and left foot
+      drawBack(skel_data[rowNum][8], skel_data[rowNum][10]); ///Torso and right hip
+      drawBack(skel_data[rowNum][10], skel_data[rowNum][12]); //Right hip and right knee
+      drawBack(skel_data[rowNum][12], skel_data[rowNum][14]); //Right knee and right foot
+      drawBack(skel_data[rowNum][10], skel_data[rowNum][9]); //Right hip and left hip
+    } else {
+
+      // BEGIN MODEL PLAYING
+      pushMatrix();
+      ZZoint[] zzpoint = new ZZoint[25];
+      // stuff grabbed from prev data
+      zzpoint[ZZkeleton.HEAD] = new ZZoint(skel_data[rowNum][0]);
+      zzpoint[ZZkeleton.NECK] = new ZZoint(skel_data[rowNum][1]);
+      zzpoint[ZZkeleton.SHOULDER_LEFT] = new ZZoint(skel_data[rowNum][2]);
+      zzpoint[ZZkeleton.SHOULDER_RIGHT] = new ZZoint(skel_data[rowNum][3]);
+      zzpoint[ZZkeleton.ELBOW_LEFT] = new ZZoint(skel_data[rowNum][4]);
+      zzpoint[ZZkeleton.ELBOW_RIGHT] = new ZZoint(skel_data[rowNum][5]);
+      zzpoint[ZZkeleton.HAND_LEFT] = new ZZoint(skel_data[rowNum][6]);
+      zzpoint[ZZkeleton.HAND_RIGHT] = new ZZoint(skel_data[rowNum][7]);
+      zzpoint[ZZkeleton.TORSO] = new ZZoint(skel_data[rowNum][8]);
+      zzpoint[ZZkeleton.HIP_LEFT] = new ZZoint(skel_data[rowNum][9]);
+      zzpoint[ZZkeleton.HIP_RIGHT] = new ZZoint(skel_data[rowNum][10]);
+      zzpoint[ZZkeleton.KNEE_LEFT] = new ZZoint(skel_data[rowNum][11]);
+      zzpoint[ZZkeleton.KNEE_RIGHT] = new ZZoint(skel_data[rowNum][12]);
+      zzpoint[ZZkeleton.FOOT_LEFT] = new ZZoint(skel_data[rowNum][13]);
+      zzpoint[ZZkeleton.FOOT_RIGHT] = new ZZoint(skel_data[rowNum][14]);
+
+
+      // generated stuff
+      //zzpoint[ZZkeleton.WAIST] = new ZZoint(skel_data[rowNum][15],-1,null);
+
+      zzpoint[ZZkeleton.WAIST] = zzpoint[ZZkeleton.HIP_LEFT].copy();
+      zzpoint[ZZkeleton.WAIST].avg(zzpoint[ZZkeleton.HIP_RIGHT]);
+      //zzpoint[ZZkeleton.ROOT] = new ZZoint(skel_data[rowNum][16],-1,null);
+      zzpoint[ZZkeleton.ROOT] = zzpoint[ZZkeleton.WAIST].copy();
+      zzpoint[ZZkeleton.ROOT].avg(zzpoint[ZZkeleton.TORSO]);
+      zzpoint[ZZkeleton.WRIST_LEFT] = zzpoint[ZZkeleton.HAND_LEFT];
+      zzpoint[ZZkeleton.WRIST_RIGHT] = zzpoint[ZZkeleton.HAND_RIGHT];
+
+      zzpoint[ZZkeleton.ANKLE_LEFT] = zzpoint[ZZkeleton.FOOT_LEFT];
+      zzpoint[ZZkeleton.ANKLE_RIGHT] = zzpoint[ZZkeleton.FOOT_RIGHT];
+      zzpoint[ZZkeleton.INDEX_LEFT] = zzpoint[ZZkeleton.HAND_LEFT];
+      zzpoint[ZZkeleton.THUMB_LEFT] = zzpoint[ZZkeleton.HAND_RIGHT];
+      zzpoint[ZZkeleton.INDEX_RIGHT] = zzpoint[ZZkeleton.HAND_LEFT];
+      zzpoint[ZZkeleton.THUMB_RIGHT] = zzpoint[ZZkeleton.HAND_RIGHT];
+
+      better.addEch(zzpoint);
+      pushMatrix();
+      //-zzKinect.getWidth()/2, -zzKinect.getHeight()/2, -800
+      //translate(width / 2, height / 2, 0);
+      popMatrix();
+      //      if (better.dataAvailable()) {    // si on a des donnees optimisees disponibles
+      //        clone.move(better.getOptimizedValue());  // on fait bouger l'avatar
+      //        println("BETTER??");
+      //      }
+      clone.move(zzpoint);
+      clone.translate(width / 2, (height / 2)+100, 0);
+      clone.draw();
+      popMatrix();
+
+      //      vision();
+      // END MODEL PLAYING
+    }
   } else {
     dancePlayback = false;
     numIterationsCompleted = 0;
 
-    if (currentDanceSegment < danceFileNames.length){
-       currentDanceSegment++;
-       println("Dance Segment: " + currentDanceSegment);
+    if (currentDanceSegment < danceFileNames.length) {
+      currentDanceSegment++;
+      println("Dance Segment: " + currentDanceSegment);
     } else if (currentChoreoSegment < danceChoreoFiles.length) {
-       currentChoreoSegment++;
+      currentChoreoSegment++;
       println("Choreo Segment: " + currentChoreoSegment);
     } else {
       playthroughChoreo++;
@@ -103,13 +169,13 @@ void playBack(Integer rowNum)
 }
 
 /*--------------------------------------------------------------
-draws the points based on the coordinates
---------------------------------------------------------------*/
+ draws the points based on the coordinates
+ --------------------------------------------------------------*/
 void drawBack(PVector skeA, PVector skeB)
 {
 
-   //Set color of skeleton "bones" to black
-
+  //Set color of skeleton "bones" to black
+>>>>>>> kate-working
   stroke(0);
   //Set weight of line
   strokeWeight (5);
@@ -124,12 +190,11 @@ void drawBack(PVector skeA, PVector skeB)
   ellipse(xB, yB, 5, 5);
   //draw a joint between two  (divided in half to fit all of skeleton onto vertical area of screen.  Negated Y value to flip skeleton right side up)
   line(xA, yA, xB, yB);
-
 }
 
 float alignX(PVector skeA)
 {
-  if(skeA.x < midWidth)
+  if (skeA.x < midWidth)
     return  midWidth - skeA.x;
   else
     return skeA.x - midWidth;
@@ -141,9 +206,9 @@ float alignY(PVector skeA)
 
 
 /*---------------------------------------------------------------
-Takes in the name of the csv skeleton file you want to play back and plays it
-----------------------------------------------------------------*/
-void playVideo(String filename){
+ Takes in the name of the csv skeleton file you want to play back and plays it
+ ----------------------------------------------------------------*/
+void playVideo(String filename) {
   //read the file specified
   if (!dancePlayback) {
     dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
@@ -155,60 +220,56 @@ void playVideo(String filename){
 
 
 /*--------------------------------------------------------------
-assigns the appropriate list of filenames depending on the current day selected
---------------------------------------------------------------*/
-void fileForDaySelected(){
+ assigns the appropriate list of filenames depending on the current day selected
+ --------------------------------------------------------------*/
+void fileForDaySelected() {
 
- if (currentDaySelected == 1) {
-   danceChoreoFiles[0] = "combo1_first8.csv";
-   danceChoreoFiles[2] = "combo1_third8.csv";
- } else if (currentDaySelected == 2) {
-   danceChoreoFiles[0] = "bird_first8.csv";
-   danceChoreoFiles[2] = "bird_third8.csv";
- } else if (currentDaySelected == 3) {
-   danceChoreoFiles[0] = "car_first8.csv";
-   danceChoreoFiles[2] = "car_third8.csv";
- }
+  if (currentDaySelected == 1) {
+    danceChoreoFiles[0] = "combo1_first8.csv";
+    danceChoreoFiles[2] = "combo1_third8.csv";
+  } else if (currentDaySelected == 2) {
+    danceChoreoFiles[0] = "bird_first8.csv";
+    danceChoreoFiles[2] = "bird_third8.csv";
+  } else if (currentDaySelected == 3) {
+    danceChoreoFiles[0] = "car_first8.csv";
+    danceChoreoFiles[2] = "car_third8.csv";
+  }
 }
 
 /*--------------------------------------------------------------
-logic for playing through the list of files
---------------------------------------------------------------*/
- void playDances(){
+ logic for playing through the list of files
+ --------------------------------------------------------------*/
+void playDances() {
   music = true;
-   //loop through each csv file in the current day's dances
+  //loop through each csv file in the current day's dances
   //loop until reach every current file name in array
-  if (currentDanceSegment < danceFileNames.length){
+  if (currentDanceSegment < danceFileNames.length) {
     playVideo(danceFileNames[currentDanceSegment]);
-  } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2){
+  } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2) {
     playVideo(danceChoreoFiles[currentChoreoSegment]);
-  } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3){
-    //wait for record mode
-    if (recordMode){
-      //countdown to the recording
-      if (waitingToRecord){
-        countdownRecord();
-
-        //record the kids
-        currentChoreoSegment++;
-        //
-      }
-    } else {
+  } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3) {
+    //countdown to the recording
+    if (recordMode && waitingToRecord) {
+      countdownRecord();
+    } else if (!recordMode && waitingToRecord) {
       drawMessage("Press SPACE to begin recording.");
+    } else if (!recordMode && !waitingToRecord) {
+      currentChoreoSegment++;
+      waitingToRecord = true;
+      countdownReady = 0;
     }
-  } else if (playthroughChoreo < danceChoreoFiles.length){
+  } else if (playthroughChoreo < danceChoreoFiles.length) {
     playVideo(danceChoreoFiles[playthroughChoreo]);
   }
 
   //when all done reset counters and go back to title screen
-  if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length && playthroughChoreo == danceChoreoFiles.length){
-
+  if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length && playthroughChoreo == danceChoreoFiles.length) {
     currentDanceSegment = 0; //reset segment count
     currentChoreoSegment = 0; //reset choreo segment count
     println("Dance Segment: " + currentDanceSegment);
     println("Choreo Segment: " + currentChoreoSegment);
     pauseMusic();
-   music = false;
-   phase = "title";
+    music = false;
+    phase = "title";
   }
- }
+}

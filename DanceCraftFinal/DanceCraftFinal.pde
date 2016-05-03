@@ -9,39 +9,6 @@ import controlP5.*;
 import java.util.ArrayList;
 
 ControlP5 cp5;
-
-
-//Minim minim; //audio context
-//int track = 1; //initial track number
-//String trackNum; //holds track number for calling from file
-//Holds animation movie
-Movie animation;
-Movie animation2;
-Movie animation3;
-
-
-//AudioPlayer player;
-//AudioPlayer soundtrack;
-AudioPlayer feedback;
-AudioPlayer exercise1;
-AudioPlayer exercise2;
-AudioPlayer exercise3;
-AudioPlayer exercise4;
-AudioPlayer exercise5;
-AudioPlayer tryAgain;
-AudioPlayer nextExercise;
-AudioPlayer greatJob;
-
-
-Minim minim;//audio context
-//audio context
-int track = 1; //initial track number
-String trackNum; //holds track number for calling from file
-
-PImage welcomelogin, welcomebg, dancecraft, onedancer, multidancers,
-myrecords, quitgame, question, dancebg, switchOn, diamond, play, arrow,
-picture1, picture2, picture3, endPicture, whiteBackground, congratulations;
-
 PFont font;
 
 String phase, mode;
@@ -69,7 +36,11 @@ int currentDaySelected = 0; //which day is selected to play appropriate dance fi
 int currentDanceSegment = 2; //which segment of the dance are we on
 int currentChoreoSegment = 0; //which segment of choreo are we on
 int playthroughChoreo = 0; //final play through of all choreo files
-Boolean waitingToRecord = false; //waiting on record mode
+Boolean waitingToRecord = true; //waiting on record mode
+Boolean recorded = false;
+
+//holds tutorial movie
+Movie tutorial;
 
 //Logging stuff
 String currentDay = String.valueOf(day());
@@ -114,10 +85,11 @@ void setup() {
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //kinectSetup();
+  kinectSetup();
 
   minim = new Minim(this);
   musicSetup();
+  movieSetup();
 
   background = 0;
 
@@ -158,13 +130,16 @@ void setup() {
 Detect which phase of the program we are in and call appropriate draw function.
 ----------------------------------------------------------------*/
 void draw() {
-
   if (phase=="title") {
     drawTitleScreen();
   } else if (phase=="dance") {
       drawDanceScreen();
       playDances();
       musicPlay();
+  } else if (phase=="tutorial"){
+    //drawDanceScreen();
+    drawMovie();
+
   }
 }
 
@@ -192,6 +167,12 @@ void mouseReleased() {
       //if it's tutorial, play the tutorial video, else select the day
      if(buttonNames[i].equals("Tutorial")){
        println("Tutorial pressed");
+       phase = "tutorial";
+
+      buttonIsPressed[i] = false;
+      buttonIsOver[i] = false;
+      tutorial.jump(0);
+      tutorial.play();
      }
      else{
       //update days to set which day is selected
@@ -226,6 +207,8 @@ void keyPressed() {
     } else if (key == ' ' && phase == "dance" && recordMode == true && allowRecordModeActivationAgain == true ) {
       recordMode = false;
       allowRecordModeActivationAgain = false;
+      //save recorded table to file
+      //saveSkeletonTable("test");
       println("Record Mode Deactivated");
     } else if(key == 'm' || key =='M') {
        phase = "model";
@@ -399,50 +382,3 @@ void drawPoint(PVector p){
 
 }*/
 // END 3D STUFF
-
-
-
-//creates the static background
-//void backgrnd(){
-  //if(background == 0){
-    //background = int(random(4)) + 1;
-    //String dncbg = "elements/" + background + ".png";
-    //dancebg = loadImage(dncbg);
-    //image(dancebg,width/2,height/2,width,height);
-  //}
-//}
-
-//void musicPlay(){
-//  //calls a random track from the music folder
-//    randomTrack();
-//    soundtrack.play();
-//
-////loop of music playing
-//  while(music == true){
-//    //plays the music
-//    if(!soundtrack.isPlaying()){
-//      soundtrack.pause();
-//      soundtrack.rewind();
-//      randomTrack();
-//      soundtrack.play();
-//    }
-//  }
-//}//Boolean music
-//
-//void stop()
-//{
-//  soundtrack.close();
-//  minim.stop();
-//  super.stop();
-//}
-//
-//void getTrack(int track){
-//  trackNum = "music/"+track+".mp3";
-//  soundtrack = minim.loadFile(trackNum, 2048);
-//}
-//
-//void randomTrack(){
-//  track = int(random(23)) + 1;
-//  println("Now playing track number: " + track);
-//  getTrack(track);
-//}
