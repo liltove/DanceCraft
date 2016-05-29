@@ -33,9 +33,10 @@ int background;
 //int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
-int currentDanceSegment = 2; //which segment of the dance are we on
+int currentDanceSegment = 0; //which segment of the dance are we on
 int currentChoreoSegment = 0; //which segment of choreo are we on
 int playthroughChoreo = 0; //final play through of all choreo files
+int numTimesTutorialPressed = 0;  //used to keep track of the times Tutorial button is pressed
 Boolean waitingToRecord = true; //waiting on record mode
 Boolean recorded = false;
 
@@ -77,7 +78,8 @@ PVector pos;
 
 void setup() {
   logFile = createWriter(dataPath("") + "/DanceCraftUserLog" + currentDate + "_" + currentTime + ".txt");
-  beginWritingLogFile(); //Begin creationg of log file for DC researchers
+  beginWritingLogFile(); //Begin creation of log file for DC researchers
+  logFile.println ("Time of day launched:" + " " + currentTime); //Log the time of day that the program was lanuched.
   smooth();
   drawScreen();
   phase = "title";

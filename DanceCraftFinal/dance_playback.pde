@@ -210,6 +210,7 @@ float alignY(PVector skeA)
 void playVideo(String filename) {
   //read the file specified
   if (!dancePlayback) {
+    //Load a CSV of skeleton data from into a table and return true if successful.  Otherwise return false.
     dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
   }
   playBack (numIterationsCompleted); //play back the skeletons
