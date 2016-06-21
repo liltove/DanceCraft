@@ -4,6 +4,7 @@ import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
 //import saito.objloader.*; 
+//import saito.objloader.*;
 // https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/saitoobjloader/OBJLoader.zip
 import controlP5.*;
 import java.util.ArrayList;
@@ -33,14 +34,27 @@ int background;
 //int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
-int currentDanceSegment = 2; //which segment of the dance are we on
 int currentChoreoSegment = 0; //which segment of choreo are we on
 int playthroughChoreo = 0; //final play through of all choreo files
+int numTimesTutorialPressed = 0;  //used to keep track of the times Tutorial button is pressed
 Boolean waitingToRecord = true; //waiting on record mode
 Boolean recorded = false;
 
 //holds tutorial movie
 Movie tutorial;
+
+//Logging stuff
+String currentDay = String.valueOf(day());
+String currentMonth = String.valueOf(month());
+String currentYear = String.valueOf(year());
+String currentHour = String.valueOf (hour());
+String currentMinute = String.valueOf (minute());
+String currentSecond = String.valueOf (second());
+String currentTime = currentHour + currentMinute + currentSecond;
+String currentTimeWithColons = currentHour + ":" + currentMinute + ":" + currentSecond;
+String currentDate = currentMonth + "_" + currentDay + "_" + currentYear;
+StopWatchTimer totalTime = new StopWatchTimer();
+PrintWriter logFile;
 
 // 3D Model stuff
 /*OBJModel model;
@@ -62,13 +76,15 @@ float k = 0.0;
 PVector pos;
 
 void setup() {
+  logFile = createWriter(dataPath("") + "/DanceCraftUserLog" + currentDate + "_" + currentTime + ".txt");
+  beginWritingLogFile(); //Begin creation of log file for DC researchers
+  logFile.println ("Time of day launched:" + " " + currentTime); //Log the time of day that the program was lanuched.
   smooth();
   drawScreen();
   phase = "title";
   //music = true;
   figure = true;
   
-  cp5 = new ControlP5(this);
   
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   kinectSetup();
@@ -107,6 +123,9 @@ void setup() {
     
     // initiallisation de l'optimiseur, NOT SURE IF WE NEED THIS OPTIMIZER OR NOT LEAVING FOR NOW
   better = new ZZoptimiseur(NBCAPT, clone.getSkeleton().getJoints());
+
+  //Function defined at end of this file that allows for code after program quit to run
+  prepareExitHandler();
 }
 
 /*---------------------------------------------------------------
@@ -161,6 +180,9 @@ void mouseReleased() {
      else{
       //update days to set which day is selected
       currentDaySelected = i+1;
+      //Write information to log file
+      logFile.println ("Time: " + currentTimeWithColons + "--" + "User has selected the dance sequence for Day " + currentDaySelected + "\n");
+      //Create a timer to keep track of the fact the user has clicked on one of the dances
       //make sure filenames are up to date
       fileForDaySelected();
       //enter the "dance" phase of the program
@@ -208,6 +230,18 @@ void keyReleased(){
      allowRecordModeActivationAgain = true;
    }
 } //End of KeyPressed function
+
+void prepareExitHandler () {
+ Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+   public void run () {
+     System.out.println("SHUTDOWN HOOK");
+     totalTime.stop();
+     logFile.println ("Total time user has played: " + totalTime.getSeconds() + " seconds");
+     closeLogFile();
+// application exit code here
+     }
+   }));
+}
 
 /// BEGIN 3d stuff
 /*void draw3d(){

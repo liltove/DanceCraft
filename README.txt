@@ -12,7 +12,8 @@ NOTE: Please refer frequently to this section as DanceCraft is still in the alph
 
 LOGIN SCREEN:
 —————————————
-To login: Type your name and press the “Enter/Return” key.
+Click on the correct day of progress.
+
 
 SAVING YOUR DANCE:
 ————————————
@@ -20,4 +21,16 @@ Press the “L” key to bring up the dialog box to name your dance.  Then selec
 
 TOGGLE RECORD MODE:
 ———————————
-Record mode can be enabled by pressing both the “SHIFT” key and the “CTRL” key at the same time.  Pressing the button combination again will disable record mode.   
+Record mode can be enabled by pressing both the “SHIFT” key and the “CTRL” key at the same time.  Pressing the button combination again will disable record mode.
+
+————————————————————
+DEVELOPER NOTES
+
+***Running software without the Kinect
+Comment out the following lines:
+Line 71 in interface.pde
+Line 90 in DanceCraftFinal.pde
+
+
+
+   

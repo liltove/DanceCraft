@@ -45,7 +45,9 @@ Boolean readCsv(String selection)
       skel_data[i][index].x = row.getFloat("x");
       skel_data[i][index].y = row.getFloat("y");
       skel_data[i][index].z = row.getFloat("z");
+
       //println ("FINAL Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
+
       //println ("Table row count is ---->" + table.getRowCount());
       //once the iteration has read all 14 joint, it starts recording a new skeleton
       if (index == 14)
@@ -135,14 +137,14 @@ void playBack(Integer rowNum)
       better.addEch(zzpoint);
       pushMatrix();
       //-zzKinect.getWidth()/2, -zzKinect.getHeight()/2, -800
-      //translate(width / 2, height / 2, 0); 
+      //translate(width / 2, height / 2, 0);
       popMatrix();
       //      if (better.dataAvailable()) {    // si on a des donnees optimisees disponibles
       //        clone.move(better.getOptimizedValue());  // on fait bouger l'avatar
       //        println("BETTER??");
       //      }
       clone.move(zzpoint);
-      clone.translate(width / 2, (height / 2)+100, 0); 
+      clone.translate(width / 2, (height / 2)+100, 0);
       clone.draw();
       popMatrix();
 
@@ -154,7 +156,7 @@ void playBack(Integer rowNum)
     numIterationsCompleted = 0;
 
     if (currentDanceSegment < danceFileNames.length) {
-      currentDanceSegment++; 
+      currentDanceSegment++;
       println("Dance Segment: " + currentDanceSegment);
     } else if (currentChoreoSegment < danceChoreoFiles.length) {
       currentChoreoSegment++;
@@ -201,12 +203,14 @@ float alignY(PVector skeA)
   return skeA.y + midHeight;
 }
 
+
 /*---------------------------------------------------------------
  Takes in the name of the csv skeleton file you want to play back and plays it
  ----------------------------------------------------------------*/
 void playVideo(String filename) {
   //read the file specified
   if (!dancePlayback) {
+    //Load a CSV of skeleton data from into a table and return true if successful.  Otherwise return false.
     dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
   }
   playBack (numIterationsCompleted); //play back the skeletons
@@ -251,7 +255,7 @@ void playDances() {
       drawMessage("Press SPACE to begin recording.");
     } else if (!recordMode && !waitingToRecord) {
       currentChoreoSegment++;
-      waitingToRecord = true; 
+      waitingToRecord = true;
       countdownReady = 0;
     }
   } else if (playthroughChoreo < danceChoreoFiles.length) {
@@ -260,14 +264,12 @@ void playDances() {
 
   //when all done reset counters and go back to title screen
   if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length && playthroughChoreo == danceChoreoFiles.length) {
-
     currentDanceSegment = 0; //reset segment count
-    currentChoreoSegment = 0; //reset choreo segment count 
+    currentChoreoSegment = 0; //reset choreo segment count
     println("Dance Segment: " + currentDanceSegment);
-    println("Choreo Segment: " + currentChoreoSegment); 
+    println("Choreo Segment: " + currentChoreoSegment);
     pauseMusic();
     music = false;
     phase = "title";
   }
 }
-

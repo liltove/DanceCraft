@@ -38,6 +38,7 @@ PVector[][] skel_data;
 
 //Table for Kinect Data to be stored in CSV
 Table table;
+Table table = new Table();
 Table tablePose;
 Table tableAngles;
 Table loadedSkelTable = new Table();
@@ -68,6 +69,12 @@ void kinectSetup()
  // enable skeleton generation for all joints
  kinect.enableUser();
 
+ //Add colums to table that is going to store CSV data of skeleton
+ table.addColumn("joint", Table.INT);
+ table.addColumn("x", Table.FLOAT);
+ table.addColumn("y", Table.FLOAT);
+ table.addColumn("z", Table.FLOAT);
+
 } // void setup()
 
 /*---------------------------------------------------------------
@@ -86,6 +93,7 @@ void kinectDance(){
   loadPixels();
   
   tint(255, 127);  // Display at half opacity
+
   //Create black color to turn user into a shadow
   color black = color (0,0,0);
   // get pixels for the user tracked
@@ -139,6 +147,7 @@ void kinectDance(){
      }
    }
 } // void draw()
+} //end KinectDance function
 
 /*---------------------------------------------------------------
 When a new user is found, print new user detected along with
@@ -246,3 +255,11 @@ void drawJoint (int userId, int jointID) {
   kinect.convertRealWorldToProjective (joint, convertedJoint);
   ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
 }
+
+
+
+//Save the Skeleton Data to a specific location
+void saveSkeletonTable(File selection) {
+  dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
+  saveTable(table, dataLocation + "/" + fileName + ".csv", "csv"); //Write table to location
+  cp5.remove("input"); //ControlP5 controller removes text input box from dance screen
