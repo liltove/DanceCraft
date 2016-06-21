@@ -124,7 +124,7 @@ void kinectDance(){
      //drawSkeleton(users[i]);
 
 
-     //if in recordMode, save the users tracked information to choreo files
+     //if in recordMode, save the users tracked information to data files
      if(recordMode){
         PVector currentPosition = new PVector();
         //add information to table
@@ -258,10 +258,10 @@ void drawJoint (int userId, int jointID) {
 
 
 //Save the Skeleton Data to a specific location
-void saveSkeletonTable(File selection) {
-  dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
-  saveTable(table, dataLocation + "/" + fileName + ".csv", "csv"); //Write table to location
-  cp5.remove("input"); //ControlP5 controller removes text input box from dance screen
-  typingFileName = false;
-  isPaused = false;
-}
+//void saveSkeletonTable(File selection) {
+//  dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
+//  saveTable(table, dataLocation + "/" + fileName + ".csv", "csv"); //Write table to location
+//  cp5.remove("input"); //ControlP5 controller removes text input box from dance screen
+//  typingFileName = false;
+//  isPaused = false;
+//}

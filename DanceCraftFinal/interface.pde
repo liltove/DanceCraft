@@ -144,7 +144,7 @@ void clearScreen(){
 }
 
 /*---------------------------------------------------------------
-Clear everything from screen
+counts down to when recording starts
 ----------------------------------------------------------------*/
 void countdownRecord(){
   if (countdownReady < countdownTimer.length){
