@@ -40,8 +40,7 @@ PVector[][] skel_data;
 //Table for Kinect Data to be stored in CSV
 //Table table = new Table();
 Table fullRecordTable = setUpTable();
-Table tablePose;
-Table tableAngles;
+Table choreoA = setUpTable();
 Table loadedSkelTable = new Table();
 
 PVector[] j1;
@@ -117,7 +116,6 @@ void kinectDance(){
      //check if the user has skeleton
     if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
      PVector currentPosition = new PVector();
-     
      //add information to table
      recordingDance(users[i], currentPosition, fullRecordTable);
        
@@ -125,7 +123,7 @@ void kinectDance(){
        if(recordMode){
           //PVector currentPosition = new PVector();
           //add information to table
-          //recordingDance(users[i], currentPosition, fullRecordTable);
+          recordingDance(users[i], currentPosition, choreoA);
         }
     }
    }

@@ -249,12 +249,13 @@ void playDances() {
     playVideo(danceChoreoFiles[currentChoreoSegment]);
   } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3) {
     //countdown to the recording
-    if (recordMode && waitingToRecord) {
+    if (recordMode && waitingToRecord) { //haven't recorded yet and record mode activated
       countdownRecord();
-    } else if (!recordMode && waitingToRecord) {
+    } else if (!recordMode && waitingToRecord) { //haven't recorded yet and record mode waiting
       drawMessage("Press SPACE to begin recording.");
-    } else if (!recordMode && !waitingToRecord) {
+    } else if (!recordMode && !waitingToRecord) { //finished recording
       currentChoreoSegment++;
+      saveSkeletonTable(currentDaySelected + "USERDATA" + currentTime, choreoA); //save full play through of skeletal data
       waitingToRecord = true;
       countdownReady = 0;
     }
