@@ -70,7 +70,7 @@ Boolean readCsv(String selection)
  --------------------------------------------------------------*/
 void playBack(Integer rowNum)
 {
-  println("playing " + rowNum);
+  //println("playing " + rowNum);
   if (rowNum < skel_data.length) {  //Compare number passed to function and make sure its less than the length of the array of skeleton data
     //println ("Drawing!" + ' ' + rowNum);
     offsetX = alignX(skel_data[0][8]);

@@ -210,7 +210,7 @@ void keyPressed() {
       recordMode = false;
       allowRecordModeActivationAgain = false;
       //save recorded table to file
-      saveSkeletonTable("test");
+      //saveSkeletonTable("test", fullRecordTable);
       println("Record Mode Deactivated");
     } else if(key == 'm' || key =='M') {
        phase = "model";
@@ -238,6 +238,7 @@ void prepareExitHandler () {
      System.out.println("SHUTDOWN HOOK");
      totalTime.stop();
      logFile.println ("Total time user has played: " + totalTime.getSeconds() + " seconds");
+     saveSkeletonTable(currentDaySelected + "USERDATA" + currentTime, fullRecordTable); //save full play through of skeletal data
      closeLogFile();
 // application exit code here
      }

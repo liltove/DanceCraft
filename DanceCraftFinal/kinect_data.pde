@@ -38,7 +38,8 @@ float[][] poseJointArray;
 PVector[][] skel_data;
 
 //Table for Kinect Data to be stored in CSV
-Table table = new Table();
+//Table table = new Table();
+Table fullRecordTable = setUpTable();
 Table tablePose;
 Table tableAngles;
 Table loadedSkelTable = new Table();
@@ -69,12 +70,6 @@ void kinectSetup()
 
  // enable skeleton generation for all joints
  kinect.enableUser();
-
- //Add colums to table that is going to store CSV data of skeleton
- table.addColumn("joint", Table.INT);
- table.addColumn("x", Table.FLOAT);
- table.addColumn("y", Table.FLOAT);
- table.addColumn("z", Table.FLOAT);
 
 } // void setup()
 
@@ -118,30 +113,20 @@ void kinectDance(){
 
   for(int i = 0; i < users.length; i++)
    {
+     
      //check if the user has skeleton
     if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
-      //Draw skeleton on top of player as they play
-     //drawSkeleton(users[i]);
+     //Draw skeleton on top of player as they play
      
+     //drawSkeleton(users[i]);
+     PVector currentPosition = new PVector();
+     //add information to table
+     recordingDance(users[i], currentPosition, fullRecordTable);
        //if in recordMode, save the users tracked information to data files
        if(recordMode){
-          PVector currentPosition = new PVector();
+          //PVector currentPosition = new PVector();
           //add information to table
-          AddToCSV(users[i], SimpleOpenNI.SKEL_HEAD,currentPosition); //0
-          AddToCSV(users[i], SimpleOpenNI.SKEL_NECK,currentPosition); //1
-          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition); //2
-          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition); //3
-          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition); //4
-          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition); //5
-          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_HAND,currentPosition); //6
-          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition); //7
-          AddToCSV(users[i], SimpleOpenNI.SKEL_TORSO,currentPosition); //8
-          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_HIP,currentPosition); //9
-          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition); //10
-          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition); //11
-          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition); //12
-          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition); //13
-          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition); //14
+          //recordingDance(users[i], currentPosition, fullRecordTable);
         }
     }
    }
@@ -166,9 +151,31 @@ void onLostUser(SimpleOpenNI curContext, int userId){
 } //void onLostUser(SimpleOpenNI curContext, int userId)
 
 /*--------------------------------------------------------------
+Recording all joint data and sending to CSV File
+--------------------------------------------------------------*/
+void recordingDance(int userID, PVector currentPosition, Table table) {
+//add information to table
+          AddToCSV(userID, SimpleOpenNI.SKEL_HEAD,currentPosition, table); //0
+          AddToCSV(userID, SimpleOpenNI.SKEL_NECK,currentPosition, table); //1
+          AddToCSV(userID, SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition, table); //2
+          AddToCSV(userID, SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition, table); //3
+          AddToCSV(userID, SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition, table); //4
+          AddToCSV(userID, SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition, table); //5
+          AddToCSV(userID, SimpleOpenNI.SKEL_LEFT_HAND,currentPosition, table); //6
+          AddToCSV(userID, SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition, table); //7
+          AddToCSV(userID, SimpleOpenNI.SKEL_TORSO,currentPosition, table); //8
+          AddToCSV(userID, SimpleOpenNI.SKEL_LEFT_HIP,currentPosition, table); //9
+          AddToCSV(userID, SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition, table); //10
+          AddToCSV(userID, SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition, table); //11
+          AddToCSV(userID, SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition, table); //12
+          AddToCSV(userID, SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition, table); //13
+          AddToCSV(userID, SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition, table); //14
+}
+
+/*--------------------------------------------------------------
 Writing all joint data to a table for CSV file format
 --------------------------------------------------------------*/
-void AddToCSV(int userID, int _joint, PVector currentPosition) {
+void AddToCSV(int userID, int _joint, PVector currentPosition, Table table) {
   kinect.getJointPositionSkeleton(userID, _joint, currentPosition);
   
   float _x = currentPosition.x;
@@ -177,6 +184,7 @@ void AddToCSV(int userID, int _joint, PVector currentPosition) {
   
   // Create a new row
   TableRow row = table.addRow();
+  //println(table.getRowCount() + " total rows in table");
   
   // Set the values of that row
   row.setInt("joint", _joint);
@@ -184,15 +192,18 @@ void AddToCSV(int userID, int _joint, PVector currentPosition) {
   row.setFloat("y", _y);
   row.setFloat("z", _z);
   row.setString("jointname", joint[_joint]);
+  row.setString("time", currentTime);
 }
 
 /*-------------------------------------------------
 Save the Skeleton Data to a specific location
 -----------------------------------------------------*/
-void saveSkeletonTable(String fileName) {
+void saveSkeletonTable(String fileName, Table table) {
   //dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
 
-  saveTable(table, "data/choreo" + fileName + ".csv", "csv"); //Write table to location
+  saveTable(table, "data/" + fileName + ".csv", "csv"); //Write table to location
+  println("saved "+fileName+".csv");
+  println(table.getRowCount() + " total rows in table");
   isPaused = false;
 }
 
@@ -261,6 +272,19 @@ void drawJoint (int userId, int jointID) {
   ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
 }
 
+
+Table setUpTable (){
+ Table table = new Table();
+ //Add colums to table that is going to store CSV data of skeleton
+ table.addColumn("joint", Table.INT);
+ table.addColumn("x", Table.FLOAT);
+ table.addColumn("y", Table.FLOAT);
+ table.addColumn("z", Table.FLOAT);
+ table.addColumn("jointname", Table.STRING);
+ table.addColumn("time", Table.STRING);
+ 
+ return table;
+}
 
 
 //Save the Skeleton Data to a specific location
