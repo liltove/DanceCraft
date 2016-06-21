@@ -122,28 +122,27 @@ void kinectDance(){
     if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
       //Draw skeleton on top of player as they play
      //drawSkeleton(users[i]);
-
-
-     //if in recordMode, save the users tracked information to data files
-     if(recordMode){
-        PVector currentPosition = new PVector();
-        //add information to table
-        AddToCSV(SimpleOpenNI.SKEL_HEAD,currentPosition.x,currentPosition.y, currentPosition.z); //0
-        AddToCSV(SimpleOpenNI.SKEL_NECK,currentPosition.x,currentPosition.y, currentPosition.z); //1
-        AddToCSV(SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition.x,currentPosition.y, currentPosition.z); //2
-        AddToCSV(SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition.x,currentPosition.y, currentPosition.z); //3
-        AddToCSV(SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition.x,currentPosition.y, currentPosition.z); //4
-        AddToCSV(SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition.x,currentPosition.y, currentPosition.z); //5
-        AddToCSV(SimpleOpenNI.SKEL_LEFT_HAND,currentPosition.x,currentPosition.y, currentPosition.z); //6
-        AddToCSV(SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition.x,currentPosition.y, currentPosition.z); //7
-        AddToCSV(SimpleOpenNI.SKEL_TORSO,currentPosition.x,currentPosition.y, currentPosition.z); //8
-        AddToCSV(SimpleOpenNI.SKEL_LEFT_HIP,currentPosition.x,currentPosition.y, currentPosition.z); //9
-        AddToCSV(SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition.x,currentPosition.y, currentPosition.z); //10
-        AddToCSV(SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition.x,currentPosition.y, currentPosition.z); //11
-        AddToCSV(SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition.x,currentPosition.y, currentPosition.z); //12
-        AddToCSV(SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition.x,currentPosition.y, currentPosition.z); //13
-        AddToCSV(SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition.x,currentPosition.y, currentPosition.z); //14
-      }
+     
+       //if in recordMode, save the users tracked information to data files
+       if(recordMode){
+          PVector currentPosition = new PVector();
+          //add information to table
+          AddToCSV(users[i], SimpleOpenNI.SKEL_HEAD,currentPosition); //0
+          AddToCSV(users[i], SimpleOpenNI.SKEL_NECK,currentPosition); //1
+          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition); //2
+          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition); //3
+          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition); //4
+          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition); //5
+          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_HAND,currentPosition); //6
+          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition); //7
+          AddToCSV(users[i], SimpleOpenNI.SKEL_TORSO,currentPosition); //8
+          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_HIP,currentPosition); //9
+          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition); //10
+          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition); //11
+          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition); //12
+          AddToCSV(users[i], SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition); //13
+          AddToCSV(users[i], SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition); //14
+        }
     }
    }
 } //end KinectDance function
@@ -169,11 +168,18 @@ void onLostUser(SimpleOpenNI curContext, int userId){
 /*--------------------------------------------------------------
 Writing all joint data to a table for CSV file format
 --------------------------------------------------------------*/
-void AddToCSV(int _joint, float _x, float _y, float _z) {
+void AddToCSV(int userID, int _joint, PVector currentPosition) {
+  kinect.getJointPositionSkeleton(userID, _joint, currentPosition);
+  
+  float _x = currentPosition.x;
+  float _y = currentPosition.y;
+  float _z = currentPosition.z;
+  
   // Create a new row
   TableRow row = table.addRow();
+  
   // Set the values of that row
-  row.setInt("joint",_joint);
+  row.setInt("joint", _joint);
   row.setFloat("x", _x);
   row.setFloat("y", _y);
   row.setFloat("z", _z);

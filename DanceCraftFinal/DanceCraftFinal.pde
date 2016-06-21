@@ -210,7 +210,7 @@ void keyPressed() {
       recordMode = false;
       allowRecordModeActivationAgain = false;
       //save recorded table to file
-      //saveSkeletonTable("test");
+      saveSkeletonTable("test");
       println("Record Mode Deactivated");
     } else if(key == 'm' || key =='M') {
        phase = "model";
