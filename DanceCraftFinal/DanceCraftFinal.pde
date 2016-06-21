@@ -17,6 +17,7 @@ String phase, mode;
 String [] files;
 String username, time;
 String desktopPath = "\\records/"; 
+String desktopPath = "\\records/";
 String recordingsFolder = "data"; // this is the folder that kinect skeleton recordings is in
 String recordingName = "better_dance_recording.csv"; // this is the file to temporarily use for the target recording to play
 String fileName = new String();
@@ -140,6 +141,7 @@ void draw() {
       musicPlay();
   } else if (phase=="tutorial"){
     //drawDanceScreen();  
+    //drawDanceScreen();
     drawMovie();
       
   }
@@ -162,6 +164,7 @@ void mousePressed() {
 }
 
 void mouseReleased() {  
+void mouseReleased() {
   // goes through each button
   for (int i = 0; i < buttonNames.length; i++) {
     // checks to see if the mouse is currently hovering over it
@@ -214,6 +217,7 @@ void keyPressed() {
       println("Record Mode Deactivated");
     } else if(key == 'm' || key =='M') {
        phase = "model"; 
+       phase = "model";
     }
   }
 }
@@ -230,6 +234,7 @@ void keyReleased(){
      allowRecordModeActivationAgain = true;
    }
 } //End of KeyPressed function
+} //End of KeyPressed function  //Methods
 
 void prepareExitHandler () {
  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -249,6 +254,7 @@ void prepareExitHandler () {
   noStroke();
 //  pushMatrix();
   translate(width / 2, height / 2, 0); 
+  translate(width / 2, height / 2, 0);
   rotateY(PI*1.5);
   tmpmodel.draw();
 //  popMatrix();
@@ -260,10 +266,10 @@ void prepareExitHandler () {
 
     pos.x = sin(radians(frameCount)) * 200;
     pos.y = cos(radians(frameCount)) * 200;  
+    pos.y = cos(radians(frameCount)) * 200;
 
     pushMatrix();
 
-    translate(width / 2, height / 2, 0); 
 
     rotateX(rotY);
     rotateY(rotX);
@@ -380,5 +386,6 @@ void drawPoint(PVector p){
     rotateY(HALF_PI);
     ellipse(0,0,20,20);   
     
+    ellipse(0,0,20,20);
 }*/
 // END 3D STUFF
