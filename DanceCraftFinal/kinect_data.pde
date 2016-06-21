@@ -33,17 +33,18 @@ String poseDataLocation = "data/csvPoseData.csv";
 String anglesLocation = "data/csvAngles.csv";
 float threshold = 50;
 
+
 float[][] poseJointArray;
 PVector[][] skel_data;
 
 //Table for Kinect Data to be stored in CSV
-Table table;
 Table table = new Table();
 Table tablePose;
 Table tableAngles;
 Table loadedSkelTable = new Table();
 
 PVector[] j1;
+
 
 
 /*---------------------------------------------------------------
@@ -91,7 +92,7 @@ void kinectDance(){
 
    // prepare the color pixels
   loadPixels();
-  
+
   tint(255, 127);  // Display at half opacity
 
   //Create black color to turn user into a shadow
@@ -114,39 +115,37 @@ void kinectDance(){
 
   //get the list of users
   int[] users = kinect.getUsers();
-  
+
   for(int i = 0; i < users.length; i++)
    {
      //check if the user has skeleton
     if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
       //Draw skeleton on top of player as they play
      //drawSkeleton(users[i]);
-     
-     
+
+
      //if in recordMode, save the users tracked information to choreo files
-//     if(recordMode){
-//       PVector currentPosition = new PVector();
-//       //add information to table
-//       AddToCSV(SimpleOpenNI.SKEL_HEAD,currentPosition.x,currentPosition.y, currentPosition.z); //0
-//       AddToCSV(SimpleOpenNI.SKEL_NECK,currentPosition.x,currentPosition.y, currentPosition.z); //1
-//       AddToCSV(SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition.x,currentPosition.y, currentPosition.z); //2
-//       AddToCSV(SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition.x,currentPosition.y, currentPosition.z); //3
-//       AddToCSV(SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition.x,currentPosition.y, currentPosition.z); //4
-//       AddToCSV(SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition.x,currentPosition.y, currentPosition.z); //5
-//       AddToCSV(SimpleOpenNI.SKEL_LEFT_HAND,currentPosition.x,currentPosition.y, currentPosition.z); //6
-//       AddToCSV(SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition.x,currentPosition.y, currentPosition.z); //7
-//       AddToCSV(SimpleOpenNI.SKEL_TORSO,currentPosition.x,currentPosition.y, currentPosition.z); //8
-//       AddToCSV(SimpleOpenNI.SKEL_LEFT_HIP,currentPosition.x,currentPosition.y, currentPosition.z); //9
-//       AddToCSV(SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition.x,currentPosition.y, currentPosition.z); //10
-//       AddToCSV(SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition.x,currentPosition.y, currentPosition.z); //11
-//       AddToCSV(SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition.x,currentPosition.y, currentPosition.z); //12
-//       AddToCSV(SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition.x,currentPosition.y, currentPosition.z); //13
-//       AddToCSV(SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition.x,currentPosition.y, currentPosition.z); //14
-//     }
-     
-     }
+     if(recordMode){
+        PVector currentPosition = new PVector();
+        //add information to table
+        AddToCSV(SimpleOpenNI.SKEL_HEAD,currentPosition.x,currentPosition.y, currentPosition.z); //0
+        AddToCSV(SimpleOpenNI.SKEL_NECK,currentPosition.x,currentPosition.y, currentPosition.z); //1
+        AddToCSV(SimpleOpenNI.SKEL_LEFT_SHOULDER,currentPosition.x,currentPosition.y, currentPosition.z); //2
+        AddToCSV(SimpleOpenNI.SKEL_RIGHT_SHOULDER,currentPosition.x,currentPosition.y, currentPosition.z); //3
+        AddToCSV(SimpleOpenNI.SKEL_LEFT_ELBOW,currentPosition.x,currentPosition.y, currentPosition.z); //4
+        AddToCSV(SimpleOpenNI.SKEL_RIGHT_ELBOW,currentPosition.x,currentPosition.y, currentPosition.z); //5
+        AddToCSV(SimpleOpenNI.SKEL_LEFT_HAND,currentPosition.x,currentPosition.y, currentPosition.z); //6
+        AddToCSV(SimpleOpenNI.SKEL_RIGHT_HAND,currentPosition.x,currentPosition.y, currentPosition.z); //7
+        AddToCSV(SimpleOpenNI.SKEL_TORSO,currentPosition.x,currentPosition.y, currentPosition.z); //8
+        AddToCSV(SimpleOpenNI.SKEL_LEFT_HIP,currentPosition.x,currentPosition.y, currentPosition.z); //9
+        AddToCSV(SimpleOpenNI.SKEL_RIGHT_HIP,currentPosition.x,currentPosition.y, currentPosition.z); //10
+        AddToCSV(SimpleOpenNI.SKEL_LEFT_KNEE,currentPosition.x,currentPosition.y, currentPosition.z); //11
+        AddToCSV(SimpleOpenNI.SKEL_RIGHT_KNEE,currentPosition.x,currentPosition.y, currentPosition.z); //12
+        AddToCSV(SimpleOpenNI.SKEL_LEFT_FOOT,currentPosition.x,currentPosition.y, currentPosition.z); //13
+        AddToCSV(SimpleOpenNI.SKEL_RIGHT_FOOT,currentPosition.x,currentPosition.y, currentPosition.z); //14
+      }
+    }
    }
-} // void draw()
 } //end KinectDance function
 
 /*---------------------------------------------------------------
@@ -186,7 +185,7 @@ Save the Skeleton Data to a specific location
 -----------------------------------------------------*/
 void saveSkeletonTable(String fileName) {
   //dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
-  
+
   saveTable(table, "data/choreo" + fileName + ".csv", "csv"); //Write table to location
   isPaused = false;
 }
@@ -229,7 +228,7 @@ void drawSkeleton (int userId) {
   drawJoint(userId, SimpleOpenNI.SKEL_NECK);
   drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
   drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW);
-  drawJoint(userId,SimpleOpenNI.SKEL_TORSO);
+  drawJoint(userId, SimpleOpenNI.SKEL_TORSO);
   drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HIP);
   drawJoint(userId, SimpleOpenNI.SKEL_LEFT_KNEE);
   drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_HIP);
@@ -263,3 +262,6 @@ void saveSkeletonTable(File selection) {
   dataLocation = selection.getAbsolutePath();  //Assign path selected by user into var for use in filename
   saveTable(table, dataLocation + "/" + fileName + ".csv", "csv"); //Write table to location
   cp5.remove("input"); //ControlP5 controller removes text input box from dance screen
+  typingFileName = false;
+  isPaused = false;
+}

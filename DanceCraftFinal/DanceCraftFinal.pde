@@ -3,20 +3,17 @@ import ddf.minim.*;
 import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
-//import saito.objloader.*; 
 //import saito.objloader.*;
 // https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/saitoobjloader/OBJLoader.zip
 import controlP5.*;
 import java.util.ArrayList;
 
 ControlP5 cp5;
-
 PFont font;
 
 String phase, mode;
 String [] files;
 String username, time;
-String desktopPath = "\\records/"; 
 String desktopPath = "\\records/";
 String recordingsFolder = "data"; // this is the folder that kinect skeleton recordings is in
 String recordingName = "better_dance_recording.csv"; // this is the file to temporarily use for the target recording to play
@@ -29,12 +26,14 @@ Boolean recordMode = false; //is program currently recording?
 Boolean dancePlayback = false; //is program currently playing back a recording?
 Boolean allowRecordModeActivationAgain = true;
 
+
 int startTime;
 int background;
 //int count;
 //int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
+int currentDanceSegment = 0; //which segment of the dance are we on
 int currentChoreoSegment = 0; //which segment of choreo are we on
 int playthroughChoreo = 0; //final play through of all choreo files
 int numTimesTutorialPressed = 0;  //used to keep track of the times Tutorial button is pressed
@@ -56,6 +55,7 @@ String currentTimeWithColons = currentHour + ":" + currentMinute + ":" + current
 String currentDate = currentMonth + "_" + currentDay + "_" + currentYear;
 StopWatchTimer totalTime = new StopWatchTimer();
 PrintWriter logFile;
+
 
 // 3D Model stuff
 /*OBJModel model;
@@ -85,8 +85,7 @@ void setup() {
   phase = "title";
   //music = true;
   figure = true;
-  
-  
+
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
   kinectSetup();
 
@@ -100,7 +99,7 @@ void setup() {
   for (int i = 0; i < keysPressed.length; i++) {
     keysPressed[i] = false;
   }
-  
+
   // 3D Model stuff
     /*model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
     tmpmodel = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
@@ -110,7 +109,7 @@ void setup() {
     tmpmodel.translateToCenter();
     pos = new PVector();*/
     avatars = ZZModel.loadModels(this, "./modeldata/avatars.bdd");
-    
+
     // recuperation du premier clone pour affichage
     clone = avatars.get(0);
 
@@ -121,7 +120,7 @@ void setup() {
       avatars.get(i).rotateX(PI);
       avatars.get(i).initBasis();
     }
-    
+
     // initiallisation de l'optimiseur, NOT SURE IF WE NEED THIS OPTIMIZER OR NOT LEAVING FOR NOW
   better = new ZZoptimiseur(NBCAPT, clone.getSkeleton().getJoints());
 
@@ -140,10 +139,9 @@ void draw() {
       playDances();
       musicPlay();
   } else if (phase=="tutorial"){
-    //drawDanceScreen();  
     //drawDanceScreen();
     drawMovie();
-      
+
   }
 }
 
@@ -151,7 +149,6 @@ void draw() {
 Senses when mouse is clicked and does appropriate action.
 ----------------------------------------------------------------*/
 void mousePressed() {
-  
   // go through each button
   for (int i = 0; i < buttonNames.length; i++) {
     // check to see if the mouse is currently hovering over the button
@@ -163,7 +160,6 @@ void mousePressed() {
   //println(mouseX,mouseY);
 }
 
-void mouseReleased() {  
 void mouseReleased() {
   // goes through each button
   for (int i = 0; i < buttonNames.length; i++) {
@@ -174,7 +170,7 @@ void mouseReleased() {
      if(buttonNames[i].equals("Tutorial")){
        println("Tutorial pressed");
        phase = "tutorial";
-       
+
       buttonIsPressed[i] = false;
       buttonIsOver[i] = false;
       tutorial.jump(0);
@@ -186,6 +182,7 @@ void mouseReleased() {
       //Write information to log file
       logFile.println ("Time: " + currentTimeWithColons + "--" + "User has selected the dance sequence for Day " + currentDaySelected + "\n");
       //Create a timer to keep track of the fact the user has clicked on one of the dances
+      totalTime.start();
       //make sure filenames are up to date
       fileForDaySelected();
       //enter the "dance" phase of the program
@@ -216,7 +213,6 @@ void keyPressed() {
       //saveSkeletonTable("test");
       println("Record Mode Deactivated");
     } else if(key == 'm' || key =='M') {
-       phase = "model"; 
        phase = "model";
     }
   }
@@ -233,8 +229,8 @@ void keyReleased(){
    if (!keysPressed[16] || !keysPressed[17]) {
      allowRecordModeActivationAgain = true;
    }
-} //End of KeyPressed function
 } //End of KeyPressed function  //Methods
+
 
 void prepareExitHandler () {
  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -248,12 +244,13 @@ void prepareExitHandler () {
    }));
 }
 
+
+
 /// BEGIN 3d stuff
 /*void draw3d(){
    background(255);
   noStroke();
 //  pushMatrix();
-  translate(width / 2, height / 2, 0); 
   translate(width / 2, height / 2, 0);
   rotateY(PI*1.5);
   tmpmodel.draw();
@@ -265,17 +262,17 @@ void prepareExitHandler () {
   lights();
 
     pos.x = sin(radians(frameCount)) * 200;
-    pos.y = cos(radians(frameCount)) * 200;  
     pos.y = cos(radians(frameCount)) * 200;
 
     pushMatrix();
 
+    translate(width / 2, height / 2, 0);
 
     rotateX(rotY);
     rotateY(rotX);
 
     pushMatrix();
-    
+
     drawPoint(pos);
 
     popMatrix();
@@ -291,9 +288,8 @@ void prepareExitHandler () {
         drawFaces( faces );
 
         drawNormals( faces );
-        
     }
-    
+
     popMatrix();
 }*/
 
@@ -301,7 +297,7 @@ void prepareExitHandler () {
   int magnitude = 30;
 
   int i = (int)k%52;
-  
+
     PVector orgv = model.getVertex(i);
     PVector tmpv = new PVector();
     if((k-(int)k)>.98) {
@@ -364,7 +360,7 @@ void drawNormals( Face[] fc ) {
 
         // scale the alpha of the stroke by the facing amount.
         // 0.0 = directly facing away
-        // 1.0 = directly facing 
+        // 1.0 = directly facing
         // in truth this is the dot product normalized
         stroke(255, 0, 255, 255.0 * fc[i].getFacingAmount(pos));
 
@@ -376,7 +372,7 @@ void drawNormals( Face[] fc ) {
 
 
 void drawPoint(PVector p){
- 
+
     translate(p.x, p.y, p.z);
 
     noStroke();
@@ -384,8 +380,7 @@ void drawPoint(PVector p){
     rotateX(HALF_PI);
     ellipse(0,0,20,20);
     rotateY(HALF_PI);
-    ellipse(0,0,20,20);   
-    
     ellipse(0,0,20,20);
+
 }*/
 // END 3D STUFF
