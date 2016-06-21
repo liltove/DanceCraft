@@ -116,12 +116,11 @@ void kinectDance(){
      
      //check if the user has skeleton
     if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
-     //Draw skeleton on top of player as they play
-     
-     //drawSkeleton(users[i]);
      PVector currentPosition = new PVector();
+     
      //add information to table
      recordingDance(users[i], currentPosition, fullRecordTable);
+       
        //if in recordMode, save the users tracked information to data files
        if(recordMode){
           //PVector currentPosition = new PVector();
