@@ -254,8 +254,8 @@ void playDances() {
     } else if (!recordMode && waitingToRecord) { //haven't recorded yet and record mode waiting
       drawMessage("Press SPACE to begin recording.");
     } else if (!recordMode && !waitingToRecord) { //finished recording
+      saveSkeletonTable(currentDaySelected + "USERDATA_choreo_" + currentChoreoSegment + currentTime, choreoA); //save full play through of skeletal data
       currentChoreoSegment++;
-      saveSkeletonTable(currentDaySelected + "USERDATA" + currentTime, choreoA); //save full play through of skeletal data
       waitingToRecord = true;
       countdownReady = 0;
     }

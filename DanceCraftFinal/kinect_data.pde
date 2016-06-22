@@ -114,7 +114,7 @@ void kinectDance(){
    {
      
      //check if the user has skeleton
-    if(kinect.isTrackingSkeleton(users[i]) && isPaused == false) {
+    if(kinect.isTrackingSkeleton(users[i])) {
      PVector currentPosition = new PVector();
      //add information to table
      recordingDance(users[i], currentPosition, fullRecordTable);
@@ -201,7 +201,7 @@ void saveSkeletonTable(String fileName, Table table) {
   saveTable(table, "data/" + fileName + ".csv", "csv"); //Write table to location
   println("saved "+fileName+".csv");
   println(table.getRowCount() + " total rows in table");
-  isPaused = false;
+  //isPaused = false;
 }
 
 /*-------------------------------------------------

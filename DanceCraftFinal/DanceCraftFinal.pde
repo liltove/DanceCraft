@@ -20,7 +20,7 @@ String recordingName = "better_dance_recording.csv"; // this is the file to temp
 String fileName = new String();
 
 Boolean typingUsername, music, figure, animationPlaying, animation2playing, showPoints, showResponses, showEncouragements;
-Boolean isPaused = false;
+//Boolean isPaused = false;
 Boolean typingFileName = false;
 Boolean recordMode = false; //is program currently recording?
 Boolean dancePlayback = false; //is program currently playing back a recording?
