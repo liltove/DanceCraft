@@ -11,14 +11,8 @@ float midHeight = 720; //middle height of the left haft screen
 String[] danceFileNames= {
   "prewarmUp.csv", "mirror.csv"
 };
-String[] danceChoreoFiles1= {
+String[] danceChoreoFiles= {
   "combo1_first8.csv", "1choreo_1.csv", "combo1_third8.csv", "1choreo_2.csv"
-};
-String[] danceChoreoFiles2= {
-  "combo1_first8.csv", "2choreo_1.csv", "combo1_third8.csv", "2choreo_2.csv"
-};
-String[] danceChoreoFiles3= {
-  "combo1_first8.csv", "3choreo_1.csv", "combo1_third8.csv", "3choreo_2.csv"
 };
 
 boolean useModel = false;

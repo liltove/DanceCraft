@@ -20,12 +20,23 @@ int distanceFromLeft = (width/2) - (buttonWidth/2);
 int distanceFromTop = (height/5) * 2; //  distance from top to start drawing buttons;
 int distanceBetweenButtons = 33;
 String[] buttonNames = {"One", "Two", "Three", "Tutorial"}; // array of button names;
+String[] buttonImgs = {"Day1.png", "Day2.png", "Day3.png", "Help.png"}; //array of button images
 //String[] danceFileNames= {"better_dance_recording.csv", "good_dance_recording.csv", "csvPoseData.csv"}; // array of associated File names to go with buttons
 Boolean[] buttonIsPressed = {false, false, false, false};
 Boolean[] buttonIsOver = {false, false, false, false};
 Boolean [] keysPressed = new Boolean[20];
 String[] countdownTimer = {"5", "4", "3", "2", "1"};
 int countdownReady = 0;
+
+//PImage button1;
+//PImage button2;
+//PImage button3;
+//PImage buttonHelp;
+
+PImage[] buttonImages;
+
+//Title Screen Images
+PImage title;
 
 /*---------------------------------------------------------------
 Draws the right screen size with other set parameters
@@ -76,11 +87,18 @@ void drawDanceScreen() {
 Draw the main title screen.
 ----------------------------------------------------------------*/
 void drawTitleScreen() {
+   title = loadImage("DanceCraft.png");
+   //assign button images
+//   button1 = loadImage(buttonImgs[0]);
+//   button2 = loadImage(buttonImgs[1]);
+//   button3 = loadImage(buttonImgs[2]);
+//   buttonHelp = loadImage(buttonImgs[3]);
+  
    background(255); //makes background white
    textSize(32);
    textAlign(CENTER);
    fill(0); //fills in letters black
-   text ("FANCY DANCECRAFT TITLE", width/2, height/5); //puts title in top center of screen
+   image(title, width/4, height/4); //puts title in top center of screen
 
   //if on title screen, then set day back to 0
   currentDaySelected = 0;
@@ -90,7 +108,8 @@ void drawTitleScreen() {
   
   // go throgh each button
   for (int i = 0; i < buttonNames.length; i++) {
-    
+    buttonImages[i] = loadImage(buttonImgs[i]);
+
     // calculate the distance of that button from the top of the screen
     y = distanceFromTop + buttonHeight*i + distanceBetweenButtons*i;
     
@@ -117,10 +136,11 @@ void drawTitleScreen() {
     stroke(255);
     rect(distanceFromLeft, y, buttonWidth, buttonHeight);
     
-    fill(255);
-    textSize(18);
-    textAlign(CENTER, CENTER);
-    text(buttonNames[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
+    //fill(255);
+    //textSize(18);
+    //textAlign(CENTER, CENTER);
+    //text(buttonNames[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
+    image(buttonImages[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
   }
 }
 
