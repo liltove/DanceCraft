@@ -11,8 +11,14 @@ float midHeight = 720; //middle height of the left haft screen
 String[] danceFileNames= {
   "prewarmUp.csv", "mirror.csv"
 };
-String[] danceChoreoFiles= {
-  "combo1_first8.csv", "bird_first8.csv", "combo1_third8.csv", "bird_third8.csv"
+String[] danceChoreoFiles1= {
+  "combo1_first8.csv", "1choreo_1.csv", "combo1_third8.csv", "1choreo_2.csv"
+};
+String[] danceChoreoFiles2= {
+  "combo1_first8.csv", "2choreo_1.csv", "combo1_third8.csv", "2choreo_2.csv"
+};
+String[] danceChoreoFiles3= {
+  "combo1_first8.csv", "3choreo_1.csv", "combo1_third8.csv", "3choreo_2.csv"
 };
 
 boolean useModel = false;
@@ -220,13 +226,19 @@ void fileForDaySelected() {
 
   if (currentDaySelected == 1) {
     danceChoreoFiles[0] = "combo1_first8.csv";
+    danceChoreoFiles[1] = "1choreo_1.csv";
     danceChoreoFiles[2] = "combo1_third8.csv";
+    danceChoreoFiles[3] = "1choreo_3.csv";
   } else if (currentDaySelected == 2) {
     danceChoreoFiles[0] = "bird_first8.csv";
+    danceChoreoFiles[1] = "2choreo_1.csv";
     danceChoreoFiles[2] = "bird_third8.csv";
+    danceChoreoFiles[3] = "2choreo_3.csv";
   } else if (currentDaySelected == 3) {
     danceChoreoFiles[0] = "car_first8.csv";
+    danceChoreoFiles[1] = "3choreo_1.csv";
     danceChoreoFiles[2] = "car_third8.csv";
+    danceChoreoFiles[3] = "3choreo_3.csv";
   }
 }
 
@@ -248,7 +260,12 @@ void playDances() {
     } else if (!recordMode && waitingToRecord) { //haven't recorded yet and record mode waiting
       drawMessage("Press SPACE to begin recording.");
     } else if (!recordMode && !waitingToRecord) { //finished recording
-      saveSkeletonTable(currentDaySelected + "USERDATA_choreo_" + currentChoreoSegment + currentTime, choreoA); //save full play through of skeletal data
+      if (currentChoreoSegment == 1){
+        saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoA); //save full play through of skeletal data
+      }else{
+        saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoB); //save full play through of skeletal data
+      }
+      
       currentChoreoSegment++;
       waitingToRecord = true;
       countdownReady = 0;

@@ -42,6 +42,7 @@ PVector[][] skel_data;
 //Table table = new Table();
 Table fullRecordTable = setUpTable();
 Table choreoA = setUpTable();
+Table choreoB = setUpTable();
 Table loadedSkelTable = new Table();
 
 PVector[] j1;
@@ -125,6 +126,11 @@ void kinectDance(){
        if(recordMode){
           //PVector currentPosition = new PVector();
           //add information to table
+          if (currentChoreoSegment == 1){
+            recordingDance(users[i], currentPosition, choreoA);
+          }else{
+            recordingDance(users[i], currentPosition, choreoB);
+          }
           //recordingDance(users[i], currentPosition, choreoA);
         }
     }
