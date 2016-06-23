@@ -18,7 +18,8 @@ String[] danceChoreoFiles= {
 boolean useModel = false;
 
 /*--------------------------------------------------------------
- reads the csv and retrieves the joint coordinate information
+ reads the csv and retrieves the joint coordinate information, loads them
+ into a table
  --------------------------------------------------------------*/
 Boolean readCsv(String selection)
 {
@@ -26,36 +27,28 @@ Boolean readCsv(String selection)
   if (selection != null) {
     println(selection);
     loadedSkelTable = loadTable(selection, "header");
-    //println(table);
     skel_data = new PVector [loadedSkelTable.getRowCount()/15][15]; //Initalize skel_data w/ row size = number of "skeletons" and column size = number of joints.
     int i = 0; //count the number of skeletons that are read
     int index; //count the join of the i skeleton that are read
+    
     //iterate through each row of the table
     for (TableRow row : loadedSkelTable.rows ()) {
       //println (row);
       //get the joint position
       index = row.getInt("joint");
-      //println ("Index is --->" + index);
       //Create a new PVector to hold the stuff we're about to grab from the table
       PVector joint = new PVector();
       //Insert that PVector into the skel_data array
       skel_data[i][index] = joint;
-      //println ("Inital Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
       //set coordinates of index joint for i skeleton
       skel_data[i][index].x = row.getFloat("x");
       skel_data[i][index].y = row.getFloat("y");
       skel_data[i][index].z = row.getFloat("z");
-
-      //println ("FINAL Value at skel_data" + "[" +i+ "]" + "[" +index+ "]" + "---------->" + skel_data[i][index]);
-
-      //println ("Table row count is ---->" + table.getRowCount());
-      //once the iteration has read all 14 joint, it starts recording a new skeleton
       if (index == 14)
       {
         i++;
       }
     }
-    //println ("For loop finished!");
     //Ready to start dance Playback
     println("Exiting readCSV function");
     return true;
@@ -66,7 +59,8 @@ Boolean readCsv(String selection)
 }
 
 /*--------------------------------------------------------------
- draws the points of each of the joints
+ draws the points of each of the joints OR draws the 3D model depending on
+ if model is turned on or off
  --------------------------------------------------------------*/
 void playBack(Integer rowNum)
 {
@@ -169,7 +163,7 @@ void playBack(Integer rowNum)
 }
 
 /*--------------------------------------------------------------
- draws the points based on the coordinates
+ draws the points based on the coordinates, adjusts where the drawing occurs on screen
  --------------------------------------------------------------*/
 void drawBack(PVector skeA, PVector skeB)
 {
