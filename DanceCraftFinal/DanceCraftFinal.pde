@@ -3,8 +3,6 @@ import ddf.minim.*;
 import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
-//import saito.objloader.*;
-// https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/saitoobjloader/OBJLoader.zip
 import controlP5.*;
 import java.util.ArrayList;
 
@@ -29,11 +27,9 @@ Boolean allowRecordModeActivationAgain = true;
 
 int startTime;
 int background;
-//int count;
-//int response;
 int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
-int currentDanceSegment = 2; //which segment of the dance are we on
+int currentDanceSegment = 1; //which segment of the dance are we on
 int currentChoreoSegment = 0; //which segment of choreo are we on
 int playthroughChoreo = 0; //final play through of all choreo files
 int numTimesTutorialPressed = 0;  //used to keep track of the times Tutorial button is pressed
@@ -58,12 +54,6 @@ PrintWriter logFile;
 
 
 // 3D Model stuff
-/*OBJModel model;
-OBJModel tmpmodel;
-String modelsFolder = "models";
-String modelName = "steve.obj";
-float rotX;
-float rotY;*/
 protected ZZModel clone;        // modele courant
 protected ZZkinect zzKinect;        // capteur kinect
 protected ArrayList<ZZModel> avatars;  // modeles
@@ -101,13 +91,6 @@ void setup() {
   }
 
   // 3D Model stuff
-    /*model = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
-    tmpmodel = new OBJModel(this, modelsFolder+ "/"+modelName, "relative", QUADS);
-    model.scale(25);
-    model.translateToCenter();
-    tmpmodel.scale(25);
-    tmpmodel.translateToCenter();
-    pos = new PVector();*/
     avatars = ZZModel.loadModels(this, "./modeldata/avatars.bdd");
 
     // recuperation du premier clone pour affichage
@@ -231,7 +214,9 @@ void keyReleased(){
    }
 } //End of KeyPressed function  //Methods
 
-
+/*---------------------------------------------------------------
+Runs upon exiting the program, shuts down logging functions.
+----------------------------------------------------------------*/
 void prepareExitHandler () {
  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
    public void run () {
@@ -244,144 +229,3 @@ void prepareExitHandler () {
      }
    }));
 }
-
-
-
-/// BEGIN 3d stuff
-/*void draw3d(){
-   background(255);
-  noStroke();
-//  pushMatrix();
-  translate(width / 2, height / 2, 0);
-  rotateY(PI*1.5);
-  tmpmodel.draw();
-//  popMatrix();
-  animation();
-}*/
-
-/*void draw3dold() {
-  lights();
-
-    pos.x = sin(radians(frameCount)) * 200;
-    pos.y = cos(radians(frameCount)) * 200;
-
-    pushMatrix();
-
-    translate(width / 2, height / 2, 0);
-
-    rotateX(rotY);
-    rotateY(rotX);
-
-    pushMatrix();
-
-    drawPoint(pos);
-
-    popMatrix();
-
-    //rotateY(PI*1.5);
-    //we have to get the faces out of each segment.
-    // a segment is all verts of the one material
-    for (int j = 0; j < model.getSegmentCount(); j++) {
-
-        Segment segment = model.getSegment(j);
-        Face[] faces = segment.getFaces();
-
-        drawFaces( faces );
-
-        drawNormals( faces );
-    }
-
-    popMatrix();
-}*/
-
-/*void animation(){
-  int magnitude = 30;
-
-  int i = (int)k%52;
-
-    PVector orgv = model.getVertex(i);
-    PVector tmpv = new PVector();
-    if((k-(int)k)>.98) {
-      tmpv.x = orgv.x; // Z -  is backwards, + is forwards
-      tmpv.y = orgv.y; // up and down + is down, - is up
-      tmpv.z = orgv.z; // * (abs(cos(.2)) * 0.3 - 1.0); + is left, - is right
-    }
-    else {
-      tmpv.x = orgv.x+ random(-1*magnitude,magnitude); // Z -  is backwards, + is forwards
-      tmpv.y = orgv.y+ random(-1*magnitude,magnitude); // up and down + is down, - is up
-      tmpv.z = orgv.z+ random(-1*magnitude,magnitude); // * (abs(cos(.2)) * 0.3 - 1.0); + is left, - is right
-    }
-    tmpmodel.setVertex(i, tmpv);
-
-//  for(int i = 0; i < model.getVertexCount(); i++){
-//    PVector orgv = model.getVertex(i);
-//    PVector tmpv = new PVector();
-//    tmpv.x = orgv.x * (abs(sin(i*0.2)) * 0.3 + 1.0);
-//    tmpv.y = orgv.y * (abs(cos(i*0.4)) * 0.3 + 1.0);
-//    tmpv.z = orgv.z * (abs(cos(i/5)) * 0.3 + 1.0);
-//    tmpmodel.setVertex(i, tmpv);
-//  }
-  k+=0.01;
-}*/
-
-
-/*void drawFaces(Face[] fc) {
-
-    // draw faces
-    noStroke();
-
-    beginShape(QUADS);
-
-    for (int i = 0; i < fc.length; i++)
-    {
-        PVector[] vs = fc[i].getVertices();
-        PVector[] ns = fc[i].getNormals();
-
-        // if the majority of the face is pointing to the position we draw it.
-        if(fc[i].isFacingPosition(pos)) {
-
-            for (int k = 0; k < vs.length; k++) {
-                normal(ns[k].x, ns[k].y, ns[k].z);
-                vertex(vs[k].x, vs[k].y, vs[k].z);
-            }
-        }
-    }
-    endShape();
-}
-
-
-
-void drawNormals( Face[] fc ) {
-
-    beginShape(LINES);
-    // draw face normals
-    for (int i = 0; i < fc.length; i++) {
-        PVector v = fc[i].getCenter();
-        PVector n = fc[i].getNormal();
-
-        // scale the alpha of the stroke by the facing amount.
-        // 0.0 = directly facing away
-        // 1.0 = directly facing
-        // in truth this is the dot product normalized
-        stroke(255, 0, 255, 255.0 * fc[i].getFacingAmount(pos));
-
-        vertex(v.x, v.y, v.z);
-        vertex(v.x + (n.x * normLength), v.y + (n.y * normLength), v.z + (n.z * normLength));
-    }
-    endShape();
-}
-
-
-void drawPoint(PVector p){
-
-    translate(p.x, p.y, p.z);
-
-    noStroke();
-    ellipse(0,0,20,20);
-    rotateX(HALF_PI);
-    ellipse(0,0,20,20);
-    rotateY(HALF_PI);
-    ellipse(0,0,20,20);
-
-}*/
-// END 3D STUFF

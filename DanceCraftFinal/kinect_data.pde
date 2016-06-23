@@ -18,6 +18,7 @@ int[] userID;
 
 // mapping of users
 int[] userMapping;
+int[] depthValues;
 // background image
 PImage backgroundImage;
 // image from rgb camera
@@ -87,10 +88,10 @@ void kinectDance(){
    // prepare the color pixels
   loadPixels();
 
-  tint(255, 127);  // Display at half opacity
+  //tint(255, 126);  // Display at half opacity
 
   //Create black color to turn user into a shadow
-  color black = color (0,0,0);
+  //color black = color (0, 0, 0, 63);
   // get pixels for the user tracked
   userMapping = kinect.userMap();
 
@@ -100,7 +101,7 @@ void kinectDance(){
     // if the pixel is part of the user
     if (userMapping[i] != 0) {
       // set the pixel color of the part of the display that is the user to black
-      pixels[i] = black;
+      pixels[i] = color (50, 50, 100, 63);
     }
   } // (int i =0; i < userMap.length; i++)
 
@@ -117,13 +118,14 @@ void kinectDance(){
     if(kinect.isTrackingSkeleton(users[i])) {
      PVector currentPosition = new PVector();
      //add information to table
+     drawSkeleton(users[i]);
      recordingDance(users[i], currentPosition, fullRecordTable);
        
        //if in recordMode, save the users tracked information to data files
        if(recordMode){
           //PVector currentPosition = new PVector();
           //add information to table
-          recordingDance(users[i], currentPosition, choreoA);
+          //recordingDance(users[i], currentPosition, choreoA);
         }
     }
    }
