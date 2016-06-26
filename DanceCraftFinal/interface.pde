@@ -14,7 +14,7 @@ int height = 480; // window height
 color rectColor = color(50, 55, 100);
 color rectHighlightColor = color(150, 155, 155);
 color rectPressedColor = color(100, 105, 155);
-int buttonWidth = 74;
+int buttonWidth = 90;
 int buttonHeight = 35;
 int distanceFromLeft = (width/2) - (buttonWidth/2);
 int distanceFromTop = (height/5) * 2; //  distance from top to start drawing buttons;
@@ -28,12 +28,7 @@ Boolean [] keysPressed = new Boolean[20];
 String[] countdownTimer = {"5", "4", "3", "2", "1"};
 int countdownReady = 0;
 
-//PImage button1;
-//PImage button2;
-//PImage button3;
-//PImage buttonHelp;
-
-PImage[] buttonImages;
+PImage[] buttonImages = new PImage[4];
 
 //Title Screen Images
 PImage title;
@@ -88,11 +83,6 @@ Draw the main title screen.
 ----------------------------------------------------------------*/
 void drawTitleScreen() {
    title = loadImage("DanceCraft.png");
-   //assign button images
-//   button1 = loadImage(buttonImgs[0]);
-//   button2 = loadImage(buttonImgs[1]);
-//   button3 = loadImage(buttonImgs[2]);
-//   buttonHelp = loadImage(buttonImgs[3]);
   
    background(255); //makes background white
    textSize(32);
@@ -108,7 +98,7 @@ void drawTitleScreen() {
   
   // go throgh each button
   for (int i = 0; i < buttonNames.length; i++) {
-    buttonImages[i] = loadImage(buttonImgs[i]);
+    buttonImages[i] = loadImage(buttonImgs[i]); //assign the images to the buttons
 
     // calculate the distance of that button from the top of the screen
     y = distanceFromTop + buttonHeight*i + distanceBetweenButtons*i;
