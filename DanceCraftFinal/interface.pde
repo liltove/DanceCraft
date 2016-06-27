@@ -30,6 +30,9 @@ int countdownReady = 0;
 
 PImage[] buttonImages = new PImage[4];
 
+//Title Background Color
+color backgroundColorTitle = color(51,51,153);
+
 //Title Screen Images
 PImage title;
 
@@ -84,7 +87,8 @@ Draw the main title screen.
 void drawTitleScreen() {
    title = loadImage("DanceCraft.png");
   
-   background(255); //makes background white
+   //background(255); //makes background white
+   background(backgroundColorTitle);
    textSize(32);
    textAlign(CENTER);
    fill(0); //fills in letters black
