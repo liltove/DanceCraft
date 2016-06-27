@@ -15,7 +15,7 @@ String[] danceChoreoFiles= {
   "combo1_first8.csv", "1choreo_1.csv", "combo1_third8.csv", "1choreo_2.csv"
 };
 
-boolean useModel = false;
+boolean useModel = true;
 
 /*--------------------------------------------------------------
  reads the csv and retrieves the joint coordinate information, loads them
@@ -130,19 +130,15 @@ void playBack(Integer rowNum)
 
       better.addEch(zzpoint);
       pushMatrix();
-      //-zzKinect.getWidth()/2, -zzKinect.getHeight()/2, -800
-      //translate(width / 2, height / 2, 0);
       popMatrix();
-      //      if (better.dataAvailable()) {    // si on a des donnees optimisees disponibles
-      //        clone.move(better.getOptimizedValue());  // on fait bouger l'avatar
-      //        println("BETTER??");
-      //      }
+            if (better.dataAvailable()) {    // si on a des donnees optimisees disponibles
+              clone.move(better.getOptimizedValue());  // on fait bouger l'avatar
+              //println("BETTER??");
+            }
       clone.move(zzpoint);
       clone.translate(width / 2, (height / 2)+100, 0);
       clone.draw();
       popMatrix();
-
-      //      vision();
       // END MODEL PLAYING
     }
   } else {

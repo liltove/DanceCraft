@@ -52,7 +52,7 @@ class ZZoint extends ZZector {
     
     public ZZoint(PVector jointPos) {
 		this(jointPos.x, jointPos.y, jointPos.z, -1, null);
-          mult(-.5f);
+          mult(-0.5f);
 	}
 
 	public int getParent() {

@@ -453,11 +453,11 @@ class ZZModel {
    	
     	resetToBasis();
     	
-//    	ZZector dl = newPosition[ZZkeleton.ROOT];				/****************************/
-//    	dl.sub(skeleton.getJoint(ZZkeleton.ROOT));				//							//
-//    	dl.div(8);												//	translation generale	//
-//    	dl.z += 400;											//							//
-//    	this.translate(dl);										/****************************/
+    	ZZector dl = newPosition[ZZkeleton.ROOT];				/****************************/
+    	dl.sub(skeleton.getJoint(ZZkeleton.ROOT));				//							//
+    	dl.div(8);												//	translation generale	//
+    	dl.z += 400;											//							//
+    	this.translate(dl);										/****************************/
     	
     	movePart(ZZkeleton.TORSO, newPosition);		// rotation des sous membres
     	movePart(ZZkeleton.WAIST, newPosition);
