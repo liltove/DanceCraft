@@ -17,6 +17,8 @@ String[] danceChoreoFiles= {
 
 boolean useModel = true;
 
+int[] refKinect = new int[25];
+
 /*--------------------------------------------------------------
  reads the csv and retrieves the joint coordinate information, loads them
  into a table
@@ -64,7 +66,10 @@ Boolean readCsv(String selection)
  --------------------------------------------------------------*/
 void playBack(Integer rowNum)
 {
+  PVector jointPos = new PVector();
+  int realNum;
   //println("playing " + rowNum);
+  
   if (rowNum < skel_data.length) {  //Compare number passed to function and make sure its less than the length of the array of skeleton data
     //println ("Drawing!" + ' ' + rowNum);
     offsetX = alignX(skel_data[0][8]);
@@ -92,6 +97,7 @@ void playBack(Integer rowNum)
       // BEGIN MODEL PLAYING
       pushMatrix();
       ZZoint[] zzpoint = new ZZoint[25];
+      
       // stuff grabbed from prev data
       zzpoint[ZZkeleton.HEAD] = new ZZoint(skel_data[rowNum][0]);
       zzpoint[ZZkeleton.NECK] = new ZZoint(skel_data[rowNum][1]);
@@ -111,13 +117,17 @@ void playBack(Integer rowNum)
 
 
       // generated stuff
-      //zzpoint[ZZkeleton.WAIST] = new ZZoint(skel_data[rowNum][15],-1,null);
-
+      
+      // calcul du bassin waist
+      
       zzpoint[ZZkeleton.WAIST] = zzpoint[ZZkeleton.HIP_LEFT].copy();
       zzpoint[ZZkeleton.WAIST].avg(zzpoint[ZZkeleton.HIP_RIGHT]);
-      //zzpoint[ZZkeleton.ROOT] = new ZZoint(skel_data[rowNum][16],-1,null);
+      
+      // calcul de la racine root
       zzpoint[ZZkeleton.ROOT] = zzpoint[ZZkeleton.WAIST].copy();
       zzpoint[ZZkeleton.ROOT].avg(zzpoint[ZZkeleton.TORSO]);
+          
+      // copie des poignets dans les mains
       zzpoint[ZZkeleton.WRIST_LEFT] = zzpoint[ZZkeleton.HAND_LEFT];
       zzpoint[ZZkeleton.WRIST_RIGHT] = zzpoint[ZZkeleton.HAND_RIGHT];
 
@@ -127,6 +137,11 @@ void playBack(Integer rowNum)
       zzpoint[ZZkeleton.THUMB_LEFT] = zzpoint[ZZkeleton.HAND_RIGHT];
       zzpoint[ZZkeleton.INDEX_RIGHT] = zzpoint[ZZkeleton.HAND_LEFT];
       zzpoint[ZZkeleton.THUMB_RIGHT] = zzpoint[ZZkeleton.HAND_RIGHT];
+
+//      // mise a jour des infos mains
+//      joinedHands.set(zzpoint[ZZkeleton.HAND_RIGHT]);
+//      joinedHands.sub(zzpoint[ZZkeleton.HAND_LEFT]);
+//      joinedHands.state = joinedHands.mag() < 50 ? 1 : 0;
 
       better.addEch(zzpoint);
       pushMatrix();
@@ -274,4 +289,37 @@ void playDances() {
     music = false;
     phase = "title";
   }
+}
+
+/*--------------------------------------------------------------
+ play back model on screen
+ --------------------------------------------------------------*/
+void populateRefKinect(){
+  //Matching du skeleton avec une kinect1
+      refKinect[ZZkeleton.WAIST] = -100;
+      refKinect[ZZkeleton.ROOT] = -101;
+      refKinect[ZZkeleton.NECK] = SimpleOpenNI.SKEL_NECK;
+      refKinect[ZZkeleton.HEAD] = SimpleOpenNI.SKEL_HEAD;
+      refKinect[ZZkeleton.SHOULDER_LEFT] = SimpleOpenNI.SKEL_LEFT_SHOULDER;
+      refKinect[ZZkeleton.ELBOW_LEFT] = SimpleOpenNI.SKEL_LEFT_ELBOW;
+      refKinect[ZZkeleton.WRIST_LEFT] = SimpleOpenNI.SKEL_LEFT_HAND; // inversion main poignet
+      refKinect[ZZkeleton.HAND_LEFT] = -100;                 // inversion avec wrist
+      refKinect[ZZkeleton.SHOULDER_RIGHT] = SimpleOpenNI.SKEL_RIGHT_SHOULDER;  
+      refKinect[ZZkeleton.ELBOW_RIGHT] = SimpleOpenNI.SKEL_RIGHT_ELBOW;
+      refKinect[ZZkeleton.WRIST_RIGHT] = SimpleOpenNI.SKEL_RIGHT_HAND; // inversion main poignet
+      refKinect[ZZkeleton.HAND_RIGHT] = -100;                // inversion main poignet
+      refKinect[ZZkeleton.HIP_LEFT] = SimpleOpenNI.SKEL_LEFT_HIP;  
+      refKinect[ZZkeleton.KNEE_LEFT] = SimpleOpenNI.SKEL_LEFT_KNEE;
+      refKinect[ZZkeleton.ANKLE_LEFT] = SimpleOpenNI.SKEL_LEFT_FOOT; // ankle left            // INVERSION pied cheville
+      refKinect[ZZkeleton.FOOT_LEFT] = -100;              // INVERSION pied cheville
+      refKinect[ZZkeleton.HIP_RIGHT] = SimpleOpenNI.SKEL_RIGHT_HIP;  
+      refKinect[ZZkeleton.KNEE_RIGHT] = SimpleOpenNI.SKEL_RIGHT_KNEE;
+      refKinect[ZZkeleton.ANKLE_RIGHT] = SimpleOpenNI.SKEL_RIGHT_FOOT; // ankle right            // INVERSION pied cheville
+      refKinect[ZZkeleton.FOOT_RIGHT] = -100;    // INVERSION pied cheville
+      refKinect[ZZkeleton.TORSO] = SimpleOpenNI.SKEL_TORSO;  
+      refKinect[ZZkeleton.INDEX_LEFT] = SimpleOpenNI.SKEL_LEFT_FINGERTIP;
+      refKinect[ZZkeleton.THUMB_LEFT] = -100;
+      refKinect[ZZkeleton.INDEX_RIGHT] = SimpleOpenNI.SKEL_RIGHT_FINGERTIP;
+      refKinect[ZZkeleton.THUMB_RIGHT] = -100;
+      println("here");
 }

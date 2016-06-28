@@ -55,7 +55,7 @@ PrintWriter logFile;
 
 // 3D Model stuff
 protected ZZModel clone;        // modele courant
-protected ZZkinect zzKinect;        // capteur kinect
+protected ZZkinectV1 zzKinectV1;        // capteur kinect
 protected ArrayList<ZZModel> avatars;  // modeles
 protected ZZoptimiseur better;      // optimisation
 final int NBCAPT = 3;  // nombre de captures pour moyennage
