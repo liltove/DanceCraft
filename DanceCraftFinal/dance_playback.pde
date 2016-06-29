@@ -188,31 +188,45 @@ void drawBack(PVector skeA, PVector skeB)
   float yA = 0.25 * ((-skeA.y) + offsetY);
   float xB = 0.25 * (offsetX + skeB.x);
   float yB = 0.25 * ((-skeB.y) + offsetY);
+  
   //draw a point for the first position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
+  ellipseMode(CENTER);
   ellipse(xA, yA, 5, 5);
   //draw a point for the second position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
+  ellipseMode(CENTER);
   ellipse(xB, yB, 5, 5);
   //draw a joint between two  (divided in half to fit all of skeleton onto vertical area of screen.  Negated Y value to flip skeleton right side up)
   //line(xA, yA, xB, yB);
   //draw oval from one joint to another
-  Float xs = (xA + xB) / 2;
-  Float ys = (yA + yB) / 2;
+//  Float xs = (xA + xB) / 2;
+//  Float ys = (yA + yB) / 2;
   Float distance = sqrt(sq(xA - xB) + sq(yA - yB));
   Float radius = distance / 2;
-  Float xM = (xA - xB) / 2;
-  Float yM = (yA - yB) / 2;
-  Float xC = xM - radius;
-  Float yC = yM;
-  Float thirdDis = sqrt(sq(xA - xC) + sq(yA - yC));
+  Float heigh = distance / 4;
+//  Float xM = (xA - xB) / 2;
+//  Float yM = (yA - yB) / 2;
+  //Float xC = xM - radius;
+  //Float yC = yM;
+  //Float thirdDis = sqrt(sq(xA - xC) + sq(yA - yC));
   //Float arcDistance = sqrt(sq(xA - xC) + sq(yA - yC));
   //Float cosRad = cos(1 - (sq(arcDistance) / (2 * sq(radius))));
   //Float radians = acos(cosRad);
-  Float cosRad = cos((sq(radius) + sq(radius) - sq(thirdDis)) / (2 * radius * radius));
-  Float radians = acos(cosRad);
-  println(radians);
-  fill(0,0,0);
-  rotate(radians);
-  ellipse(xs, ys, distance, 25);
+  //Float cosRad = cos((sq(radius) + sq(radius) - sq(thirdDis)) / (2 * radius * radius));
+  //Float radians = acos(cosRad);
+  //println(radians);
+  
+  Float m1 = (yB - yA) / (xB - xA);
+  Float m2 = (-1) / m1;
+  Float dx = (sqrt((heigh / (1 + sq(m2)))) / 2 );
+  Float dy = m2 * dx;
+  Float xC = xA + dx;
+  Float yC = yA + dy;
+  Float xD = xB = dx;
+  Float yD = yB - dy;
+  //fill(0,0,0);
+  //rotate(radians);
+  ellipseMode(CORNERS);
+  ellipse(xC, yC, xD, yD);
 }
 
 float alignX(PVector skeA)
@@ -308,37 +322,4 @@ void playDances() {
     music = false;
     phase = "title";
   }
-}
-
-/*--------------------------------------------------------------
- play back model on screen
- --------------------------------------------------------------*/
-void populateRefKinect(){
-  //Matching du skeleton avec une kinect1
-      refKinect[ZZkeleton.WAIST] = -100;
-      refKinect[ZZkeleton.ROOT] = -101;
-      refKinect[ZZkeleton.NECK] = SimpleOpenNI.SKEL_NECK;
-      refKinect[ZZkeleton.HEAD] = SimpleOpenNI.SKEL_HEAD;
-      refKinect[ZZkeleton.SHOULDER_LEFT] = SimpleOpenNI.SKEL_LEFT_SHOULDER;
-      refKinect[ZZkeleton.ELBOW_LEFT] = SimpleOpenNI.SKEL_LEFT_ELBOW;
-      refKinect[ZZkeleton.WRIST_LEFT] = SimpleOpenNI.SKEL_LEFT_HAND; // inversion main poignet
-      refKinect[ZZkeleton.HAND_LEFT] = -100;                 // inversion avec wrist
-      refKinect[ZZkeleton.SHOULDER_RIGHT] = SimpleOpenNI.SKEL_RIGHT_SHOULDER;  
-      refKinect[ZZkeleton.ELBOW_RIGHT] = SimpleOpenNI.SKEL_RIGHT_ELBOW;
-      refKinect[ZZkeleton.WRIST_RIGHT] = SimpleOpenNI.SKEL_RIGHT_HAND; // inversion main poignet
-      refKinect[ZZkeleton.HAND_RIGHT] = -100;                // inversion main poignet
-      refKinect[ZZkeleton.HIP_LEFT] = SimpleOpenNI.SKEL_LEFT_HIP;  
-      refKinect[ZZkeleton.KNEE_LEFT] = SimpleOpenNI.SKEL_LEFT_KNEE;
-      refKinect[ZZkeleton.ANKLE_LEFT] = SimpleOpenNI.SKEL_LEFT_FOOT; // ankle left            // INVERSION pied cheville
-      refKinect[ZZkeleton.FOOT_LEFT] = -100;              // INVERSION pied cheville
-      refKinect[ZZkeleton.HIP_RIGHT] = SimpleOpenNI.SKEL_RIGHT_HIP;  
-      refKinect[ZZkeleton.KNEE_RIGHT] = SimpleOpenNI.SKEL_RIGHT_KNEE;
-      refKinect[ZZkeleton.ANKLE_RIGHT] = SimpleOpenNI.SKEL_RIGHT_FOOT; // ankle right            // INVERSION pied cheville
-      refKinect[ZZkeleton.FOOT_RIGHT] = -100;    // INVERSION pied cheville
-      refKinect[ZZkeleton.TORSO] = SimpleOpenNI.SKEL_TORSO;  
-      refKinect[ZZkeleton.INDEX_LEFT] = SimpleOpenNI.SKEL_LEFT_FINGERTIP;
-      refKinect[ZZkeleton.THUMB_LEFT] = -100;
-      refKinect[ZZkeleton.INDEX_RIGHT] = SimpleOpenNI.SKEL_RIGHT_FINGERTIP;
-      refKinect[ZZkeleton.THUMB_RIGHT] = -100;
-      println("here");
 }
