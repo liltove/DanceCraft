@@ -178,6 +178,8 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   stroke(0);
   //Set weight of line
   strokeWeight (5);
+  //load texture image
+  PImage txt = loadImage("crumpledPaper.jpg");
 
   float xA = 0.25 * (offsetX + skeA.x);
   float yA = 0.25 * ((-skeA.y) + offsetY);
@@ -189,6 +191,7 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   rotate(0);
   if (isHead){
     fill(0,0,0);
+    //texture(txt);
     ellipse(xA, yA, 40, 60);
   } else {
     ellipse(xA, yA, 5, 5);
@@ -253,6 +256,7 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   println("radians: " + radians);
 
   fill(0,0,0);
+  //texture(txt);
   
   pushMatrix();
   translate(xM, yM);
