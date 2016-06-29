@@ -201,7 +201,6 @@ void drawBack(PVector skeA, PVector skeB)
   //line(xA, yA, xB, yB);
   
   //Begin drawing the limb between the joints
-  pushMatrix();
   
   //draw oval from one joint to another
 //  Float xs = (xA + xB) / 2;
@@ -245,43 +244,22 @@ void drawBack(PVector skeA, PVector skeB)
       newY = yA - yM;
     }
   }
-  println("point A: (" + xA + ", " + yA);
-  println("point B: (" + xB + ", " + yB);
-  println("midpoint: (" + xM + ", " + yM);
-  println("new point: (" + newX + ", " + newY);
-  
-//  Float xC = xM - radius;
-//  Float yC = yM;
+  println("point A: (" + xA + ", " + yA + ")");
+  println("point B: (" + xB + ", " + yB + ")");
+  println("midpoint: (" + xM + ", " + yM + ")");
+  println("new point: (" + newX + ", " + newY + ")");
+  println("distance: " + distance);
 
-//  Float thirdDis = sqrt(sq(xA - xC) + sq(yA - yC));
-//  Float arcDistance = sqrt(sq(xA - xC) + sq(yA - yC));
-  //Float cosRad = cos(1 - (sq(arcDistance) / (2 * sq(radius))));
   Float cosRad = cos((sq(radius) + sq(radius) - sq(newY)) / (2 * radius * radius));
   Float radians = acos(cosRad);
   println("radians: " + radians);
-  
-//  Float m1 = (yB - yM) / (xB - xM);
-//  Float m2 = (-1) / m1;
-//  Float m3 = (yA - yM) / (xA - xM);
-//  Float m4 = (-1) / m3;
-//  Float dxC = (sqrt((heigh / (1 + sq(m2)))) / 2 );
-//  Float dyC = m2 * dxC;
-//  Float dxD = (sqrt((heigh / (1 + sq(m4)))) / 2 );
-//  Float dyD = m4 * dxD;
-////  Float xC = xA + dxC;
-////  Float yC = yA + dyC;
-//  Float xD = xB = dxD;
-//  Float yD = yB - dyD;
 
   fill(0,0,0);
   
-//  ellipseMode(CORNERS);
+  pushMatrix();
   translate(xM, yM);
-  rotate(radians);
-  ellipse(0, 0, distance, 30);
-  
-  //rotate(.18);
-  //ellipse(xC,yC,xD,yD);
+  rotate(2.1 - radians);
+  ellipse(0, 0, distance, 15);
   popMatrix();
 }
 
