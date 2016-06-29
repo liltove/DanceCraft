@@ -77,7 +77,7 @@ void drawDanceScreen() {
      tutorial.read(); 
   } else if (phase == "dance"){
      //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-     //kinectDance(); 
+     kinectDance(); 
   }
 }
 
