@@ -191,12 +191,15 @@ void drawBack(PVector skeA, PVector skeB)
   
   //draw a point for the first position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
   ellipseMode(CENTER);
+  //rotate(-.18);
   ellipse(xA, yA, 5, 5);
   //draw a point for the second position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
   ellipseMode(CENTER);
   ellipse(xB, yB, 5, 5);
   //draw a joint between two  (divided in half to fit all of skeleton onto vertical area of screen.  Negated Y value to flip skeleton right side up)
   //line(xA, yA, xB, yB);
+  
+  pushMatrix();
   //draw oval from one joint to another
 //  Float xs = (xA + xB) / 2;
 //  Float ys = (yA + yB) / 2;
@@ -205,32 +208,36 @@ void drawBack(PVector skeA, PVector skeB)
   Float heigh = distance / 4;
   Float xM = (xA - xB) / 2;
   Float yM = (yA - yB) / 2;
-  //Float xC = xM - radius;
-  //Float yC = yM;
-  //Float thirdDis = sqrt(sq(xA - xC) + sq(yA - yC));
-  //Float arcDistance = sqrt(sq(xA - xC) + sq(yA - yC));
+  Float xC = xM - radius;
+  Float yC = yM;
+  Float thirdDis = sqrt(sq(xA - xC) + sq(yA - yC));
+  Float arcDistance = sqrt(sq(xA - xC) + sq(yA - yC));
   //Float cosRad = cos(1 - (sq(arcDistance) / (2 * sq(radius))));
-  //Float radians = acos(cosRad);
-  //Float cosRad = cos((sq(radius) + sq(radius) - sq(thirdDis)) / (2 * radius * radius));
-  //Float radians = acos(cosRad);
+  Float cosRad = cos((sq(radius) + sq(radius) - sq(thirdDis)) / (2 * radius * radius));
+  Float radians = acos(cosRad);
   //println(radians);
   
-  Float m1 = (yB - yM) / (xB - xM);
-  Float m2 = (-1) / m1;
-  Float m3 = (yA - yM) / (xA - xM);
-  Float m4 = (-1) / m3;
-  Float dxC = (sqrt((heigh / (1 + sq(m2)))) / 2 );
-  Float dyC = m2 * dxC;
-  Float dxD = (sqrt((heigh / (1 + sq(m4)))) / 2 );
-  Float dyD = m4 * dxD;
-  Float xC = xA + dxC;
-  Float yC = yA + dyC;
-  Float xD = xB = dxD;
-  Float yD = yB - dyD;
+//  Float m1 = (yB - yM) / (xB - xM);
+//  Float m2 = (-1) / m1;
+//  Float m3 = (yA - yM) / (xA - xM);
+//  Float m4 = (-1) / m3;
+//  Float dxC = (sqrt((heigh / (1 + sq(m2)))) / 2 );
+//  Float dyC = m2 * dxC;
+//  Float dxD = (sqrt((heigh / (1 + sq(m4)))) / 2 );
+//  Float dyD = m4 * dxD;
+//  Float xC = xA + dxC;
+//  Float yC = yA + dyC;
+//  Float xD = xB = dxD;
+//  Float yD = yB - dyD;
   //fill(0,0,0);
-  //rotate(radians);
-  ellipseMode(CORNERS);
-  ellipse(xC, yC, xD, yD);
+  rotate(radians);
+  //ellipseMode(CORNERS);
+  translate(xA, yA);
+  ellipse(0, 0, distance, heigh);
+  
+  rotate(.18);
+  ellipse(0,0,30,20);
+  popMatrix();
 }
 
 float alignX(PVector skeA)
