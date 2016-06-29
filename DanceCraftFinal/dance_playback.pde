@@ -15,7 +15,7 @@ String[] danceChoreoFiles= {
   "combo1_first8.csv", "1choreo_1.csv", "combo1_third8.csv", "1choreo_2.csv"
 };
 
-boolean useModel = true;
+boolean useModel = false;
 
 int[] refKinect = new int[25];
 
@@ -193,7 +193,26 @@ void drawBack(PVector skeA, PVector skeB)
   //draw a point for the second position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
   ellipse(xB, yB, 5, 5);
   //draw a joint between two  (divided in half to fit all of skeleton onto vertical area of screen.  Negated Y value to flip skeleton right side up)
-  line(xA, yA, xB, yB);
+  //line(xA, yA, xB, yB);
+  //draw oval from one joint to another
+  Float xs = (xA + xB) / 2;
+  Float ys = (yA + yB) / 2;
+  Float distance = sqrt(sq(xA - xB) + sq(yA - yB));
+  Float radius = distance / 2;
+  Float xM = (xA - xB) / 2;
+  Float yM = (yA - yB) / 2;
+  Float xC = xM - radius;
+  Float yC = yM;
+  Float thirdDis = sqrt(sq(xA - xC) + sq(yA - yC));
+  //Float arcDistance = sqrt(sq(xA - xC) + sq(yA - yC));
+  //Float cosRad = cos(1 - (sq(arcDistance) / (2 * sq(radius))));
+  //Float radians = acos(cosRad);
+  Float cosRad = cos((sq(radius) + sq(radius) - sq(thirdDis)) / (2 * radius * radius));
+  Float radians = acos(cosRad);
+  println(radians);
+  fill(0,0,0);
+  rotate(radians);
+  ellipse(xs, ys, distance, 25);
 }
 
 float alignX(PVector skeA)

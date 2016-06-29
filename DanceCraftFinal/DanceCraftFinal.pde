@@ -55,7 +55,7 @@ PrintWriter logFile;
 
 // 3D Model stuff
 protected ZZModel clone;        // modele courant
-protected ZZkinectV1 zzKinectV1;        // capteur kinect
+protected ZZkinect ZZkinect;        // capteur kinect
 protected ArrayList<ZZModel> avatars;  // modeles
 protected ZZoptimiseur better;      // optimisation
 final int NBCAPT = 3;  // nombre de captures pour moyennage
@@ -77,7 +77,7 @@ void setup() {
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  kinectSetup();
+  //kinectSetup();
 
   minim = new Minim(this);
   musicSetup();
