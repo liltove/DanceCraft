@@ -183,16 +183,16 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
       newY = yA - yM;
     }
   }
-  println("point A: (" + xA + ", " + yA + ")");
-  println("point B: (" + xB + ", " + yB + ")");
-  println("midpoint: (" + xM + ", " + yM + ")");
-  println("new point: (" + newX + ", " + newY + ")");
-  println("distance: " + distance);
+//  println("point A: (" + xA + ", " + yA + ")");
+//  println("point B: (" + xB + ", " + yB + ")");
+//  println("midpoint: (" + xM + ", " + yM + ")");
+//  println("new point: (" + newX + ", " + newY + ")");
+//  println("distance: " + distance);
 
 //  Float cosRad = cos((sq(radius) + sq(radius) - sq(newY)) / (2 * radius * radius));
   Float cosRad = cos(1 - (sq(newY) / (2 * sq(radius))));
   Float radians = acos(cosRad);
-  println("radians: " + radians);
+//  println("radians: " + radians);
 
   fill(0,0,0);
   //texture(txt);
