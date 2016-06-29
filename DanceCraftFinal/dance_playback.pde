@@ -76,22 +76,22 @@ void playBack(Integer rowNum)
     offsetY = alignY(skel_data[0][8]);
 
     if (!useModel) {
-      drawBack(skel_data[rowNum][0], skel_data[rowNum][1]); //Head and neck
-      drawBack(skel_data[rowNum][1], skel_data[rowNum][2]); //Neck and left shoulder
-      drawBack(skel_data[rowNum][2], skel_data[rowNum][4]); //Left shoulder and Left elbow
-      drawBack(skel_data[rowNum][4], skel_data[rowNum][6]); //Left elbow and left hand
-      drawBack(skel_data[rowNum][1], skel_data[rowNum][3]); //Neck and right shoulder
-      drawBack(skel_data[rowNum][3], skel_data[rowNum][5]); //Right shoulder and right elbow
-      drawBack(skel_data[rowNum][5], skel_data[rowNum][7]); //Right elbow and right hand
-      drawBack(skel_data[rowNum][2], skel_data[rowNum][8]); //Left shoulder and TORSO
-      drawBack(skel_data[rowNum][3], skel_data[rowNum][8]); //Right shoulder and TORSO
-      drawBack(skel_data[rowNum][8], skel_data[rowNum][9]); //Torso and left Hip
-      drawBack(skel_data[rowNum][9], skel_data[rowNum][11]); //Left hip and left Knee
-      drawBack(skel_data[rowNum][11], skel_data[rowNum][13]); //left knee and left foot
-      drawBack(skel_data[rowNum][8], skel_data[rowNum][10]); ///Torso and right hip
-      drawBack(skel_data[rowNum][10], skel_data[rowNum][12]); //Right hip and right knee
-      drawBack(skel_data[rowNum][12], skel_data[rowNum][14]); //Right knee and right foot
-      drawBack(skel_data[rowNum][10], skel_data[rowNum][9]); //Right hip and left hip
+      drawBack(skel_data[rowNum][0], skel_data[rowNum][1], false); //Head and neck
+      drawBack(skel_data[rowNum][1], skel_data[rowNum][2], false); //Neck and left shoulder
+      drawBack(skel_data[rowNum][2], skel_data[rowNum][4], false); //Left shoulder and Left elbow
+      drawBack(skel_data[rowNum][4], skel_data[rowNum][6], false); //Left elbow and left hand
+      drawBack(skel_data[rowNum][1], skel_data[rowNum][3], false); //Neck and right shoulder
+      drawBack(skel_data[rowNum][3], skel_data[rowNum][5], false); //Right shoulder and right elbow
+      drawBack(skel_data[rowNum][5], skel_data[rowNum][7], false); //Right elbow and right hand
+      drawBack(skel_data[rowNum][2], skel_data[rowNum][8], true); //Left shoulder and TORSO
+      drawBack(skel_data[rowNum][3], skel_data[rowNum][8], true); //Right shoulder and TORSO
+      drawBack(skel_data[rowNum][8], skel_data[rowNum][9], true); //Torso and left Hip
+      drawBack(skel_data[rowNum][9], skel_data[rowNum][11], false); //Left hip and left Knee
+      drawBack(skel_data[rowNum][11], skel_data[rowNum][13], false); //left knee and left foot
+      drawBack(skel_data[rowNum][8], skel_data[rowNum][10], true); ///Torso and right hip
+      drawBack(skel_data[rowNum][10], skel_data[rowNum][12], false); //Right hip and right knee
+      drawBack(skel_data[rowNum][12], skel_data[rowNum][14], false); //Right knee and right foot
+      drawBack(skel_data[rowNum][10], skel_data[rowNum][9], false); //Right hip and left hip
     } else {
 
       // BEGIN MODEL PLAYING
@@ -138,11 +138,6 @@ void playBack(Integer rowNum)
       zzpoint[ZZkeleton.INDEX_RIGHT] = zzpoint[ZZkeleton.HAND_LEFT];
       zzpoint[ZZkeleton.THUMB_RIGHT] = zzpoint[ZZkeleton.HAND_RIGHT];
 
-//      // mise a jour des infos mains
-//      joinedHands.set(zzpoint[ZZkeleton.HAND_RIGHT]);
-//      joinedHands.sub(zzpoint[ZZkeleton.HAND_LEFT]);
-//      joinedHands.state = joinedHands.mag() < 50 ? 1 : 0;
-
       better.addEch(zzpoint);
       pushMatrix();
       popMatrix();
@@ -176,7 +171,7 @@ void playBack(Integer rowNum)
 /*--------------------------------------------------------------
  draws the points based on the coordinates, adjusts where the drawing occurs on screen
  --------------------------------------------------------------*/
-void drawBack(PVector skeA, PVector skeB)
+void drawBack(PVector skeA, PVector skeB, Boolean thicker)
 {
 
   //Set color of skeleton "bones" to black
@@ -201,10 +196,7 @@ void drawBack(PVector skeA, PVector skeB)
   //line(xA, yA, xB, yB);
   
   //Begin drawing the limb between the joints
-  
   //draw oval from one joint to another
-//  Float xs = (xA + xB) / 2;
-//  Float ys = (yA + yB) / 2;
   Float distance = sqrt(sq(xA - xB) + sq(yA - yB));
   Float radius = distance / 2;
   Float heigh = distance / 4;
@@ -259,7 +251,12 @@ void drawBack(PVector skeA, PVector skeB)
   pushMatrix();
   translate(xM, yM);
   rotate(2.1 - radians);
-  ellipse(0, 0, distance, 15);
+  if (thicker){
+    ellipse(0, 0, distance, 45);
+  } else {
+    ellipse(0, 0, distance, 10);
+  }
+  
   popMatrix();
 }
 
