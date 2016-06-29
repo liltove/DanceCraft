@@ -203,8 +203,8 @@ void drawBack(PVector skeA, PVector skeB)
   Float distance = sqrt(sq(xA - xB) + sq(yA - yB));
   Float radius = distance / 2;
   Float heigh = distance / 4;
-//  Float xM = (xA - xB) / 2;
-//  Float yM = (yA - yB) / 2;
+  Float xM = (xA - xB) / 2;
+  Float yM = (yA - yB) / 2;
   //Float xC = xM - radius;
   //Float yC = yM;
   //Float thirdDis = sqrt(sq(xA - xC) + sq(yA - yC));
@@ -215,14 +215,18 @@ void drawBack(PVector skeA, PVector skeB)
   //Float radians = acos(cosRad);
   //println(radians);
   
-  Float m1 = (yB - yA) / (xB - xA);
+  Float m1 = (yB - yM) / (xB - xM);
   Float m2 = (-1) / m1;
-  Float dx = (sqrt((heigh / (1 + sq(m2)))) / 2 );
-  Float dy = m2 * dx;
-  Float xC = xA + dx;
-  Float yC = yA + dy;
-  Float xD = xB = dx;
-  Float yD = yB - dy;
+  Float m3 = (yA - yM) / (xA - xM);
+  Float m4 = (-1) / m3;
+  Float dxC = (sqrt((heigh / (1 + sq(m2)))) / 2 );
+  Float dyC = m2 * dxC;
+  Float dxD = (sqrt((heigh / (1 + sq(m4)))) / 2 );
+  Float dyD = m4 * dxD;
+  Float xC = xA + dxC;
+  Float yC = yA + dyC;
+  Float xD = xB = dxD;
+  Float yD = yB - dyD;
   //fill(0,0,0);
   //rotate(radians);
   ellipseMode(CORNERS);
