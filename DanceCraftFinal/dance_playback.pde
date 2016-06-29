@@ -191,31 +191,74 @@ void drawBack(PVector skeA, PVector skeB)
   
   //draw a point for the first position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
   ellipseMode(CENTER);
-  //rotate(-.18);
+  rotate(0);
   ellipse(xA, yA, 5, 5);
+  
   //draw a point for the second position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
-  ellipseMode(CENTER);
   ellipse(xB, yB, 5, 5);
+  
   //draw a joint between two  (divided in half to fit all of skeleton onto vertical area of screen.  Negated Y value to flip skeleton right side up)
   //line(xA, yA, xB, yB);
   
+  //Begin drawing the limb between the joints
   pushMatrix();
+  
   //draw oval from one joint to another
 //  Float xs = (xA + xB) / 2;
 //  Float ys = (yA + yB) / 2;
   Float distance = sqrt(sq(xA - xB) + sq(yA - yB));
   Float radius = distance / 2;
   Float heigh = distance / 4;
-  Float xM = (xA - xB) / 2;
-  Float yM = (yA - yB) / 2;
-  Float xC = xM - radius;
-  Float yC = yM;
-  Float thirdDis = sqrt(sq(xA - xC) + sq(yA - yC));
-  Float arcDistance = sqrt(sq(xA - xC) + sq(yA - yC));
+  
+  //what to modify the point by to get midpoint
+  Float xMod = (xA - xB) / 2;
+  Float yMod = (yA - yB) / 2;
+  
+  //placeholders for midpoints and what will be the new point to calc angle from
+  Float xM;
+  Float yM;
+  Float newX;
+  Float newY;
+  //figure out which point is the one to be modified to find midpoint
+  if (xMod >= 0){
+    if (xA > xB){
+      xM = xB + xMod;
+      yM = yB + yMod;
+      newX = xA - xM;
+      newY = yA - yM;
+    } else {
+      xM = xA + xMod;
+      yM = yA + yMod;
+      newX = xB - xM;
+      newY = yB - yM;
+    }
+  } else {
+    if (xA > xB){
+      xM = xA + xMod;
+      yM = yA + yMod;
+      newX = xA - xM;
+      newY = yA - yM;
+    } else {
+      xM = xB + xMod;
+      yM = yB + yMod;
+      newX = xA - xM;
+      newY = yA - yM;
+    }
+  }
+  println("point A: (" + xA + ", " + yA);
+  println("point B: (" + xB + ", " + yB);
+  println("midpoint: (" + xM + ", " + yM);
+  println("new point: (" + newX + ", " + newY);
+  
+//  Float xC = xM - radius;
+//  Float yC = yM;
+
+//  Float thirdDis = sqrt(sq(xA - xC) + sq(yA - yC));
+//  Float arcDistance = sqrt(sq(xA - xC) + sq(yA - yC));
   //Float cosRad = cos(1 - (sq(arcDistance) / (2 * sq(radius))));
-  Float cosRad = cos((sq(radius) + sq(radius) - sq(thirdDis)) / (2 * radius * radius));
+  Float cosRad = cos((sq(radius) + sq(radius) - sq(newY)) / (2 * radius * radius));
   Float radians = acos(cosRad);
-  //println(radians);
+  println("radians: " + radians);
   
 //  Float m1 = (yB - yM) / (xB - xM);
 //  Float m2 = (-1) / m1;
@@ -225,18 +268,20 @@ void drawBack(PVector skeA, PVector skeB)
 //  Float dyC = m2 * dxC;
 //  Float dxD = (sqrt((heigh / (1 + sq(m4)))) / 2 );
 //  Float dyD = m4 * dxD;
-//  Float xC = xA + dxC;
-//  Float yC = yA + dyC;
+////  Float xC = xA + dxC;
+////  Float yC = yA + dyC;
 //  Float xD = xB = dxD;
 //  Float yD = yB - dyD;
-  //fill(0,0,0);
-  rotate(radians);
-  //ellipseMode(CORNERS);
-  translate(xA, yA);
-  ellipse(0, 0, distance, heigh);
+
+  fill(0,0,0);
   
-  rotate(.18);
-  ellipse(0,0,30,20);
+//  ellipseMode(CORNERS);
+  translate(xM, yM);
+  rotate(radians);
+  ellipse(0, 0, distance, 30);
+  
+  //rotate(.18);
+  //ellipse(xC,yC,xD,yD);
   popMatrix();
 }
 
