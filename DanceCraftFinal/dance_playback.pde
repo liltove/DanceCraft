@@ -76,22 +76,22 @@ void playBack(Integer rowNum)
     offsetY = alignY(skel_data[0][8]);
 
     if (!useModel) {
-      drawBack(skel_data[rowNum][0], skel_data[rowNum][1], false); //Head and neck
-      drawBack(skel_data[rowNum][1], skel_data[rowNum][2], false); //Neck and left shoulder
-      drawBack(skel_data[rowNum][2], skel_data[rowNum][4], false); //Left shoulder and Left elbow
-      drawBack(skel_data[rowNum][4], skel_data[rowNum][6], false); //Left elbow and left hand
-      drawBack(skel_data[rowNum][1], skel_data[rowNum][3], false); //Neck and right shoulder
-      drawBack(skel_data[rowNum][3], skel_data[rowNum][5], false); //Right shoulder and right elbow
-      drawBack(skel_data[rowNum][5], skel_data[rowNum][7], false); //Right elbow and right hand
-      drawBack(skel_data[rowNum][2], skel_data[rowNum][8], true); //Left shoulder and TORSO
-      drawBack(skel_data[rowNum][3], skel_data[rowNum][8], true); //Right shoulder and TORSO
-      drawBack(skel_data[rowNum][8], skel_data[rowNum][9], true); //Torso and left Hip
-      drawBack(skel_data[rowNum][9], skel_data[rowNum][11], false); //Left hip and left Knee
-      drawBack(skel_data[rowNum][11], skel_data[rowNum][13], false); //left knee and left foot
-      drawBack(skel_data[rowNum][8], skel_data[rowNum][10], true); ///Torso and right hip
-      drawBack(skel_data[rowNum][10], skel_data[rowNum][12], false); //Right hip and right knee
-      drawBack(skel_data[rowNum][12], skel_data[rowNum][14], false); //Right knee and right foot
-      drawBack(skel_data[rowNum][10], skel_data[rowNum][9], false); //Right hip and left hip
+      drawBack(skel_data[rowNum][0], skel_data[rowNum][1], false, true); //Head and neck
+      drawBack(skel_data[rowNum][1], skel_data[rowNum][2], false, false); //Neck and left shoulder
+      drawBack(skel_data[rowNum][2], skel_data[rowNum][4], false, false); //Left shoulder and Left elbow
+      drawBack(skel_data[rowNum][4], skel_data[rowNum][6], false, false); //Left elbow and left hand
+      drawBack(skel_data[rowNum][1], skel_data[rowNum][3], false, false); //Neck and right shoulder
+      drawBack(skel_data[rowNum][3], skel_data[rowNum][5], false, false); //Right shoulder and right elbow
+      drawBack(skel_data[rowNum][5], skel_data[rowNum][7], false, false); //Right elbow and right hand
+      drawBack(skel_data[rowNum][2], skel_data[rowNum][8], true, false); //Left shoulder and TORSO
+      drawBack(skel_data[rowNum][3], skel_data[rowNum][8], true, false); //Right shoulder and TORSO
+      drawBack(skel_data[rowNum][8], skel_data[rowNum][9], true, false); //Torso and left Hip
+      drawBack(skel_data[rowNum][9], skel_data[rowNum][11], false, false); //Left hip and left Knee
+      drawBack(skel_data[rowNum][11], skel_data[rowNum][13], false, false); //left knee and left foot
+      drawBack(skel_data[rowNum][8], skel_data[rowNum][10], true, false); ///Torso and right hip
+      drawBack(skel_data[rowNum][10], skel_data[rowNum][12], false, false); //Right hip and right knee
+      drawBack(skel_data[rowNum][12], skel_data[rowNum][14], false, false); //Right knee and right foot
+      drawBack(skel_data[rowNum][10], skel_data[rowNum][9], false, false); //Right hip and left hip
     } else {
 
       // BEGIN MODEL PLAYING
@@ -171,7 +171,7 @@ void playBack(Integer rowNum)
 /*--------------------------------------------------------------
  draws the points based on the coordinates, adjusts where the drawing occurs on screen
  --------------------------------------------------------------*/
-void drawBack(PVector skeA, PVector skeB, Boolean thicker)
+void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
 {
 
   //Set color of skeleton "bones" to black
@@ -187,7 +187,12 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker)
   //draw a point for the first position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
   ellipseMode(CENTER);
   rotate(0);
-  ellipse(xA, yA, 5, 5);
+  if (isHead){
+    fill(0,0,0);
+    ellipse(xA, yA, 40, 60);
+  } else {
+    ellipse(xA, yA, 5, 5);
+  }
   
   //draw a point for the second position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
   ellipse(xB, yB, 5, 5);
@@ -242,7 +247,8 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker)
   println("new point: (" + newX + ", " + newY + ")");
   println("distance: " + distance);
 
-  Float cosRad = cos((sq(radius) + sq(radius) - sq(newY)) / (2 * radius * radius));
+//  Float cosRad = cos((sq(radius) + sq(radius) - sq(newY)) / (2 * radius * radius));
+  Float cosRad = cos(1 - (sq(newY) / (2 * sq(radius))));
   Float radians = acos(cosRad);
   println("radians: " + radians);
 
@@ -250,7 +256,8 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker)
   
   pushMatrix();
   translate(xM, yM);
-  rotate(2.1 - radians);
+  //rotate(2.1 - radians);
+  rotate(PI * radians);
   if (thicker){
     ellipse(0, 0, distance, 45);
   } else {
