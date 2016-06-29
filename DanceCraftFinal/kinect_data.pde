@@ -58,7 +58,6 @@ void kinectSetup()
 
  // start a new kinect object
  kinect = new SimpleOpenNI(this);
- ZZkinect = new ZZkinectV1(this);
  kinect.setMirror(true);
  // enable depth sensor
  kinect.enableDepth();

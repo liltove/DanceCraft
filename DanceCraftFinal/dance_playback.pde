@@ -17,8 +17,6 @@ String[] danceChoreoFiles= {
 
 boolean useModel = false;
 
-int[] refKinect = new int[25];
-
 /*--------------------------------------------------------------
  reads the csv and retrieves the joint coordinate information, loads them
  into a table
@@ -92,64 +90,6 @@ void playBack(Integer rowNum)
       drawBack(skel_data[rowNum][10], skel_data[rowNum][12], false, false); //Right hip and right knee
       drawBack(skel_data[rowNum][12], skel_data[rowNum][14], false, false); //Right knee and right foot
       drawBack(skel_data[rowNum][10], skel_data[rowNum][9], false, false); //Right hip and left hip
-    } else {
-
-      // BEGIN MODEL PLAYING
-      pushMatrix();
-      ZZoint[] zzpoint = new ZZoint[25];
-      
-      // stuff grabbed from prev data
-      zzpoint[ZZkeleton.HEAD] = new ZZoint(skel_data[rowNum][0]);
-      zzpoint[ZZkeleton.NECK] = new ZZoint(skel_data[rowNum][1]);
-      zzpoint[ZZkeleton.SHOULDER_LEFT] = new ZZoint(skel_data[rowNum][2]);
-      zzpoint[ZZkeleton.SHOULDER_RIGHT] = new ZZoint(skel_data[rowNum][3]);
-      zzpoint[ZZkeleton.ELBOW_LEFT] = new ZZoint(skel_data[rowNum][4]);
-      zzpoint[ZZkeleton.ELBOW_RIGHT] = new ZZoint(skel_data[rowNum][5]);
-      zzpoint[ZZkeleton.HAND_LEFT] = new ZZoint(skel_data[rowNum][6]);
-      zzpoint[ZZkeleton.HAND_RIGHT] = new ZZoint(skel_data[rowNum][7]);
-      zzpoint[ZZkeleton.TORSO] = new ZZoint(skel_data[rowNum][8]);
-      zzpoint[ZZkeleton.HIP_LEFT] = new ZZoint(skel_data[rowNum][9]);
-      zzpoint[ZZkeleton.HIP_RIGHT] = new ZZoint(skel_data[rowNum][10]);
-      zzpoint[ZZkeleton.KNEE_LEFT] = new ZZoint(skel_data[rowNum][11]);
-      zzpoint[ZZkeleton.KNEE_RIGHT] = new ZZoint(skel_data[rowNum][12]);
-      zzpoint[ZZkeleton.FOOT_LEFT] = new ZZoint(skel_data[rowNum][13]);
-      zzpoint[ZZkeleton.FOOT_RIGHT] = new ZZoint(skel_data[rowNum][14]);
-
-
-      // generated stuff
-      
-      // calcul du bassin waist
-      
-      zzpoint[ZZkeleton.WAIST] = zzpoint[ZZkeleton.HIP_LEFT].copy();
-      zzpoint[ZZkeleton.WAIST].avg(zzpoint[ZZkeleton.HIP_RIGHT]);
-      
-      // calcul de la racine root
-      zzpoint[ZZkeleton.ROOT] = zzpoint[ZZkeleton.WAIST].copy();
-      zzpoint[ZZkeleton.ROOT].avg(zzpoint[ZZkeleton.TORSO]);
-          
-      // copie des poignets dans les mains
-      zzpoint[ZZkeleton.WRIST_LEFT] = zzpoint[ZZkeleton.HAND_LEFT];
-      zzpoint[ZZkeleton.WRIST_RIGHT] = zzpoint[ZZkeleton.HAND_RIGHT];
-
-      zzpoint[ZZkeleton.ANKLE_LEFT] = zzpoint[ZZkeleton.FOOT_LEFT];
-      zzpoint[ZZkeleton.ANKLE_RIGHT] = zzpoint[ZZkeleton.FOOT_RIGHT];
-      zzpoint[ZZkeleton.INDEX_LEFT] = zzpoint[ZZkeleton.HAND_LEFT];
-      zzpoint[ZZkeleton.THUMB_LEFT] = zzpoint[ZZkeleton.HAND_RIGHT];
-      zzpoint[ZZkeleton.INDEX_RIGHT] = zzpoint[ZZkeleton.HAND_LEFT];
-      zzpoint[ZZkeleton.THUMB_RIGHT] = zzpoint[ZZkeleton.HAND_RIGHT];
-
-      better.addEch(zzpoint);
-      pushMatrix();
-      popMatrix();
-            if (better.dataAvailable()) {    // si on a des donnees optimisees disponibles
-              clone.move(better.getOptimizedValue());  // on fait bouger l'avatar
-              //println("BETTER??");
-            }
-      clone.move(zzpoint);
-      clone.translate(width / 2, (height / 2)+100, 0);
-      clone.draw();
-      popMatrix();
-      // END MODEL PLAYING
     }
   } else {
     dancePlayback = false;
@@ -179,7 +119,7 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   //Set weight of line
   strokeWeight (5);
   //load texture image
-  PImage txt = loadImage("crumpledPaper.jpg");
+  //PImage txt = loadImage("crumpledPaper.jpg");
 
   float xA = 0.25 * (offsetX + skeA.x);
   float yA = 0.25 * ((-skeA.y) + offsetY);
@@ -191,7 +131,6 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   rotate(0);
   if (isHead){
     fill(0,0,0);
-    //texture(txt);
     ellipse(xA, yA, 40, 60);
   } else {
     ellipse(xA, yA, 5, 5);
@@ -260,7 +199,6 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   
   pushMatrix();
   translate(xM, yM);
-  //rotate(2.1 - radians);
   rotate(PI * radians);
   if (thicker){
     ellipse(0, 0, distance, 45);

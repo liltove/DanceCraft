@@ -52,15 +52,6 @@ String currentDate = currentMonth + "_" + currentDay + "_" + currentYear;
 StopWatchTimer totalTime = new StopWatchTimer();
 PrintWriter logFile;
 
-
-// 3D Model stuff
-protected ZZModel clone;        // modele courant
-protected ZZkinect ZZkinect;        // capteur kinect
-protected ArrayList<ZZModel> avatars;  // modeles
-protected ZZoptimiseur better;      // optimisation
-final int NBCAPT = 3;  // nombre de captures pour moyennage
-
-
 float normLength = -25;
 
 float k = 0.0;
@@ -89,23 +80,6 @@ void setup() {
   for (int i = 0; i < keysPressed.length; i++) {
     keysPressed[i] = false;
   }
-
-  // 3D Model stuff
-    avatars = ZZModel.loadModels(this, "./modeldata/avatars.bdd");
-
-    // recuperation du premier clone pour affichage
-    clone = avatars.get(0);
-
-    // Orientation et echelle du modele
-    for (int i = 0; i < avatars.size (); i++) {
-      avatars.get(i).scale(64);
-      avatars.get(i).rotateY(PI);
-      avatars.get(i).rotateX(PI);
-      avatars.get(i).initBasis();
-    }
-
-    // initiallisation de l'optimiseur, NOT SURE IF WE NEED THIS OPTIMIZER OR NOT LEAVING FOR NOW
-  better = new ZZoptimiseur(NBCAPT, clone.getSkeleton().getJoints());
 
   //Function defined at end of this file that allows for code after program quit to run
   prepareExitHandler();
