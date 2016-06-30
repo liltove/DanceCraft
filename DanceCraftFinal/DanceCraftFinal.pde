@@ -30,7 +30,7 @@ int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
 
 //CHANGE THIS LINE IF YOU DON'T WANT TO START AT THE BEGINNING!!
-int currentDanceSegment = 1; //which segment of the dance are we on
+int currentDanceSegment = 2; //which segment of the dance are we on
 
 int currentChoreoSegment = 0; //which segment of choreo are we on
 int playthroughChoreo = 0; //final play through of all choreo files
@@ -40,6 +40,10 @@ Boolean recorded = false;
 
 //holds tutorial movie
 Movie tutorial;
+
+//dance backgrounds
+PImage danceBackdrop;
+String[] danceBG = {"Day1BG.png", "Day2BG.png", "Day3BG.png"};
 
 //Logging stuff
 String currentDay = String.valueOf(day());
@@ -70,7 +74,7 @@ void setup() {
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  kinectSetup();
+  //kinectSetup();
 
   minim = new Minim(this);
   musicSetup();
@@ -144,6 +148,8 @@ void mouseReleased() {
       totalTime.start();
       //make sure filenames are up to date
       fileForDaySelected();
+      //change background image to appropriate day
+      danceBackdrop = loadImage(danceBG[i]);
       //enter the "dance" phase of the program
       phase = "dance";
     }
