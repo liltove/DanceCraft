@@ -273,11 +273,11 @@ void playDances() {
     playVideo(danceChoreoFiles[currentChoreoSegment]);
   } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3) {
     //countdown to the recording
-    if (recordMode && waitingToRecord) { //haven't recorded yet and record mode activated
+    if (recordMode && waitingToRecord && !finishedRecording) { //haven't recorded yet and record mode activated
       countdownRecord();
-    } else if (!recordMode && waitingToRecord) { //haven't recorded yet and record mode waiting
+    } else if (!recordMode && waitingToRecord && !finishedRecording) { //haven't recorded yet and record mode waiting
       drawMessage("Press SPACE to begin recording.");
-    } else if (!recordMode && !waitingToRecord) { //finished recording
+    } else if (!recordMode && !waitingToRecord && !finishedRecording) { //finished recording but not saved yet
       //save current recording to csv file
       if (currentChoreoSegment == 1){
           saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoA); //save full play through of skeletal data
@@ -285,7 +285,7 @@ void playDances() {
           saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoB); //save full play through of skeletal data
         }
         finishedRecording = true;
-    } else if (finishedRecording) {
+    } else if (!recordMode && !waitingToRecord && finishedRecording) { //finished recording, dance is saved in csv
       //check to see if they want to save the dance
       drawMessage("To KEEP recorded dance, press 'k'." + '\n' + "To WATCH recorded dance, press 'w'." + '\n' + "To REDO recorded dance, press 'r'.");
     }
@@ -307,19 +307,19 @@ void playDances() {
 
 void keepRecordedDance(){
   currentChoreoSegment++;
+  finishedRecording = false;
   waitingToRecord = true;
   countdownReady = 0;
-  finishedRecording = false;
 }
 
 void watchRecordedDance(){
   finishedRecording = false;
   playVideo(danceChoreoFiles[currentChoreoSegment]);
-  finishedRecording = true;
+  //finishedRecording = true;
 }
 
 void redoRecordedDance(){
+  finishedRecording = false;
   waitingToRecord = true;
   countdownReady = 0;
-  finishedRecording = false;
 }
