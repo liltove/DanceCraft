@@ -301,6 +301,8 @@ void playDances() {
     println("Choreo Segment: " + currentChoreoSegment);
     pauseMusic();
     music = false;
+    totalTime.stop(); //stops the timer for the dancing
+    logFile.println ("Total time user has played for Day " + currentDaySelected + ": " + totalTime.getSeconds() + " seconds");
     phase = "title";
   }
 }

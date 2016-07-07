@@ -69,7 +69,7 @@ PVector pos;
 void setup() {
   logFile = createWriter(dataPath("") + "/DanceCraftUserLog" + currentDate + "_" + currentTime + ".txt");
   beginWritingLogFile(); //Begin creation of log file for DC researchers
-  logFile.println ("Time of day launched:" + " " + currentTime); //Log the time of day that the program was lanuched.
+  logFile.println ("Time of day launched:" + " " + currentTimeWithColons); //Log the time of day that the program was lanuched.
   smooth();
   drawScreen();
   phase = "title";
@@ -98,6 +98,9 @@ void setup() {
 Detect which phase of the program we are in and call appropriate draw function.
 ----------------------------------------------------------------*/
 void draw() {
+  //update time?
+  getCurrentTime();
+  
   if (phase=="title") {
     drawTitleScreen();
   } else if (phase=="dance") {
@@ -105,9 +108,7 @@ void draw() {
       playDances();
       musicPlay();
   } else if (phase=="tutorial"){
-    //drawDanceScreen();
     drawMovie();
-
   }
 }
 
@@ -174,18 +175,21 @@ void keyPressed() {
       waitingToRecord = true;
       allowRecordModeActivationAgain = false;
       println("Record Mode Activated");
+      logFile.println("Record Mode Activated at: " + currentTimeWithColons);
     } else if (key == ' ' && phase == "dance" && recordMode == true && allowRecordModeActivationAgain == true ) {
       recordMode = false;
       allowRecordModeActivationAgain = false;
       //save recorded table to file
       //saveSkeletonTable("test", fullRecordTable);
       println("Record Mode Deactivated");
+      logFile.println("Record Mode Deactivated at: " + currentTimeWithColons);
     } else if(key == 'm' || key =='M') {
        phase = "model";
     } else if (key == 'k' || key == 'K') {
       //only if they've finished recording
       if (!recordMode && !waitingToRecord){
         keepRecordedDance();
+        logFile.println ("Keeping recorded dance for Day  " + currentDaySelected + ", Choreo " + currentChoreoSegment + " at: " + currentTimeWithColons);
       }
 //    } else if (key == 'w' || key == 'W') {
 //      //only if they've finished recording
@@ -196,6 +200,7 @@ void keyPressed() {
     } else if (key == 'r' || key == 'R') {
       //only if they've finished recording
       if (!recordMode && !waitingToRecord){
+        logFile.println ("Redoing recorded dance for Day  " + currentDaySelected + ", Choreo " + currentChoreoSegment + " at: " + currentTimeWithColons);
         redoRecordedDance();
       }
     }
@@ -215,6 +220,18 @@ void keyReleased(){
    }
 } //End of KeyPressed function  //Methods
 
+void getCurrentTime(){
+  currentDay = String.valueOf(day());
+  currentMonth = String.valueOf(month());
+  currentYear = String.valueOf(year());
+  currentHour = String.valueOf (hour());
+  currentMinute = String.valueOf (minute());
+  currentSecond = String.valueOf (second());
+  currentTime = currentHour + currentMinute + currentSecond;
+  currentTimeWithColons = currentHour + ":" + currentMinute + ":" + currentSecond;
+  currentDate = currentMonth + "_" + currentDay + "_" + currentYear;
+}
+
 /*---------------------------------------------------------------
 Runs upon exiting the program, shuts down logging functions.
 ----------------------------------------------------------------*/
@@ -223,6 +240,7 @@ void prepareExitHandler () {
    public void run () {
      System.out.println("SHUTDOWN HOOK");
      totalTime.stop();
+     logFile.println ("Time: " + currentTimeWithColons + "--" + "User has exited the game " + "\n");
      logFile.println ("Total time user has played: " + totalTime.getSeconds() + " seconds");
      saveSkeletonTable(currentDaySelected + "USERDATA" + currentTime, fullRecordTable); //save full play through of skeletal data
      closeLogFile();
