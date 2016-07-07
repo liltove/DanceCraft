@@ -1,0 +1,10 @@
+DANCECRAFT LOG FILE
+
+___________________________________________________________
+
+Username: TEST User Name
+
+Time of day launched: 114633
+Time: 11:46:33--User has selected the dance sequence for Day 2
+
+Total time user has played: 28 seconds

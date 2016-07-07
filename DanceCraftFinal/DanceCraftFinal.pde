@@ -37,9 +37,9 @@ int playthroughChoreo = 0; //final play through of all choreo files
 int numTimesTutorialPressed = 0;  //used to keep track of the times Tutorial button is pressed
 Boolean waitingToRecord = true; //waiting on record mode
 Boolean recorded = false;
-Boolean watchRecording = false; //do they want to replay what they just recorded?
+//Boolean watchRecording = false; //do they want to replay what they just recorded?
 Boolean savedRecording = false; //did the choreo get saved?
-Boolean finishedRecording = false; //are they all done recording?
+//Boolean finishedRecording = false; //are they all done recording?
 
 //holds tutorial movie
 Movie tutorial;
@@ -185,19 +185,17 @@ void keyPressed() {
     } else if (key == 'k' || key == 'K') {
       //only if they've finished recording
       if (!recordMode && !waitingToRecord){
-        //keep = true;
         keepRecordedDance();
       }
-    } else if (key == 'w' || key == 'W') {
-      //only if they've finished recording
-      if (!recordMode && !waitingToRecord){
-        watchRecording = true;
-        //watchRecordedDance();
-      }
+//    } else if (key == 'w' || key == 'W') {
+//      //only if they've finished recording
+//      if (!recordMode && !waitingToRecord){
+//        watchRecording = true;
+//        //watchRecordedDance();
+//      }
     } else if (key == 'r' || key == 'R') {
       //only if they've finished recording
       if (!recordMode && !waitingToRecord){
-        //redo = true;
         redoRecordedDance();
       }
     }
