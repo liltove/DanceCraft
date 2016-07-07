@@ -278,15 +278,16 @@ void playDances() {
     } else if (!recordMode && waitingToRecord) { //haven't recorded yet and record mode waiting
       drawMessage("Press SPACE to begin recording.");
     } else if (!recordMode && !waitingToRecord) { //finished recording
+      //save current recording to csv file
       if (currentChoreoSegment == 1){
-        saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoA); //save full play through of skeletal data
-      }else{
-        saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoB); //save full play through of skeletal data
-      }
-      
-      currentChoreoSegment++;
-      waitingToRecord = true;
-      countdownReady = 0;
+          saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoA); //save full play through of skeletal data
+        }else{
+          saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoB); //save full play through of skeletal data
+        }
+        finishedRecording = true;
+    } else if (finishedRecording) {
+      //check to see if they want to save the dance
+      drawMessage("To KEEP recorded dance, press 'k'." + '\n' + "To WATCH recorded dance, press 'w'." + '\n' + "To REDO recorded dance, press 'r'.");
     }
   } else if (playthroughChoreo < danceChoreoFiles.length) {
     playVideo(danceChoreoFiles[playthroughChoreo]);
@@ -302,4 +303,23 @@ void playDances() {
     music = false;
     phase = "title";
   }
+}
+
+void keepRecordedDance(){
+  currentChoreoSegment++;
+  waitingToRecord = true;
+  countdownReady = 0;
+  finishedRecording = false;
+}
+
+void watchRecordedDance(){
+  finishedRecording = false;
+  playVideo(danceChoreoFiles[currentChoreoSegment]);
+  finishedRecording = true;
+}
+
+void redoRecordedDance(){
+  waitingToRecord = true;
+  countdownReady = 0;
+  finishedRecording = false;
 }
