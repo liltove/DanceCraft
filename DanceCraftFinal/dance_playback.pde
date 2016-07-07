@@ -30,7 +30,7 @@ Boolean readCsv(String selection)
     skel_data = new PVector [loadedSkelTable.getRowCount()/15][15]; //Initalize skel_data w/ row size = number of "skeletons" and column size = number of joints.
     int i = 0; //count the number of skeletons that are read
     int index; //count the join of the i skeleton that are read
-
+    
     //iterate through each row of the table
     for (TableRow row : loadedSkelTable.rows ()) {
       //println (row);
@@ -67,7 +67,7 @@ void playBack(Integer rowNum)
   PVector jointPos = new PVector();
   int realNum;
   //println("playing " + rowNum);
-
+  
   if (rowNum < skel_data.length) {  //Compare number passed to function and make sure its less than the length of the array of skeleton data
     //println ("Drawing!" + ' ' + rowNum);
     offsetX = alignX(skel_data[0][8]);
@@ -125,7 +125,7 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   float yA = 0.25 * ((-skeA.y) + offsetY);
   float xB = 0.25 * (offsetX + skeB.x);
   float yB = 0.25 * ((-skeB.y) + offsetY);
-
+  
   //draw a point for the first position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
   ellipseMode(CENTER);
   rotate(0);
@@ -135,23 +135,23 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   } else {
     ellipse(xA, yA, 5, 5);
   }
-
+  
   //draw a point for the second position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
   ellipse(xB, yB, 5, 5);
-
+  
   //draw a joint between two  (divided in half to fit all of skeleton onto vertical area of screen.  Negated Y value to flip skeleton right side up)
   //line(xA, yA, xB, yB);
-
+  
   //Begin drawing the limb between the joints
   //draw oval from one joint to another
   Float distance = sqrt(sq(xA - xB) + sq(yA - yB));
   Float radius = distance / 2;
   Float heigh = distance / 4;
-
+  
   //what to modify the point by to get midpoint
   Float xMod = (xA - xB) / 2;
   Float yMod = (yA - yB) / 2;
-
+  
   //placeholders for midpoints and what will be the new point to calc angle from
   Float xM;
   Float yM;
@@ -196,7 +196,7 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
 
   fill(0,0,0);
   //texture(txt);
-
+  
   pushMatrix();
   translate(xM, yM);
   rotate(PI * radians);
@@ -205,7 +205,7 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   } else {
     ellipse(0, 0, distance, 10);
   }
-
+  
   popMatrix();
 }
 
@@ -276,11 +276,10 @@ void playDances() {
     if (recordMode && waitingToRecord) { //haven't recorded yet and record mode activated
       countdownRecord();
     } else if (!recordMode && waitingToRecord) { //haven't recorded yet and record mode waiting
-      drawMessage("Press SPACE to begin recording. \n  Press SPACE again when complete.");
+      drawMessage("Press SPACE to begin recording.");
     } else if (!recordMode && !waitingToRecord) { //finished recording
       //save current recording to csv file
       if (currentChoreoSegment == 1){
-<<<<<<< HEAD
           saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoA); //save full play through of skeletal data
         }else{
           saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoB); //save full play through of skeletal data
@@ -289,16 +288,6 @@ void playDances() {
     } else if (finishedRecording) {
       //check to see if they want to save the dance
       drawMessage("To KEEP recorded dance, press 'k'." + '\n' + "To WATCH recorded dance, press 'w'." + '\n' + "To REDO recorded dance, press 'r'.");
-=======
-        saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoA); //save full play through of skeletal data
-      }else{
-        saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoB); //save full play through of skeletal data
-      }
-
-      currentChoreoSegment++;
-      waitingToRecord = true;
-      countdownReady = 0;
->>>>>>> FETCH_HEAD
     }
   } else if (playthroughChoreo < danceChoreoFiles.length) {
     playVideo(danceChoreoFiles[playthroughChoreo]);
