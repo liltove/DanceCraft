@@ -3,7 +3,7 @@ import ddf.minim.*;
 //AudioPlayer player;
 AudioPlayer soundtrack;
 Minim minim;//audio context
-int track = 1; //initial track number
+int track = 0; //initial track number
 String[] musicFiles= {"music/01Coming Over_filous Remix.mp3", "music/02New Resolution.mp3", "music/07AnthemsforaSeventeenYearOldGirl.mp3"};
 //int track = currentDaySelected; //initialize the track to whatever is the current day selected
 String trackNum; //holds track number for calling from file
