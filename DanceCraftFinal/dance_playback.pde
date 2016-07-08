@@ -268,9 +268,12 @@ void playDances() {
   //loop until reach every current file name in array
   if (currentDanceSegment < danceFileNames.length) {
     playVideo(danceFileNames[currentDanceSegment]);
+    changeTracks(1);
   } else if (currentChoreoSegment == 0 || currentChoreoSegment == 2) {
     playVideo(danceChoreoFiles[currentChoreoSegment]);
+    changeTrackToDanceDay();
   } else if (currentChoreoSegment == 1 || currentChoreoSegment == 3) {
+    changeTrackToDanceDay();
     //countdown to the recording
     if (recordMode && waitingToRecord && !savedRecording) { //haven't recorded yet and record mode activated
       countdownRecord();

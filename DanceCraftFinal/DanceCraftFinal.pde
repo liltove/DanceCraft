@@ -30,7 +30,7 @@ int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
 
 //CHANGE THIS LINE IF YOU DON'T WANT TO START AT THE BEGINNING!!
-int currentDanceSegment = 2; //which segment of the dance are we on
+int currentDanceSegment = 1; //which segment of the dance are we on
 
 int currentChoreoSegment = 0; //which segment of choreo are we on
 int playthroughChoreo = 0; //final play through of all choreo files
@@ -98,16 +98,17 @@ void setup() {
 Detect which phase of the program we are in and call appropriate draw function.
 ----------------------------------------------------------------*/
 void draw() {
-  //update time?
+  //update time
   getCurrentTime();
   
   if (phase=="title") {
     drawTitleScreen();
+    changeTracks(0); //reset to title music
   } else if (phase=="dance") {
       drawDanceScreen();
       playDances();
-      musicPlay();
   } else if (phase=="tutorial"){
+    musicPause(); //pause any music
     drawMovie();
   }
 }
@@ -239,6 +240,7 @@ void prepareExitHandler () {
  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
    public void run () {
      System.out.println("SHUTDOWN HOOK");
+     musicStop();
      totalTime.stop();
      logFile.println ("Time: " + currentTimeWithColons + "--" + "User has exited the game " + "\n");
      logFile.println ("Total time user has played: " + totalTime.getSeconds() + " seconds");
