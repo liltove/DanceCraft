@@ -192,10 +192,10 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
     newX = xB;
     newY = yM;
 
-  println("point A: (" + xA + ", " + yA + ")");
-  println("point B: (" + xB + ", " + yB + ")");
-  println("midpoint: (" + xM + ", " + yM + ")");
-  println("new point: (" + newX + ", " + newY + ")");
+//  println("point A: (" + xA + ", " + yA + ")");
+//  println("point B: (" + xB + ", " + yB + ")");
+//  println("midpoint: (" + xM + ", " + yM + ")");
+//  println("new point: (" + newX + ", " + newY + ")");
 //  println("distance: " + distance);
 
 
@@ -217,7 +217,7 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
     radians = (2 * PI) - radians;
   }
   
-  println("radians: " + radians);
+//  println("radians: " + radians);
   
   rotate(radians);
   if (thicker){
