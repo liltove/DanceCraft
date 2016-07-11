@@ -121,17 +121,34 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   //load texture image
   //PImage txt = loadImage("crumpledPaper.jpg");
 
-  float xA = 0.25 * (offsetX + skeA.x);
-  float yA = 0.25 * ((-skeA.y) + offsetY);
-  float xB = 0.25 * (offsetX + skeB.x);
-  float yB = 0.25 * ((-skeB.y) + offsetY);
+  float xAint = 0.25 * (offsetX + skeA.x);
+  float yAint = 0.25 * ((-skeA.y) + offsetY);
+  float xBint = 0.25 * (offsetX + skeB.x);
+  float yBint = 0.25 * ((-skeB.y) + offsetY);
+  
+  float xA;
+  float yA;
+  float xB;
+  float yB;
+  
+  if (xAint < xBint){
+    xA = xAint;
+    yA = yAint;
+    xB = xBint;
+    yB = yBint;
+  } else {
+    xB = xAint;
+    yB = yAint;
+    xA = xBint;
+    yA = yBint;
+  }
   
   //draw a point for the first position (divided in half to fit on left side of screen.  Negated Y value to flip skeleton right side up)
   ellipseMode(CENTER);
   rotate(0);
   if (isHead){
     fill(0,0,0);
-    ellipse(xA, yA, 40, 60);
+    ellipse(xAint, yAint, 40, 60);
   } else {
     ellipse(xA, yA, 5, 5);
   }
@@ -144,62 +161,65 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   
   //Begin drawing the limb between the joints
   //draw oval from one joint to another
-  Float distance = sqrt(sq(xA - xB) + sq(yA - yB));
+  Float distance = distanceFormula(xA, yA, xB, yB);
   Float radius = distance / 2;
   Float heigh = distance / 4;
-  
-  //what to modify the point by to get midpoint
-  Float xMod = (xA - xB) / 2;
-  Float yMod = (yA - yB) / 2;
   
   //placeholders for midpoints and what will be the new point to calc angle from
   Float xM;
   Float yM;
   Float newX;
   Float newY;
-  //figure out which point is the one to be modified to find midpoint
-  if (xMod >= 0){
-    if (xA > xB){
-      xM = xB + xMod;
-      yM = yB + yMod;
-      newX = xA - xM;
-      newY = yA - yM;
-    } else {
-      xM = xA + xMod;
-      yM = yA + yMod;
-      newX = xB - xM;
-      newY = yB - yM;
-    }
+  float yMod;
+  float xMod;
+  
+  //what to modify the point by to get midpoint
+  xMod = (xB - xA) / 2;
+  if (yA > yB) {
+    yMod = (yA - yB) / 2;
   } else {
-    if (xA > xB){
-      xM = xA + xMod;
-      yM = yA + yMod;
-      newX = xA - xM;
-      newY = yA - yM;
-    } else {
-      xM = xB + xMod;
-      yM = yB + yMod;
-      newX = xA - xM;
-      newY = yA - yM;
-    }
+    yMod = (yB - yA) / 2; 
   }
-//  println("point A: (" + xA + ", " + yA + ")");
-//  println("point B: (" + xB + ", " + yB + ")");
-//  println("midpoint: (" + xM + ", " + yM + ")");
-//  println("new point: (" + newX + ", " + newY + ")");
+  
+  //figure out which point is the one to be modified to find midpoint
+  xM = xB - xMod;
+  if (yA > yB){
+    yM = yA - yMod;
+  } else {
+    yM = yB - yMod;
+  }
+
+    newX = xB;
+    newY = yM;
+
+  println("point A: (" + xA + ", " + yA + ")");
+  println("point B: (" + xB + ", " + yB + ")");
+  println("midpoint: (" + xM + ", " + yM + ")");
+  println("new point: (" + newX + ", " + newY + ")");
 //  println("distance: " + distance);
 
-//  Float cosRad = cos((sq(radius) + sq(radius) - sq(newY)) / (2 * radius * radius));
-  Float cosRad = cos(1 - (sq(newY) / (2 * sq(radius))));
-  Float radians = acos(cosRad);
-//  println("radians: " + radians);
 
   fill(0,0,0);
   //texture(txt);
   
   pushMatrix();
   translate(xM, yM);
-  rotate(PI * radians);
+  
+  newX = xB - xM;
+  newY = yB - yM;
+  float r = distanceFormula(xB, yB, xM, yM);
+  float xR = r;
+  float yR = 0; 
+  float distanceA = distanceFormula(xR, yR, newX, newY);
+  
+  float radians = acos((sq(r) + sq(r) - sq(distanceA)) / (2 * r * r));
+  if (yB < yM){
+    radians = (2 * PI) - radians;
+  }
+  
+  println("radians: " + radians);
+  
+  rotate(radians);
   if (thicker){
     ellipse(0, 0, distance, 45);
   } else {
@@ -327,4 +347,9 @@ void redoRecordedDance(){
   savedRecording = false;
   waitingToRecord = true;
   countdownReady = 0;
+}
+
+float distanceFormula(float xA, float yA, float xB, float yB){
+   float distance = sqrt(sq(xA - xB) + sq(yA - yB));
+   return distance;
 }

@@ -108,7 +108,7 @@ void draw() {
       drawDanceScreen();
       playDances();
   } else if (phase=="tutorial"){
-    musicPause(); //pause any music
+    pauseMusic(); //pause any music
     drawMovie();
   }
 }
