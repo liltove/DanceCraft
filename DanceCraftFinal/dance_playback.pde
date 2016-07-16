@@ -10,6 +10,8 @@ float[] averageXs = new float[15];
 float[] averageYs = new float[15];
 PVector[] averageV = new PVector[15];
 
+float thresholdDance = 500;
+
 /*
 This file contains the functions necessary for playing back "dances" recorded
  by the user.
@@ -89,19 +91,26 @@ void playBack(Integer rowNum)
     offsetY = alignY(skel_data[0][8]);
     
     for (int i = 0; i < 15; i++){
-      jointQueue[i].add(skel_data[rowNum][i]);
-      totalXs[i] += skel_data[rowNum][i].x;
-      totalYs[i] += skel_data[rowNum][i].y;
-      
-      if (jointQueue[i].size() >= 20) { //is the queue full??
-        totalXs[i] -= jointQueue[i].peek().x;  
-        totalYs[i] -= jointQueue[i].peek().y;
-        jointQueue[i].remove();
+      if (jointQueue[i].size() >= 20 && (skel_data[rowNum][i].x > (averageV[i].x + thresholdDance) || skel_data[rowNum][i].y > (averageV[i].y + thresholdDance))){
+        println("====Threshold reached====");
+        println("Joint ID: " + i + " Average x: " + averageV[i].x + " Bad Coord: " + skel_data[rowNum][i].x);
+        println("Joint ID: " + i + " Average y: " + averageV[i].y + " Bad Coord: " + skel_data[rowNum][i].y);
+      }else{
+        if (jointQueue[i].size() >= 20) { //is the queue full??
+          totalXs[i] -= jointQueue[i].peek().x;  
+          totalYs[i] -= jointQueue[i].peek().y;
+          jointQueue[i].remove();
+        }
+        
+        jointQueue[i].add(skel_data[rowNum][i]);
+        totalXs[i] += skel_data[rowNum][i].x;
+        totalYs[i] += skel_data[rowNum][i].y;
+  
+        averageV[i].x = totalXs[i] / jointQueue[i].size();
+        averageV[i].y = totalYs[i] / jointQueue[i].size();
+        
+        //println("Joint ID: " + i + " Average x: " + averageV[i].x + " Average y: " + averageV[i].y);
       }
-      averageV[i].x = totalXs[i] / jointQueue[i].size();
-      averageV[i].y = totalYs[i] / jointQueue[i].size();
-      
-      println("Joint ID: " + i + " Average x: " + averageV[i].x + " Average y: " + averageV[i].y);
     }
     
       drawBack(averageV[0], averageV[1], false, true); //Head and neck
