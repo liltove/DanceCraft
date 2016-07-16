@@ -84,6 +84,8 @@ void setup() {
   movieSetup();
 
   background = 0;
+  
+  initializeQueueArray();
 
   //Fill the Boolean array keysPressed with falses
   for (int i = 0; i < keysPressed.length; i++) {

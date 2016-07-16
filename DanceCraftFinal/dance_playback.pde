@@ -1,8 +1,14 @@
 import java.util.*;
 
-Queue<PVector> holdingQueue = new LinkedList<PVector>();
-Queue<PVector> qHead = new LinkedList<PVector>();
-Queue<PVector> qNeck = new LinkedList<PVector>();
+//Queue<PVector> holdingQueue = new LinkedList<PVector>();
+Queue<PVector>[] jointQueue;
+
+//create arrays to hold the totals from the joint queues and the calculated averages, array matches joint ID
+float[] totalXs = new float[15];
+float[] totalYs = new float[15];
+float[] averageXs = new float[15];
+float[] averageYs = new float[15];
+PVector[] averageV = new PVector[15];
 
 /*
 This file contains the functions necessary for playing back "dances" recorded
@@ -14,7 +20,8 @@ float offsetY; // The offset y of the skeleton
 float midWidth = 320 * 4; //middle width of the left half screen
 float midHeight = 720; //middle height of the left haft screen
 
-PVector total = new PVector();
+float totalX = 0;
+float totalY = 0;
 
 String[] danceFileNames= {
   "prewarmUp.csv", "mirror.csv"
@@ -81,48 +88,56 @@ void playBack(Integer rowNum)
     offsetX = alignX(skel_data[0][8]);
     offsetY = alignY(skel_data[0][8]);
     
-    //println(skel_data[rowNum][0]);
-    if (qHead.size() >= 20) {
-      qHead.remove();
-      qHead.add(skel_data[rowNum][0]);
-    } else {
-      qHead.add(skel_data[rowNum][0]);
+    for (int i = 0; i < 15; i++){
+      jointQueue[i].add(skel_data[rowNum][i]);
+      totalXs[i] += skel_data[rowNum][i].x;
+      totalYs[i] += skel_data[rowNum][i].y;
+      
+      if (jointQueue[i].size() >= 20) { //is the queue full??
+        totalXs[i] -= jointQueue[i].peek().x;  
+        totalYs[i] -= jointQueue[i].peek().y;
+        jointQueue[i].remove();
+      }
+      averageV[i].x = totalXs[i] / jointQueue[i].size();
+      averageV[i].y = totalYs[i] / jointQueue[i].size();
+      
+      println("Joint ID: " + i + " Average x: " + averageV[i].x + " Average y: " + averageV[i].y);
     }
     
-    for (int i = 0; i < qHead.size(); i++){
-      holdingQueue.add(qHead.peek());
-      //println("Holding Queue: " + holdingQueue);
-      total.add(qHead.poll());
-      println("Total: " + total);
-    }
-    
-    for (int j = 0; j < holdingQueue.size(); j++){
-      qHead.add(holdingQueue.poll());
-    }
-    println("Queue: " + qHead);
-    
-    total.div(qHead.size());
-    println("Average: " + total);
-    
-
-    if (!useModel) {
-      drawBack(skel_data[rowNum][0], skel_data[rowNum][1], false, true); //Head and neck
-      drawBack(skel_data[rowNum][1], skel_data[rowNum][2], false, false); //Neck and left shoulder
-      drawBack(skel_data[rowNum][2], skel_data[rowNum][4], false, false); //Left shoulder and Left elbow
-      drawBack(skel_data[rowNum][4], skel_data[rowNum][6], false, false); //Left elbow and left hand
-      drawBack(skel_data[rowNum][1], skel_data[rowNum][3], false, false); //Neck and right shoulder
-      drawBack(skel_data[rowNum][3], skel_data[rowNum][5], false, false); //Right shoulder and right elbow
-      drawBack(skel_data[rowNum][5], skel_data[rowNum][7], false, false); //Right elbow and right hand
-      drawBack(skel_data[rowNum][2], skel_data[rowNum][8], true, false); //Left shoulder and TORSO
-      drawBack(skel_data[rowNum][3], skel_data[rowNum][8], true, false); //Right shoulder and TORSO
-      drawBack(skel_data[rowNum][8], skel_data[rowNum][9], true, false); //Torso and left Hip
-      drawBack(skel_data[rowNum][9], skel_data[rowNum][11], false, false); //Left hip and left Knee
-      drawBack(skel_data[rowNum][11], skel_data[rowNum][13], false, false); //left knee and left foot
-      drawBack(skel_data[rowNum][8], skel_data[rowNum][10], true, false); ///Torso and right hip
-      drawBack(skel_data[rowNum][10], skel_data[rowNum][12], false, false); //Right hip and right knee
-      drawBack(skel_data[rowNum][12], skel_data[rowNum][14], false, false); //Right knee and right foot
-      drawBack(skel_data[rowNum][10], skel_data[rowNum][9], false, false); //Right hip and left hip
-    }
+      drawBack(averageV[0], averageV[1], false, true); //Head and neck
+      drawBack(averageV[1], averageV[2], false, false); //Neck and left shoulder
+      drawBack(averageV[2], averageV[4], false, false); //Left shoulder and Left elbow
+      drawBack(averageV[4], averageV[6], false, false); //Left elbow and left hand
+      drawBack(averageV[1], averageV[3], false, false); //Neck and right shoulder
+      drawBack(averageV[3], averageV[5], false, false); //Right shoulder and right elbow
+      drawBack(averageV[5], averageV[7], false, false); //Right elbow and right hand
+      drawBack(averageV[2], averageV[8], true, false); //Left shoulder and TORSO
+      drawBack(averageV[3], averageV[8], true, false); //Right shoulder and TORSO
+      drawBack(averageV[8], averageV[9], true, false); //Torso and left Hip
+      drawBack(averageV[9], averageV[11], false, false); //Left hip and left Knee
+      drawBack(averageV[11], averageV[13], false, false); //left knee and left foot
+      drawBack(averageV[8], averageV[10], true, false); ///Torso and right hip
+      drawBack(averageV[10], averageV[12], false, false); //Right hip and right knee
+      drawBack(averageV[12], averageV[14], false, false); //Right knee and right foot
+      drawBack(averageV[10], averageV[9], false, false); //Right hip and left hip
+//    if (!useModel) {
+//      drawBack(skel_data[rowNum][0], skel_data[rowNum][1], false, true); //Head and neck
+//      drawBack(skel_data[rowNum][1], skel_data[rowNum][2], false, false); //Neck and left shoulder
+//      drawBack(skel_data[rowNum][2], skel_data[rowNum][4], false, false); //Left shoulder and Left elbow
+//      drawBack(skel_data[rowNum][4], skel_data[rowNum][6], false, false); //Left elbow and left hand
+//      drawBack(skel_data[rowNum][1], skel_data[rowNum][3], false, false); //Neck and right shoulder
+//      drawBack(skel_data[rowNum][3], skel_data[rowNum][5], false, false); //Right shoulder and right elbow
+//      drawBack(skel_data[rowNum][5], skel_data[rowNum][7], false, false); //Right elbow and right hand
+//      drawBack(skel_data[rowNum][2], skel_data[rowNum][8], true, false); //Left shoulder and TORSO
+//      drawBack(skel_data[rowNum][3], skel_data[rowNum][8], true, false); //Right shoulder and TORSO
+//      drawBack(skel_data[rowNum][8], skel_data[rowNum][9], true, false); //Torso and left Hip
+//      drawBack(skel_data[rowNum][9], skel_data[rowNum][11], false, false); //Left hip and left Knee
+//      drawBack(skel_data[rowNum][11], skel_data[rowNum][13], false, false); //left knee and left foot
+//      drawBack(skel_data[rowNum][8], skel_data[rowNum][10], true, false); ///Torso and right hip
+//      drawBack(skel_data[rowNum][10], skel_data[rowNum][12], false, false); //Right hip and right knee
+//      drawBack(skel_data[rowNum][12], skel_data[rowNum][14], false, false); //Right knee and right foot
+//      drawBack(skel_data[rowNum][10], skel_data[rowNum][9], false, false); //Right hip and left hip
+//    }
   } else {
     dancePlayback = false;
     numIterationsCompleted = 0;
@@ -398,3 +413,16 @@ float distanceFormula(float xA, float yA, float xB, float yB){
    float distance = sqrt(sq(xA - xB) + sq(yA - yB));
    return distance;
 }
+
+/*--------------------------------------------------------------
+ INitislizes the queue array
+ --------------------------------------------------------------*/
+ void initializeQueueArray(){
+   jointQueue = new Queue[15];
+   for (int i = 0; i < 15; i++){
+     jointQueue[i] = new LinkedList<PVector>();
+     averageV[i] = new PVector();
+   }
+   
+   
+ }
