@@ -1,3 +1,9 @@
+import java.util.*;
+
+Queue<PVector> holdingQueue = new LinkedList<PVector>();
+Queue<PVector> qHead = new LinkedList<PVector>();
+Queue<PVector> qNeck = new LinkedList<PVector>();
+
 /*
 This file contains the functions necessary for playing back "dances" recorded
  by the user.
@@ -7,6 +13,8 @@ float offsetX; //The offset x of the skeleton
 float offsetY; // The offset y of the skeleton
 float midWidth = 320 * 4; //middle width of the left half screen
 float midHeight = 720; //middle height of the left haft screen
+
+PVector total = new PVector();
 
 String[] danceFileNames= {
   "prewarmUp.csv", "mirror.csv"
@@ -72,6 +80,30 @@ void playBack(Integer rowNum)
     //println ("Drawing!" + ' ' + rowNum);
     offsetX = alignX(skel_data[0][8]);
     offsetY = alignY(skel_data[0][8]);
+    
+    //println(skel_data[rowNum][0]);
+    if (qHead.size() >= 20) {
+      qHead.remove();
+      qHead.add(skel_data[rowNum][0]);
+    } else {
+      qHead.add(skel_data[rowNum][0]);
+    }
+    
+    for (int i = 0; i < qHead.size(); i++){
+      holdingQueue.add(qHead.peek());
+      //println("Holding Queue: " + holdingQueue);
+      total.add(qHead.poll());
+      println("Total: " + total);
+    }
+    
+    for (int j = 0; j < holdingQueue.size(); j++){
+      qHead.add(holdingQueue.poll());
+    }
+    println("Queue: " + qHead);
+    
+    total.div(qHead.size());
+    println("Average: " + total);
+    
 
     if (!useModel) {
       drawBack(skel_data[rowNum][0], skel_data[rowNum][1], false, true); //Head and neck
@@ -106,6 +138,13 @@ void playBack(Integer rowNum)
       println("Choreo Playthrough: " + playthroughChoreo);
     }
   }
+}
+
+/*--------------------------------------------------------------
+ draws the points based on the coordinates, adjusts where the drawing occurs on screen
+ --------------------------------------------------------------*/
+void filterAverage(PVector dataPoint){
+  
 }
 
 /*--------------------------------------------------------------
@@ -229,6 +268,11 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   popMatrix();
 }
 
+
+/*---------------------------------------------------------------
+ Realigns where the x and y are
+ ----------------------------------------------------------------*/
+
 float alignX(PVector skeA)
 {
   if (skeA.x < midWidth)
@@ -236,6 +280,7 @@ float alignX(PVector skeA)
   else
     return skeA.x - midWidth;
 }
+
 float alignY(PVector skeA)
 {
   return skeA.y + midHeight;
