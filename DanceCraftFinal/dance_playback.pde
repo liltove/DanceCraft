@@ -372,9 +372,11 @@ void playDances() {
       //save current recording to csv file
       if (currentChoreoSegment == 1){
           saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoA); //save full play through of skeletal data
+          println("Saving dance");
           savedRecording = true;
         }else{
           saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoB); //save full play through of skeletal data
+          println("Saving dance");
           savedRecording = true;
         }      
     } else if (!recordMode && !waitingToRecord && savedRecording) { //finished recording, dance is saved in csv
@@ -389,8 +391,6 @@ void playDances() {
   if (currentDanceSegment == danceFileNames.length && currentChoreoSegment == danceChoreoFiles.length && playthroughChoreo == danceChoreoFiles.length) {
     currentDanceSegment = 0; //reset segment count
     currentChoreoSegment = 0; //reset choreo segment count
-    println("Dance Segment: " + currentDanceSegment);
-    println("Choreo Segment: " + currentChoreoSegment);
     pauseMusic();
     music = false;
     totalTime.stop(); //stops the timer for the dancing
@@ -400,17 +400,12 @@ void playDances() {
 }
 
 void keepRecordedDance(){
-  //go to next dance segment
-  currentChoreoSegment++;
+  playVideo(danceChoreoFiles[currentChoreoSegment]);
   //reset all the counters
   waitingToRecord = true;
   countdownReady = 0;
   savedRecording = false;
 }
-//
-//void watchRecordedDance(){
-//  
-//}
 
 void redoRecordedDance(){
   savedRecording = false;
