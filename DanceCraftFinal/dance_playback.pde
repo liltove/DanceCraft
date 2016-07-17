@@ -91,12 +91,12 @@ void playBack(Integer rowNum)
     offsetY = alignY(skel_data[0][8]);
     
     for (int i = 0; i < 15; i++){
-      if (jointQueue[i].size() >= 20 && (skel_data[rowNum][i].x > (averageV[i].x + thresholdDance) || skel_data[rowNum][i].y > (averageV[i].y + thresholdDance))){
-        println("====Threshold reached====");
-        println("Joint ID: " + i + " Average x: " + averageV[i].x + " Bad Coord: " + skel_data[rowNum][i].x);
-        println("Joint ID: " + i + " Average y: " + averageV[i].y + " Bad Coord: " + skel_data[rowNum][i].y);
-      }else{
-        if (jointQueue[i].size() >= 20) { //is the queue full??
+//      if (jointQueue[i].size() >= 20 && (skel_data[rowNum][i].x > (averageV[i].x + thresholdDance) || skel_data[rowNum][i].y > (averageV[i].y + thresholdDance))){
+//        println("====Threshold reached====");
+//        println("Joint ID: " + i + " Average x: " + averageV[i].x + " Bad Coord: " + skel_data[rowNum][i].x);
+//        println("Joint ID: " + i + " Average y: " + averageV[i].y + " Bad Coord: " + skel_data[rowNum][i].y);
+//      }else{
+        if (jointQueue[i].size() >= 12) { //is the queue full??
           totalXs[i] -= jointQueue[i].peek().x;  
           totalYs[i] -= jointQueue[i].peek().y;
           jointQueue[i].remove();
@@ -111,7 +111,7 @@ void playBack(Integer rowNum)
         
         //println("Joint ID: " + i + " Average x: " + averageV[i].x + " Average y: " + averageV[i].y);
       }
-    }
+//    }
     
       drawBack(averageV[0], averageV[1], false, true); //Head and neck
       drawBack(averageV[1], averageV[2], false, false); //Neck and left shoulder
