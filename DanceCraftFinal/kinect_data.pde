@@ -131,7 +131,9 @@ void kinectDance(){
           }else{
             recordingDance(users[i], currentPosition, choreoB);
           }
-          //recordingDance(users[i], currentPosition, choreoA);
+          if (phase == "recordingMode"){
+            recordingDance(users[i], currentPosition, teacherRecording);
+          }
         }
     }
    }

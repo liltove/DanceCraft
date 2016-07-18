@@ -76,7 +76,7 @@ void drawDanceScreen() {
   if (phase == "tutorial"){
      image(tutorial, 0, 0, 340, 300);
      tutorial.read(); 
-  } else if (phase == "dance"){
+  } else if (phase == "dance" || phase == "teacherMode"){
      //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
      //kinectDance(); 
   }
