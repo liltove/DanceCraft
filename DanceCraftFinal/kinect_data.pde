@@ -125,11 +125,11 @@ void kinectDance(){
      //drawSkeleton(users[i]);
      recordingDance(users[i], currentPosition, fullRecordTable);
     if (phase == "teacherMode"){
-          if (recordMode && !teacherDone==false){
+          if (recordMode && !teacherDone){
             recordingDance(users[i], currentPosition, teacherRecording);
             println("recording teacher");
-          } else if (!recordMode && teacherDone==false){
-            drawMessage("Press SPACE to begin recording.");
+          } else if (!recordMode && !teacherDone){
+            //drawMessage("Press SPACE to begin recording.");
           } else if (!recordMode && teacherDone){
             drawMessage("To KEEP recorded dance, press 'k'." + '\n' + "To REDO recorded dance, press 'r'.");
           }

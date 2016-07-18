@@ -10,7 +10,7 @@ float[] averageXs = new float[15];
 float[] averageYs = new float[15];
 PVector[] averageV = new PVector[15];
 
-float thresholdDance = 500;
+float thresholdDance = 50;
 
 /*
 This file contains the functions necessary for playing back "dances" recorded
@@ -26,7 +26,7 @@ float totalX = 0;
 float totalY = 0;
 
 String[] danceFileNames= {
-  "prewarmUp.csv", "mirror.csv"
+  "teacherRecording.csv", "prewarmUp.csv", "mirror.csv"
 };
 String[] danceChoreoFiles= {
   "combo1_first8.csv", "1choreo_1.csv", "combo1_third8.csv", "1choreo_2.csv"
