@@ -51,7 +51,9 @@ Draw the dance screen. Calls the animation/background image. Calls Kinect class.
 ----------------------------------------------------------------*/
 void drawDanceScreen() {
   background(255);
-  background(danceBackdrop);
+  if (phase=="dance"){
+    background(danceBackdrop);
+  }
   int passedTime = millis() - startTime;
   int secs = passedTime/1000 %60;
   int mins = passedTime/1000/60;
@@ -78,7 +80,7 @@ void drawDanceScreen() {
      tutorial.read(); 
   } else if (phase == "dance" || phase == "teacherMode"){
      //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-     //kinectDance(); 
+     kinectDance(); 
   }
 }
 

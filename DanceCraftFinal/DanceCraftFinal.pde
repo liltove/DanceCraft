@@ -11,6 +11,7 @@ PFont font;
 
 String phase, mode;
 Boolean teacherMode = true; //Change this to true if you want to record new teacher dances
+Boolean playTeacherRecording = false;
 String [] files;
 String username, time;
 String desktopPath = "\\records/";
@@ -71,6 +72,7 @@ void setup() {
   logFile = createWriter(dataPath("") + "/DanceCraftUserLog" + currentDate + "_" + currentTime + ".txt");
   beginWritingLogFile(); //Begin creation of log file for DC researchers
   logFile.println ("Time of day launched:" + " " + currentTimeWithColons); //Log the time of day that the program was lanuched.
+  
   smooth();
   drawScreen();
   if (teacherMode){
@@ -78,11 +80,12 @@ void setup() {
   }else{
     phase = "title";
   }
+  println(phase);
   //music = true;
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //kinectSetup();
+  kinectSetup();
 
   minim = new Minim(this);
   musicSetup();
@@ -197,6 +200,7 @@ void keyPressed() {
     } else if (key == ' ' && phase == "teacherMode"){
       if (recordMode){
         recordMode = false;
+        teacherDone = true;
       }else{
         recordMode = true;
       }
@@ -207,19 +211,27 @@ void keyPressed() {
       if (!recordMode && !waitingToRecord){
         keepRecordedDance();
         logFile.println ("Keeping recorded dance for Day  " + currentDaySelected + ", Choreo " + currentChoreoSegment + " at: " + currentTimeWithColons);
+      } else if (teacherMode){
+        keepRecordedDance();
+        println("Keep recorded dance");
       }
-//    } else if (key == 'w' || key == 'W') {
-//      //only if they've finished recording
-//      if (!recordMode && !waitingToRecord){
-//        watchRecording = true;
-//        //watchRecordedDance();
-//      }
     } else if (key == 'r' || key == 'R') {
       //only if they've finished recording
       if (!recordMode && !waitingToRecord){
         logFile.println ("Redoing recorded dance for Day  " + currentDaySelected + ", Choreo " + currentChoreoSegment + " at: " + currentTimeWithColons);
         redoRecordedDance();
+      } else if (teacherMode){
+        println("redoing recorded dance");
+        redoRecordedDance();
       }
+    } else if (key == 'p' || key == 'P') {
+        if(teacherMode){
+          if (playTeacherRecording){
+             playTeacherRecording = false; 
+          } else {
+            playTeacherRecording = true;
+          }
+        }
     }
   }
 }

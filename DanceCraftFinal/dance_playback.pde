@@ -401,6 +401,9 @@ void playDances() {
 
 void keepRecordedDance(){
   if(teacherMode){
+    saveSkeletonTable("teacherRecording", teacherRecording); //save full play through of skeletal data
+    println("Saving dance");
+    //playVideo("teacherRecording.csv"); //play back what we just recorded
     teacherDone = false;
   }else{
     playVideo(danceChoreoFiles[currentChoreoSegment]);
