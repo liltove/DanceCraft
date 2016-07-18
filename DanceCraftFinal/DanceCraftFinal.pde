@@ -10,6 +10,7 @@ ControlP5 cp5;
 PFont font;
 
 String phase, mode;
+Boolean teacherMode = true; //Change this to true if you want to record new teacher dances
 String [] files;
 String username, time;
 String desktopPath = "\\records/";
@@ -72,7 +73,11 @@ void setup() {
   logFile.println ("Time of day launched:" + " " + currentTimeWithColons); //Log the time of day that the program was lanuched.
   smooth();
   drawScreen();
-  phase = "title";
+  if (teacherMode){
+    phase = "teacherMode";
+  }else{
+    phase = "title";
+  }
   //music = true;
   figure = true;
 
@@ -112,6 +117,9 @@ void draw() {
   } else if (phase=="tutorial"){
     pauseMusic(); //pause any music
     drawMovie();
+  } else if (phase=="teacherMode"){
+    drawDanceScreen();
+    
   }
 }
 
