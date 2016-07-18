@@ -400,17 +400,25 @@ void playDances() {
 }
 
 void keepRecordedDance(){
-  playVideo(danceChoreoFiles[currentChoreoSegment]);
-  //reset all the counters
-  waitingToRecord = true;
-  countdownReady = 0;
-  savedRecording = false;
+  if(teacherMode){
+    teacherDone = false;
+  }else{
+    playVideo(danceChoreoFiles[currentChoreoSegment]);
+    //reset all the counters
+    waitingToRecord = true;
+    countdownReady = 0;
+    savedRecording = false;
+  }
 }
 
 void redoRecordedDance(){
-  savedRecording = false;
-  waitingToRecord = true;
-  countdownReady = 0;
+  if(teacherMode){
+    teacherDone = false;
+  }else{
+    savedRecording = false;
+    waitingToRecord = true;
+    countdownReady = 0;
+  }
 }
 
 float distanceFormula(float xA, float yA, float xB, float yB){

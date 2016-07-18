@@ -47,6 +47,8 @@ Table loadedSkelTable = new Table();
 
 PVector[] j1;
 
+Boolean teacherDone = false;
+
 
 
 /*---------------------------------------------------------------
@@ -132,7 +134,13 @@ void kinectDance(){
             recordingDance(users[i], currentPosition, choreoB);
           }
           if (phase == "recordingMode"){
-            recordingDance(users[i], currentPosition, teacherRecording);
+            if (recordMode && !teacherDone){
+              recordingDance(users[i], currentPosition, teacherRecording);
+            } else if (!recordMode && !teacherDone){
+              drawMessage("Press SPACE to begin recording.");
+            } else if (!recordMode && teacherDone){
+              drawMessage("To KEEP recorded dance, press 'k'." + '\n' + "To REDO recorded dance, press 'r'.");
+            }
           }
         }
     }

@@ -194,6 +194,12 @@ void keyPressed() {
       //saveSkeletonTable("test", fullRecordTable);
       println("Record Mode Deactivated");
       logFile.println("Record Mode Deactivated at: " + currentTimeWithColons);
+    } else if (key == ' ' && phase == "teacherMode"){
+      if (recordMode){
+        recordMode = false;
+      }else{
+        recordMode = true;
+      }
     } else if(key == 'm' || key =='M') {
        phase = "model";
     } else if (key == 'k' || key == 'K') {
