@@ -10,7 +10,7 @@ ControlP5 cp5;
 PFont font;
 
 String phase, mode;
-Boolean teacherMode = true; //Change this to true if you want to record new teacher dances
+Boolean teacherMode = false; //Change this to true if you want to record new teacher dances
 Boolean playTeacherRecording = false;
 String [] files;
 String username, time;
@@ -121,6 +121,7 @@ void draw() {
     pauseMusic(); //pause any music
     drawMovie();
   } else if (phase=="teacherMode"){
+    pauseMusic();
     drawDanceScreen();
     
   }
