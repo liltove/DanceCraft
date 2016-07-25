@@ -26,7 +26,7 @@ float totalX = 0;
 float totalY = 0;
 
 String[] danceFileNames= {
-  "teacherRecording.csv", "warmup.csv", "prewarmUp.csv", "mirror.csv"
+  "prewarmUp.csv", "warmup.csv", "technique1.csv", "technique3.csv", "mirror.csv"
 };
 String[] danceChoreoFiles= {
   "combo1_first8.csv", "1choreo_1.csv", "combo1_third8.csv", "1choreo_2.csv"
