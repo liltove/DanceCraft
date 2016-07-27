@@ -96,7 +96,7 @@ void playBack(Integer rowNum)
 //        println("Joint ID: " + i + " Average x: " + averageV[i].x + " Bad Coord: " + skel_data[rowNum][i].x);
 //        println("Joint ID: " + i + " Average y: " + averageV[i].y + " Bad Coord: " + skel_data[rowNum][i].y);
 //      }else{
-        if (jointQueue[i].size() >= 12) { //is the queue full??
+        if (jointQueue[i].size() >= 10) { //is the queue full??
           totalXs[i] -= jointQueue[i].peek().x;  
           totalYs[i] -= jointQueue[i].peek().y;
           jointQueue[i].remove();
