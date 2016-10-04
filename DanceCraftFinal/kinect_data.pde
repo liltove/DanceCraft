@@ -208,6 +208,7 @@ void AddToCSV(int userID, int _joint, PVector currentPosition, Table table) {
   row.setFloat("z", _z);
   row.setString("jointname", joint[_joint]);
   row.setString("time", currentTime);
+  row.setInt("voiceover", 0);
 }
 
 /*-------------------------------------------------
@@ -297,6 +298,7 @@ Table setUpTable (){
  table.addColumn("z", Table.FLOAT);
  table.addColumn("jointname", Table.STRING);
  table.addColumn("time", Table.STRING);
+ table.addColumn("voiceover", Table.INT);
  
  return table;
 }

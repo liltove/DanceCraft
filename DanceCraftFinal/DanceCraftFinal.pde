@@ -117,7 +117,6 @@ void draw() {
   if (phase=="title") {
     drawTitleScreen();
     changeTracks(0); //reset to title music
-    changeSounds(3);
   } else if (phase=="dance") {
       drawDanceScreen();
       playDances();
@@ -237,6 +236,10 @@ void keyPressed() {
           playingBack = true;
         }
       }
+    } else if (key == 'v' || key == 'V') {
+      //mark for voiceover in the CSV file
+      println(curRow);
+      markVoiceover(curRow);
     }
   }
 }

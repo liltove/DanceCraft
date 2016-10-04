@@ -10,7 +10,11 @@ float[] averageXs = new float[15];
 float[] averageYs = new float[15];
 PVector[] averageV = new PVector[15];
 
+int voiceoverIndex = 0; 
+
 float thresholdDance = 50;
+
+int curRow = 0;
 
 /*
 This file contains the functions necessary for playing back "dances" recorded
@@ -37,6 +41,7 @@ String[] teacherRecordings= {
 };
 
 boolean useModel = false;
+String FN;
 
 /*--------------------------------------------------------------
  reads the csv and retrieves the joint coordinate information, loads them
@@ -87,6 +92,7 @@ void playBack(Integer rowNum)
 {
   PVector jointPos = new PVector();
   int realNum;
+  curRow = rowNum;
   //println("playing " + rowNum);
   
   if (rowNum < skel_data.length) {  //Compare number passed to function and make sure its less than the length of the array of skeleton data
@@ -322,7 +328,9 @@ void playVideo(String filename) {
   //read the file specified
   if (!dancePlayback) {
     //Load a CSV of skeleton data from into a table and return true if successful.  Otherwise return false.
-    dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
+    FN = sketchPath(recordingsFolder + "/" + filename).toString();
+    //dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
+    dancePlayback = readCsv(FN);
     println("loading csv file");
   }
   playBack (numIterationsCompleted); //play back the skeletons
@@ -466,4 +474,16 @@ float distanceFormula(float xA, float yA, float xB, float yB){
    }
    
    
+ }
+ 
+ /*--------------------------------------------------------------
+Marks the row to play back voiceover
+ --------------------------------------------------------------*/
+ void markVoiceover(int curRow){
+   println(FN);
+   loadedSkelTable = loadTable(FN, "header");
+   TableRow row = loadedSkelTable.getRow(curRow-2);
+   row.setInt("voiceover", 1);
+   saveTable(loadedSkelTable, FN, "csv"); //Write table to location
+   println("saved "+ FN);
  }
