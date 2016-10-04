@@ -10,8 +10,10 @@ ControlP5 cp5;
 PFont font;
 
 String phase, mode;
-Boolean teacherMode = false; //Change this to true if you want to record new teacher dances
-Boolean playTeacherRecording = false;
+Boolean teacherMode = true; //Change this to true if you want to record new teacher dances
+Boolean playTeacherRecording = true;
+Boolean teacherDone = false;
+Boolean playingBack = false;
 String [] files;
 String username, time;
 String desktopPath = "\\records/";
@@ -124,7 +126,7 @@ void draw() {
   } else if (phase=="teacherMode"){
     pauseMusic();
     drawDanceScreen();
-    
+    teacherRecording();
   }
 }
 
@@ -199,10 +201,10 @@ void keyPressed() {
       //saveSkeletonTable("test", fullRecordTable);
       println("Record Mode Deactivated");
       logFile.println("Record Mode Deactivated at: " + currentTimeWithColons);
-    } else if (key == ' ' && teacherMode){
+    } else if (key == ' ' && teacherMode){ //space bar starts and stops recording
       if (recordMode){
         recordMode = false;
-        teacherDone = true;
+        keepRecordedDance();
       }else{
         recordMode = true;
       }
@@ -227,13 +229,13 @@ void keyPressed() {
         redoRecordedDance();
       }
     } else if (key == 'p' || key == 'P') {
-        if(teacherMode){
-          if (playTeacherRecording){
-             playTeacherRecording = false; 
-          } else {
-            playTeacherRecording = true;
-          }
+      //play back the teacher's recording if in teacherMode  
+      currentDanceSegment = 0;
+      if(teacherMode){
+        if(!recordMode){
+          playingBack = true;
         }
+      }
     }
   }
 }

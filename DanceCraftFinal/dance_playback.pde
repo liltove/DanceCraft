@@ -32,6 +32,10 @@ String[] danceChoreoFiles= {
   "combo1_first8.csv", "1choreo_1.csv", "combo1_third8.csv", "1choreo_2.csv"
 };
 
+String[] teacherRecordings= {
+  "teacherRecording.csv"
+};
+
 boolean useModel = false;
 
 /*--------------------------------------------------------------
@@ -319,6 +323,7 @@ void playVideo(String filename) {
   if (!dancePlayback) {
     //Load a CSV of skeleton data from into a table and return true if successful.  Otherwise return false.
     dancePlayback = readCsv(sketchPath(recordingsFolder + "/" + filename).toString());
+    println("loading csv file");
   }
   playBack (numIterationsCompleted); //play back the skeletons
   numIterationsCompleted++;
@@ -411,6 +416,27 @@ void keepRecordedDance(){
     waitingToRecord = true;
     countdownReady = 0;
     savedRecording = false;
+  }
+}
+
+void teacherRecording(){
+  if (recordMode){
+    //recording teacher
+    
+  } else if (playingBack){
+    //playing back current recording
+    playTeacherRecording();
+  } else if (!playingBack && !recordMode){
+    //drawMessage("Press 'p' to play current recording." + '\n' + "Press SPACE to begin recording.");
+  }
+}
+
+void playTeacherRecording(){
+  //play back most recent recording
+  if (currentDanceSegment < teacherRecordings.length) {
+    playVideo(teacherRecordings[currentDanceSegment]); //play back what we just recorded
+  } else{
+    playingBack = false;
   }
 }
 

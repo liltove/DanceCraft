@@ -48,10 +48,6 @@ Table loadedSkelTable = new Table();
 
 PVector[] j1;
 
-Boolean teacherDone = false;
-
-
-
 /*---------------------------------------------------------------
 Starts new kinect object and enables skeleton tracking.
 Draws window
@@ -124,22 +120,23 @@ void kinectDance(){
      //add information to table
      //drawSkeleton(users[i]);
      recordingDance(users[i], currentPosition, fullRecordTable);
-    if (phase == "teacherMode"){
-          if (recordMode && !teacherDone){
-            recordingDance(users[i], currentPosition, teacherRecording);
-            println("recording teacher");
-          } else if (!recordMode && !teacherDone){
-            //drawMessage("Press SPACE to begin recording.");
-          } else if (!recordMode && teacherDone){
-            drawMessage("To KEEP recorded dance, press 'k'." + '\n' + "To REDO recorded dance, press 'r'.");
-          }
-       }  
+//    if (phase == "teacherMode"){
+//          if (recordMode && !teacherDone){
+//            recordingDance(users[i], currentPosition, teacherRecording);
+//            println("recording teacher");
+//          } else if (!recordMode && !teacherDone){
+//            drawMessage("Press SPACE to begin recording.");
+//          } else if (!recordMode && teacherDone){
+//            drawMessage("To KEEP recorded dance, press 'k'." + '\n' + "To REDO recorded dance, press 'r'.");
+//          }
+//       }  
        
        //if in recordMode, save the users tracked information to data files
        if(recordMode){
           //PVector currentPosition = new PVector();
-          //add information to table
-        if (currentChoreoSegment == 1){
+          if (teacherMode){
+            recordingDance(users[i], currentPosition, teacherRecording);
+          } else if (currentChoreoSegment == 1){
             recordingDance(users[i], currentPosition, choreoA);
          }else{
             recordingDance(users[i], currentPosition, choreoB);
