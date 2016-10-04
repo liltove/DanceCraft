@@ -72,6 +72,7 @@ void setup() {
   logFile = createWriter(dataPath("") + "/DanceCraftUserLog" + currentDate + "_" + currentTime + ".txt");
   beginWritingLogFile(); //Begin creation of log file for DC researchers
   logFile.println ("Time of day launched:" + " " + currentTimeWithColons); //Log the time of day that the program was lanuched.
+  frameRate(60);
   
   smooth();
   drawScreen();
@@ -85,7 +86,7 @@ void setup() {
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //kinectSetup();
+  kinectSetup();
 
   minim = new Minim(this);
   musicSetup();
