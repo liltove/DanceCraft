@@ -1,9 +1,15 @@
 import ddf.minim.*;
+import ddf.minim.signals.*;
+import javax.sound.sampled.*;
+import ddf.minim.ugens.*;
 
 //AudioPlayer player;
 AudioPlayer soundtrack;
+AudioPlayer sounds;
 Minim minim;//audio context
+Minim minim2;
 int track = 0; //initial track number
+int voiceover = 0; //initial voiceover number
 String[] musicFiles= {"music/2.mp3", "music/01Coming Over_filous Remix.mp3", "music/02New Resolution.mp3", "music/07AnthemsforaSeventeenYearOldGirl.mp3"};
 //int track = currentDaySelected; //initialize the track to whatever is the current day selected
 String trackNum; //holds track number for calling from file
@@ -11,7 +17,9 @@ String trackNum; //holds track number for calling from file
 void musicSetup(){
   //start the music player
   minim = new Minim(this);
+  minim2 = new Minim(this);
   getTrack(track);
+  getSounds(voiceover);
   soundtrack.loop(10);
 }
 
@@ -20,6 +28,13 @@ void musicPlay(){
       getTrack(track);   //Loads the corresponding track to be played.
       soundtrack.play();
     }
+}
+
+void voiceoverPlay(){
+  if(!sounds.isPlaying()){
+      getSounds(3);   //Loads the corresponding track to be played.
+      sounds.play();
+  }
 }
 
 //pause music
@@ -41,6 +56,13 @@ void getTrack(int tracks){
  //soundtrack = minim.loadFile("music/ferrisWheel.mp3", 2048);  //Commented out what was the previous default music file
 }
 
+void getSounds(int tracks){
+ //track = currentDaySelected; //So we can index the correct track in the array
+ println("Loading voiceover: " + musicFiles[tracks]);
+ sounds = minim2.loadFile(musicFiles[tracks], 2048);  //Check
+ //soundtrack = minim.loadFile("music/ferrisWheel.mp3", 2048);  //Commented out what was the previous default music file
+}
+
 void changeTracks(int tracks){
  if (track == tracks){
    //println("Track: " + track + ", Changing to tracks: " + tracks);
@@ -52,6 +74,20 @@ void changeTracks(int tracks){
        soundtrack.rewind(); //set back to beginning of track
      }
    musicPlay();
+ }
+}
+
+void changeSounds(int tracks){
+ if (voiceover == tracks){
+   //println("Track: " + track + ", Changing to tracks: " + tracks);
+ } else {
+   println("Sound: " + track + ", Changing to sound: " + tracks);
+   voiceover = tracks; //set the new track to specified integer
+     if (sounds.isPlaying()){
+       sounds.pause(); //stop current music
+       sounds.rewind(); //set back to beginning of track
+     }
+   voiceoverPlay();
  }
 }
 
