@@ -10,8 +10,6 @@ float[] averageXs = new float[15];
 float[] averageYs = new float[15];
 PVector[] averageV = new PVector[15];
 
-int voiceoverIndex = 0; 
-
 float thresholdDance = 50;
 
 int curRow = 0;
@@ -55,6 +53,7 @@ Boolean readCsv(String selection)
     loadedSkelTable = loadTable(selection, "header");
     skel_data = new PVector [loadedSkelTable.getRowCount()/15][15]; //Initalize skel_data w/ row size = number of "skeletons" and column size = number of joints.
     int i = 0; //count the number of skeletons that are read
+    int playVoiceover = 0;
     int index; //count the join of the i skeleton that are read
     
     //iterate through each row of the table
@@ -70,6 +69,13 @@ Boolean readCsv(String selection)
       skel_data[i][index].x = row.getFloat("x");
       skel_data[i][index].y = row.getFloat("y");
       skel_data[i][index].z = row.getFloat("z");
+      
+      playVoiceover = row.getInt("voiceover");
+      
+      if (playVoiceover == 1) {
+        voiceoverPlay();  
+      }
+      
       if (index == 14)
       {
         i++;
