@@ -1,7 +1,5 @@
 import ddf.minim.*;
 import ddf.minim.signals.*;
-import javax.sound.sampled.*;
-import ddf.minim.ugens.*;
 
 //AudioPlayer player;
 AudioPlayer soundtrack;

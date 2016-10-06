@@ -160,7 +160,7 @@ void onNewUser(SimpleOpenNI curContext, int userId){
 /*---------------------------------------------------------------
 Print when user is lost. Input is int userId of user lost
 ----------------------------------------------------------------*/
-void onLostUser(SimpleOpenNI curContext, int userId){
+void onLostUser(int userId){
  // print user lost and user id
  println("User Lost - userId: " + userId);
 } //void onLostUser(SimpleOpenNI curContext, int userId)

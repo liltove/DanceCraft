@@ -96,8 +96,7 @@ Boolean readCsv(String selection)
  --------------------------------------------------------------*/
 void playBack(Integer rowNum)
 {
-  PVector jointPos = new PVector();
-  int realNum;
+  //PVector jointPos = new PVector();
   curRow = rowNum;
   //println("playing " + rowNum);
   
@@ -183,13 +182,6 @@ void playBack(Integer rowNum)
 /*--------------------------------------------------------------
  draws the points based on the coordinates, adjusts where the drawing occurs on screen
  --------------------------------------------------------------*/
-void filterAverage(PVector dataPoint){
-  
-}
-
-/*--------------------------------------------------------------
- draws the points based on the coordinates, adjusts where the drawing occurs on screen
- --------------------------------------------------------------*/
 void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
 {
 
@@ -241,8 +233,8 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   //Begin drawing the limb between the joints
   //draw oval from one joint to another
   Float distance = distanceFormula(xA, yA, xB, yB);
-  Float radius = distance / 2;
-  Float heigh = distance / 4;
+  //Float radius = distance / 2;
+  //Float heigh = distance / 4;
   
   //placeholders for midpoints and what will be the new point to calc angle from
   Float xM;

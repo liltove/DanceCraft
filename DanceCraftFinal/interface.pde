@@ -6,9 +6,6 @@ Imports
 /*---------------------------------------------------------------
 Variables
 ----------------------------------------------------------------*/
-//SET SIZE OF WINDOW
-int width = 640; // window width
-int height = 480; // window height
 
 // BUTTON VARIABLES
 color rectColor = color(50, 55, 100);
@@ -40,8 +37,8 @@ PImage title;
 Draws the right screen size with other set parameters
 ----------------------------------------------------------------*/
 void drawScreen(){
-  frame.setTitle("DanceCraft"); //sets window title
-  size(width,height, P3D);
+  surface.setTitle("DanceCraft"); //sets window title
+  
   font=createFont("Arial", 48);
   textFont(font); 
 }
@@ -80,7 +77,7 @@ void drawDanceScreen() {
      tutorial.read(); 
   } else if (phase == "dance" || phase == "teacherMode"){
      //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-     kinectDance(); 
+     //kinectDance(); 
   }
 }
 
@@ -186,5 +183,3 @@ void recordIndicator(){
     ellipse (width-20, 20, 20, 20);
   }
 }
-
-
