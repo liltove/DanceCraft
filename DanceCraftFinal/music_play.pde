@@ -61,7 +61,7 @@ void getTrack(int tracks){
 
 void getSounds(int tracks){
  //track = currentDaySelected; //So we can index the correct track in the array
- println("Loading voiceover: " + musicFiles[tracks]);
+ println("Loading voiceover: " + soundFiles[tracks]);
  sounds = minim2.loadFile(soundFiles[tracks], 2048);  //Check
  //soundtrack = minim.loadFile("music/ferrisWheel.mp3", 2048);  //Commented out what was the previous default music file
 }
