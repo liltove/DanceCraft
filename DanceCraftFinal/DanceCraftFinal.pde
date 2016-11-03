@@ -70,11 +70,17 @@ float normLength = -25;
 float k = 0.0;
 PVector pos;
 
+//SET SIZE OF WINDOW
+int width = 640; // window width
+int height = 480; // window height
+
 void setup() {
+  size(640,480);
+  
   logFile = createWriter(dataPath("") + "/DanceCraftUserLog" + currentDate + "_" + currentTime + ".txt");
   beginWritingLogFile(); //Begin creation of log file for DC researchers
   logFile.println ("Time of day launched:" + " " + currentTimeWithColons); //Log the time of day that the program was lanuched.
-  frameRate(60);
+  frameRate(30);
   
   smooth();
   drawScreen();
@@ -88,11 +94,11 @@ void setup() {
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  kinectSetup();
+  //kinectSetup();
 
   minim = new Minim(this);
   musicSetup();
-  movieSetup();
+  //movieSetup();
 
   background = 0;
   

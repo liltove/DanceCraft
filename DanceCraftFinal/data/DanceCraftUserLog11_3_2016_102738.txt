@@ -1,0 +1,10 @@
+DANCECRAFT LOG FILE
+
+___________________________________________________________
+
+Username: TEST User Name
+
+Time of day launched: 10:27:38
+Time: 10:27:58--User has exited the game 
+
+Total time user has played: 20 seconds

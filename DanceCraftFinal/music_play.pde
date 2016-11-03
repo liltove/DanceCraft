@@ -1,7 +1,5 @@
 import ddf.minim.*;
 import ddf.minim.signals.*;
-import javax.sound.sampled.*;
-import ddf.minim.ugens.*;
 
 //AudioPlayer player;
 AudioPlayer soundtrack;
@@ -11,6 +9,11 @@ Minim minim2;
 int track = 0; //initial track number
 int voiceover = 0; //initial voiceover number
 String[] musicFiles= {"music/2.mp3", "music/01Coming Over_filous Remix.mp3", "music/02New Resolution.mp3", "music/07AnthemsforaSeventeenYearOldGirl.mp3"};
+String[] soundFiles = {"music/voiceover/warmup.mp3", "music/voiceover/technique- intro.mp3", "music/voiceover/technique- 1.mp3",
+                      "music/voiceover/bird- intro- 1.mp3", "music/voiceover/bird- 2.mp3", 
+                      "music/voiceover/car- intro.mp3", "music/voiceover/car- 1.mp3", "music/voiceover/car- 2.mp3", 
+                      "music/voiceover/snow- intro.mp3", "music/voiceover/snow- 1.mp3", "music/voiceover/snow- 2.mp3"
+                      };
 //int track = currentDaySelected; //initialize the track to whatever is the current day selected
 String trackNum; //holds track number for calling from file
 
@@ -59,7 +62,7 @@ void getTrack(int tracks){
 void getSounds(int tracks){
  //track = currentDaySelected; //So we can index the correct track in the array
  println("Loading voiceover: " + musicFiles[tracks]);
- sounds = minim2.loadFile(musicFiles[tracks], 2048);  //Check
+ sounds = minim2.loadFile(soundFiles[tracks], 2048);  //Check
  //soundtrack = minim.loadFile("music/ferrisWheel.mp3", 2048);  //Commented out what was the previous default music file
 }
 
@@ -92,7 +95,7 @@ void changeSounds(int tracks){
 }
 
 void changeTrackToDanceDay(){
-  if (currentDaySelected == 1 || currentDaySelected ==3 ){
+  if (currentDaySelected == 1 || currentDaySelected == 3 ){
       changeTracks(2);
     } else {
       changeTracks(3);

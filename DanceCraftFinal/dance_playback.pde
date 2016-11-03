@@ -28,8 +28,12 @@ float totalX = 0;
 float totalY = 0;
 
 String[] danceFileNames= {
-  "prewarmUp.csv", "warmup.csv", "technique1.csv", "technique3.csv", "mirror.csv"
+  "teacherRecording- warmup.csv", "teacherRecording- technique.csv", 
+  "teacherRecording- bird- 1.csv","teacherRecording- bird- 2.csv", 
+  "teacherRecording- snow- 1.csv", "teacherRecording- snow- 2.csv", 
+  "teacherRecording- car- 1.csv", "teacherRecording- car- 2.csv"
 };
+
 String[] danceChoreoFiles= {
   "combo1_first8.csv", "1choreo_1.csv", "combo1_third8.csv", "1choreo_2.csv"
 };
@@ -96,8 +100,7 @@ Boolean readCsv(String selection)
  --------------------------------------------------------------*/
 void playBack(Integer rowNum)
 {
-  PVector jointPos = new PVector();
-  int realNum;
+  //PVector jointPos = new PVector();
   curRow = rowNum;
   //println("playing " + rowNum);
   
@@ -112,7 +115,7 @@ void playBack(Integer rowNum)
 //        println("Joint ID: " + i + " Average x: " + averageV[i].x + " Bad Coord: " + skel_data[rowNum][i].x);
 //        println("Joint ID: " + i + " Average y: " + averageV[i].y + " Bad Coord: " + skel_data[rowNum][i].y);
 //      }else{
-        if (jointQueue[i].size() >= 10) { //is the queue full??
+        if (jointQueue[i].size() >= 5) { //is the queue full??
           totalXs[i] -= jointQueue[i].peek().x;  
           totalYs[i] -= jointQueue[i].peek().y;
           jointQueue[i].remove();
@@ -183,13 +186,6 @@ void playBack(Integer rowNum)
 /*--------------------------------------------------------------
  draws the points based on the coordinates, adjusts where the drawing occurs on screen
  --------------------------------------------------------------*/
-void filterAverage(PVector dataPoint){
-  
-}
-
-/*--------------------------------------------------------------
- draws the points based on the coordinates, adjusts where the drawing occurs on screen
- --------------------------------------------------------------*/
 void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
 {
 
@@ -241,8 +237,8 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   //Begin drawing the limb between the joints
   //draw oval from one joint to another
   Float distance = distanceFormula(xA, yA, xB, yB);
-  Float radius = distance / 2;
-  Float heigh = distance / 4;
+  //Float radius = distance / 2;
+  //Float heigh = distance / 4;
   
   //placeholders for midpoints and what will be the new point to calc angle from
   Float xM;
@@ -448,7 +444,8 @@ void teacherRecording(){
 void playTeacherRecording(){
   //play back most recent recording
   if (currentDanceSegment < teacherRecordings.length) {
-    playVideo(teacherRecordings[currentDanceSegment]); //play back what we just recorded
+    //playVideo(teacherRecordings[currentDanceSegment]); //play back what we just recorded
+    playVideo("teacherRecording- bird-1.csv");
   } else{
     playingBack = false;
   }
