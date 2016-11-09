@@ -1,11 +1,11 @@
 /*---------------------------------------------------------------
-Imports
-----------------------------------------------------------------*/
+ Imports
+ ----------------------------------------------------------------*/
 
 
 /*---------------------------------------------------------------
-Variables
-----------------------------------------------------------------*/
+ Variables
+ ----------------------------------------------------------------*/
 
 // BUTTON VARIABLES
 color rectColor = color(50, 55, 100);
@@ -23,32 +23,37 @@ Boolean[] buttonIsPressed = {false, false, false, false};
 Boolean[] buttonIsOver = {false, false, false, false};
 Boolean [] keysPressed = new Boolean[20];
 String[] countdownTimer = {"5", "4", "3", "2", "1"};
+String[] countdownTimer_choreoSeg2 = {"4", "3", "2", "1"};
 int countdownReady = 0;
 
 PImage[] buttonImages = new PImage[4];
 
 //Title Background Color
-color backgroundColorTitle = color(51,51,153);
+color backgroundColorTitle = color(51, 51, 153);
 
 //Title Screen Images
 PImage title;
 
+//Countdown timer for choreo segment 2
+int countdown_time; // to countdown seconds before choreo segment 2 starts
+int wait = 1000; 
+
 /*---------------------------------------------------------------
-Draws the right screen size with other set parameters
-----------------------------------------------------------------*/
-void drawScreen(){
+ Draws the right screen size with other set parameters
+ ----------------------------------------------------------------*/
+void drawScreen() {
   surface.setTitle("DanceCraft"); //sets window title
-  
+
   font=createFont("Arial", 48);
-  textFont(font); 
+  textFont(font);
 }
 
 /*---------------------------------------------------------------
-Draw the dance screen. Calls the animation/background image. Calls Kinect class.
-----------------------------------------------------------------*/
+ Draw the dance screen. Calls the animation/background image. Calls Kinect class.
+ ----------------------------------------------------------------*/
 void drawDanceScreen() {
   background(255);
-  if (phase=="dance"){
+  if (phase=="dance") {
     background(danceBackdrop);
   }
   int passedTime = millis() - startTime;
@@ -57,61 +62,62 @@ void drawDanceScreen() {
 
   textSize(30);
   fill(0);
-  
+
   textAlign(LEFT);
   time = (nf(mins, 2) + ":" + nf(secs, 2));
 
-  fill(255,255,255,75);
+  fill(255, 255, 255, 75);
   rectMode(CORNER);
   noStroke();
-  rect(82,51,15,15,7);
-  rect(82,71,15,15,7);
+  rect(82, 51, 15, 15, 7);
+  rect(82, 71, 15, 15, 7);
   fill(255);
   textSize(18);
   textAlign(LEFT);
-  
+
   recordIndicator();
-  
-  if (phase == "tutorial"){
-     image(tutorial, 0, 0, 340, 300);
-     tutorial.read(); 
-  } else if (phase == "dance" || phase == "teacherMode"){
-     //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-     //kinectDance(); 
+  countdown_choreoSeg2();
+
+  if (phase == "tutorial") {
+    image(tutorial, 0, 0, 340, 300);
+    tutorial.read();
+  } else if (phase == "dance" || phase == "teacherMode") {
+    //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
+    //kinectDance();
   }
 }
 
 /*---------------------------------------------------------------
-Draw the main title screen.
-----------------------------------------------------------------*/
+ Draw the main title screen.
+ ----------------------------------------------------------------*/
 void drawTitleScreen() {
-   title = loadImage("DanceCraft.png");
-  
-   //background(255); //makes background white
-   background(backgroundColorTitle);
-   textSize(32);
-   textAlign(CENTER);
-   fill(0); //fills in letters black
-   image(title, width/4, height/4); //puts title in top center of screen
+  title = loadImage("DanceCraft.png");
+
+  //background(255); //makes background white
+  background(backgroundColorTitle);
+  textSize(32);
+  textAlign(CENTER);
+  fill(0); //fills in letters black
+  image(title, width/4, height/4); //puts title in top center of screen
 
   //if on title screen, then set day back to 0
   currentDaySelected = 0;
-  
-   int y = 0;
+
+  int y = 0;
   // ADDING BUTTONS
-  
+
   // go throgh each button
   for (int i = 0; i < buttonNames.length; i++) {
     buttonImages[i] = loadImage(buttonImgs[i]); //assign the images to the buttons
 
     // calculate the distance of that button from the top of the screen
     y = distanceFromTop + buttonHeight*i + distanceBetweenButtons*i;
-    
+
     // if the cursor is currently hovering over the button
     if (mouseX >= distanceFromLeft && mouseX <= distanceFromLeft+buttonWidth && 
-    mouseY >= y && mouseY <= y+buttonHeight) {
+      mouseY >= y && mouseY <= y+buttonHeight) {
       // check to see if the button is NOT currently pressed
-      if(!buttonIsPressed[i]) {
+      if (!buttonIsPressed[i]) {
         // then color it as highlighted
         fill(rectHighlightColor);
       } else {
@@ -126,22 +132,22 @@ void drawTitleScreen() {
       // mark that the mouse is NOT over this button
       buttonIsOver[i] = false;
     }
-    
+
     stroke(255);
     rect(distanceFromLeft, y, buttonWidth, buttonHeight);
-    
+
     //fill(255);
     //textSize(18);
     //textAlign(CENTER, CENTER);
     //text(buttonNames[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
-    image(buttonImages[i], distanceFromLeft,y,buttonWidth,buttonHeight-5);
+    image(buttonImages[i], distanceFromLeft, y, buttonWidth, buttonHeight-5);
   }
 }
 
 /*---------------------------------------------------------------
-Draw String to screen
-----------------------------------------------------------------*/
-void drawMessage(String message){
+ Draw String to screen
+ ----------------------------------------------------------------*/
+void drawMessage(String message) {
   clearScreen();
   textSize(32);
   textAlign(CENTER);
@@ -151,33 +157,51 @@ void drawMessage(String message){
 }
 
 /*---------------------------------------------------------------
-Clear everything from screen
-----------------------------------------------------------------*/
-void clearScreen(){
- background(255);
- if (phase == "dance"){
-   background(danceBackdrop);
- }
-}
-
-/*---------------------------------------------------------------
-counts down to when recording starts
-----------------------------------------------------------------*/
-void countdownRecord(){
-  if (countdownReady < countdownTimer.length){
-    drawMessage(countdownTimer[countdownReady]);
-    delay(800);
-    countdownReady++;
-  }else if (countdownReady == countdownTimer.length){
-    waitingToRecord = false;
+ Clear everything from screen
+ ----------------------------------------------------------------*/
+void clearScreen() {
+  background(255);
+  if (phase == "dance") {
+    background(danceBackdrop);
   }
 }
 
 /*---------------------------------------------------------------
-Display a RED dot when RecordMode is true
-----------------------------------------------------------------*/
-void recordIndicator(){
-  if (recordMode){
+ Counts down to when recording starts
+ ----------------------------------------------------------------*/
+void countdownRecord() {
+  if (countdownReady < countdownTimer.length) {
+    drawMessage(countdownTimer[countdownReady]);
+    delay(800);
+    countdownReady++;
+  } else if (countdownReady == countdownTimer.length) {
+    waitingToRecord = false;
+  }
+}
+
+void countdown_choreoSeg2() {
+  textSize(35);
+  fill(0);
+
+  if (currentChoreoSegment == 2) {
+    if (countdownReady < countdownTimer_choreoSeg2.length) {
+      text(countdownTimer_choreoSeg2[countdownReady], 550, 50);
+      if (millis() - countdown_time >= wait) {
+        countdown_time = millis();//also update the stored time
+        countdownReady++;
+      }
+    }
+  }
+
+
+  //check the difference between now and the previously stored time is greater than the wait interval
+}
+
+/*---------------------------------------------------------------
+ Display a RED dot when RecordMode is true
+ ----------------------------------------------------------------*/
+void recordIndicator() {
+  if (recordMode) {
     //Draw red circle indicatiing that we are recording
     fill (189, 41, 2);
     ellipse (width-20, 20, 20, 20);

@@ -34,9 +34,8 @@ int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
 
 //CHANGE THIS LINE IF YOU DON'T WANT TO START AT THE BEGINNING!! --currently 4 gets you to mirror
-int currentDanceSegment = 0; //which segment of the dance are we on
-
-int currentChoreoSegment = 0; //which segment of choreo are we on
+int currentDanceSegment = 2; //which segment of the dance are we on //0- warmup, 1- technique
+int currentChoreoSegment = 2; //which segment of choreo are we on //0- first 8, 1- record, 3- second 8, 4- record
 int playthroughChoreo = 0; //final play through of all choreo files
 int numTimesTutorialPressed = 0;  //used to keep track of the times Tutorial button is pressed
 Boolean waitingToRecord = true; //waiting on record mode
@@ -75,18 +74,18 @@ int width = 640; // window width
 int height = 480; // window height
 
 void setup() {
-  size(640,480);
-  
+  size(640, 480);
+
   logFile = createWriter(dataPath("") + "/DanceCraftUserLog" + currentDate + "_" + currentTime + ".txt");
   beginWritingLogFile(); //Begin creation of log file for DC researchers
   logFile.println ("Time of day launched:" + " " + currentTimeWithColons); //Log the time of day that the program was lanuched.
   frameRate(30);
-  
+
   smooth();
   drawScreen();
-  if (teacherMode){
+  if (teacherMode) {
     phase = "teacherMode";
-  }else{
+  } else {
     phase = "title";
   }
   println(phase);
@@ -101,7 +100,7 @@ void setup() {
   //movieSetup();
 
   background = 0;
-  
+
   initializeQueueArray();
 
   //Fill the Boolean array keysPressed with falses
@@ -111,25 +110,28 @@ void setup() {
 
   //Function defined at end of this file that allows for code after program quit to run
   prepareExitHandler();
+  
+  // to countdown seconds before choreo segment 2 starts
+  countdown_time = millis();//store the current time
 }
 
 /*---------------------------------------------------------------
-Detect which phase of the program we are in and call appropriate draw function.
-----------------------------------------------------------------*/
+ Detect which phase of the program we are in and call appropriate draw function.
+ ----------------------------------------------------------------*/
 void draw() {
   //update time
   getCurrentTime();
-  
+
   if (phase=="title") {
     drawTitleScreen();
     changeTracks(0); //reset to title music
   } else if (phase=="dance") {
-      drawDanceScreen();
-      playDances();
-  } else if (phase=="tutorial"){
+    drawDanceScreen();
+    playDances();
+  } else if (phase=="tutorial") {
     pauseMusic(); //pause any music
     drawMovie();
-  } else if (phase=="teacherMode"){
+  } else if (phase=="teacherMode") {
     pauseMusic();
     drawDanceScreen();
     teacherRecording();
@@ -137,13 +139,13 @@ void draw() {
 }
 
 /*---------------------------------------------------------------
-Senses when mouse is clicked and does appropriate action.
-----------------------------------------------------------------*/
+ Senses when mouse is clicked and does appropriate action.
+ ----------------------------------------------------------------*/
 void mousePressed() {
   // go through each button
   for (int i = 0; i < buttonNames.length; i++) {
     // check to see if the mouse is currently hovering over the button
-    if(buttonIsOver[i]) {
+    if (buttonIsOver[i]) {
       // if so then mark this button as pressed
       buttonIsPressed[i] = true;
     }
@@ -156,31 +158,30 @@ void mouseReleased() {
   for (int i = 0; i < buttonNames.length; i++) {
     // checks to see if the mouse is currently hovering over it
     // and if the mouse press event started on that button
-    if(buttonIsOver[i] && buttonIsPressed[i]) {
+    if (buttonIsOver[i] && buttonIsPressed[i]) {
       //if it's tutorial, play the tutorial video, else select the day
-     if(buttonNames[i].equals("Tutorial")){
-       println("Tutorial pressed");
-       phase = "tutorial";
+      if (buttonNames[i].equals("Tutorial")) {
+        println("Tutorial pressed");
+        phase = "tutorial";
 
-      buttonIsPressed[i] = false;
-      buttonIsOver[i] = false;
-      tutorial.jump(0);
-      tutorial.play();
-     }
-     else{
-      //update days to set which day is selected
-      currentDaySelected = i+1;
-      //Write information to log file
-      logFile.println ("Time: " + currentTimeWithColons + "--" + "User has selected the dance sequence for Day " + currentDaySelected + "\n");
-      //Create a timer to keep track of the fact the user has clicked on one of the dances
-      totalTime.start();
-      //make sure filenames are up to date
-      fileForDaySelected();
-      //change background image to appropriate day
-      danceBackdrop = loadImage(danceBG[i]);
-      //enter the "dance" phase of the program
-      phase = "dance";
-    }
+        buttonIsPressed[i] = false;
+        buttonIsOver[i] = false;
+        tutorial.jump(0);
+        tutorial.play();
+      } else {
+        //update days to set which day is selected
+        currentDaySelected = i+1;
+        //Write information to log file
+        logFile.println ("Time: " + currentTimeWithColons + "--" + "User has selected the dance sequence for Day " + currentDaySelected + "\n");
+        //Create a timer to keep track of the fact the user has clicked on one of the dances
+        totalTime.start();
+        //make sure filenames are up to date
+        fileForDaySelected();
+        //change background image to appropriate day
+        danceBackdrop = loadImage(danceBG[i]);
+        //enter the "dance" phase of the program
+        phase = "dance";
+      }
     }
     // clear the button presse flag under all instances, because the mouse is released
     // and we're ready for the next mouse event
@@ -189,12 +190,12 @@ void mouseReleased() {
 }
 
 /*---------------------------------------------------------------
-Detects when a key has been pressed and does appropriate action.
-----------------------------------------------------------------*/
+ Detects when a key has been pressed and does appropriate action.
+ ----------------------------------------------------------------*/
 void keyPressed() {
   //Switch to recording mode if you're pressing SPACE
-  if (keyPressed){
-    if (key == ' ' && phase == "dance" && recordMode == false  && allowRecordModeActivationAgain == true){
+  if (keyPressed) {
+    if (key == ' ' && phase == "dance" && recordMode == false  && allowRecordModeActivationAgain == true) {
       recordMode = true;
       waitingToRecord = true;
       allowRecordModeActivationAgain = false;
@@ -207,38 +208,38 @@ void keyPressed() {
       //saveSkeletonTable("test", fullRecordTable);
       println("Record Mode Deactivated");
       logFile.println("Record Mode Deactivated at: " + currentTimeWithColons);
-    } else if (key == ' ' && teacherMode){ //space bar starts and stops recording
-      if (recordMode){
+    } else if (key == ' ' && teacherMode) { //space bar starts and stops recording
+      if (recordMode) {
         recordMode = false;
         keepRecordedDance();
-      }else{
+      } else {
         recordMode = true;
       }
-    } else if(key == 'm' || key =='M') {
-       phase = "model";
+    } else if (key == 'm' || key =='M') {
+      phase = "model";
     } else if (key == 'k' || key == 'K') {
       //only if they've finished recording
-      if (!recordMode && !waitingToRecord){
+      if (!recordMode && !waitingToRecord) {
         keepRecordedDance();
         logFile.println ("Keeping recorded dance for Day  " + currentDaySelected + ", Choreo " + currentChoreoSegment + " at: " + currentTimeWithColons);
-      } else if (teacherMode){
+      } else if (teacherMode) {
         keepRecordedDance();
         println("Keep recorded dance");
       }
     } else if (key == 'r' || key == 'R') {
       //only if they've finished recording
-      if (!recordMode && !waitingToRecord){
+      if (!recordMode && !waitingToRecord) {
         logFile.println ("Redoing recorded dance for Day  " + currentDaySelected + ", Choreo " + currentChoreoSegment + " at: " + currentTimeWithColons);
         redoRecordedDance();
-      } else if (teacherMode){
+      } else if (teacherMode) {
         println("redoing recorded dance");
         redoRecordedDance();
       }
     } else if (key == 'p' || key == 'P') {
       //play back the teacher's recording if in teacherMode  
       currentDanceSegment = 0;
-      if(teacherMode){
-        if(!recordMode){
+      if (teacherMode) {
+        if (!recordMode) {
           playingBack = true;
         }
       }
@@ -251,19 +252,19 @@ void keyPressed() {
 }
 
 
-void keyReleased(){
-   //When you release a special key, make sure to set it's value back to false in the keysPressed array
-   if (key == CODED && keyCode <= keysPressed.length-1 ) {
-     keysPressed[keyCode] = false;
-     println ("Value in array for key pressed: --->" + keysPressed[keyCode]);
-   }
-   //Allow Record Mode to be active once at least one either SHIFT or CTRL is let up
-   if (!keysPressed[16] || !keysPressed[17]) {
-     allowRecordModeActivationAgain = true;
-   }
+void keyReleased() {
+  //When you release a special key, make sure to set it's value back to false in the keysPressed array
+  if (key == CODED && keyCode <= keysPressed.length-1 ) {
+    keysPressed[keyCode] = false;
+    println ("Value in array for key pressed: --->" + keysPressed[keyCode]);
+  }
+  //Allow Record Mode to be active once at least one either SHIFT or CTRL is let up
+  if (!keysPressed[16] || !keysPressed[17]) {
+    allowRecordModeActivationAgain = true;
+  }
 } //End of KeyPressed function  //Methods
 
-void getCurrentTime(){
+void getCurrentTime() {
   currentDay = String.valueOf(day());
   currentMonth = String.valueOf(month());
   currentYear = String.valueOf(year());
@@ -276,19 +277,20 @@ void getCurrentTime(){
 }
 
 /*---------------------------------------------------------------
-Runs upon exiting the program, shuts down logging functions.
-----------------------------------------------------------------*/
+ Runs upon exiting the program, shuts down logging functions.
+ ----------------------------------------------------------------*/
 void prepareExitHandler () {
- Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-   public void run () {
-     System.out.println("SHUTDOWN HOOK");
-     musicStop();
-     totalTime.stop();
-     logFile.println ("Time: " + currentTimeWithColons + "--" + "User has exited the game " + "\n");
-     logFile.println ("Total time user has played: " + totalTime.getSeconds() + " seconds");
-     saveSkeletonTable(currentDaySelected + "USERDATA" + currentTime, fullRecordTable); //save full play through of skeletal data
-     closeLogFile();
-// application exit code here
-     }
-   }));
+  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+    public void run () {
+      System.out.println("SHUTDOWN HOOK");
+      musicStop();
+      totalTime.stop();
+      logFile.println ("Time: " + currentTimeWithColons + "--" + "User has exited the game " + "\n");
+      logFile.println ("Total time user has played: " + totalTime.getSeconds() + " seconds");
+      saveSkeletonTable(currentDaySelected + "USERDATA" + currentTime, fullRecordTable); //save full play through of skeletal data
+      closeLogFile();
+      // application exit code here
+    }
+  }
+  ));
 }

@@ -2,22 +2,21 @@ import ddf.minim.*;
 import ddf.minim.signals.*;
 
 //AudioPlayer player;
-AudioPlayer soundtrack;
-AudioPlayer sounds;
+AudioPlayer soundtrack; // to play the main sound tracks
+AudioPlayer sounds; // to play the voiceovers 
 Minim minim;//audio context
 Minim minim2;
 int track = 0; //initial track number
 int voiceover = 0; //initial voiceover number
-String[] musicFiles= {"music/2.mp3", "music/01Coming Over_filous Remix.mp3", "music/02New Resolution.mp3", "music/07AnthemsforaSeventeenYearOldGirl.mp3"};
-String[] soundFiles = {"music/voiceover/warmup.mp3", "music/voiceover/technique- intro.mp3", "music/voiceover/technique- 1.mp3",
-                      "music/voiceover/bird- intro- 1.mp3", "music/voiceover/bird- 2.mp3", 
-                      "music/voiceover/car- intro.mp3", "music/voiceover/car- 1.mp3", "music/voiceover/car- 2.mp3", 
-                      "music/voiceover/snow- intro.mp3", "music/voiceover/snow- 1.mp3", "music/voiceover/snow- 2.mp3"
-                      };
-//int track = currentDaySelected; //initialize the track to whatever is the current day selected
-String trackNum; //holds track number for calling from file
+// String[] musicFiles= {"music/2.mp3", "music/01Coming Over_filous Remix.mp3", "music/02New Resolution.mp3", "music/07AnthemsforaSeventeenYearOldGirl.mp3"};
+String[] musicFiles= {"music/silence.mp3", "music/silence.mp3", "music/silence.mp3", "music/silence.mp3"};
+String[] soundFiles = {"music/voiceover/snow- intro.mp3", "music/voiceover/snow- 1.mp3", "music/voiceover/snow- 2.mp3", 
+  "music/voiceover/bird- intro- 1.mp3", "music/voiceover/bird- 2.mp3", 
+  "music/voiceover/car- intro.mp3", "music/voiceover/car- 1.mp3", "music/voiceover/car- 2.mp3", 
+  "music/voiceover/warmup.mp3", "music/voiceover/technique- intro.mp3", "music/voiceover/technique- 1.mp3"
+}; // ignore the first sound file 
 
-void musicSetup(){
+void musicSetup() {
   //start the music player
   minim = new Minim(this);
   minim2 = new Minim(this);
@@ -26,23 +25,23 @@ void musicSetup(){
   soundtrack.loop(10);
 }
 
-void musicPlay(){
-    if(!soundtrack.isPlaying()){
-      getTrack(track);   //Loads the corresponding track to be played.
-      soundtrack.play();
-    }
+void musicPlay() {
+  if (!soundtrack.isPlaying()) {
+    getTrack(track);   //Loads the corresponding track to be played.
+    soundtrack.play();
+  }
 }
 
-void voiceoverPlay(){
-  if(!sounds.isPlaying()){
-      getSounds(3);   //Loads the corresponding track to be played.
-      sounds.play();
+void voiceoverPlay() {
+  if (!sounds.isPlaying()) {
+    getSounds(voiceover);   //Loads the corresponding voiceover to be played.
+    sounds.play();
   }
 }
 
 //pause music
-void pauseMusic(){
-    soundtrack.pause();
+void pauseMusic() {
+  soundtrack.pause();
 }
 
 void musicStop()
@@ -52,52 +51,83 @@ void musicStop()
   super.stop();
 }
 
-void getTrack(int tracks){
- //track = currentDaySelected; //So we can index the correct track in the array
- println("Loading music: " + musicFiles[tracks]);
- soundtrack = minim.loadFile(musicFiles[tracks], 2048);  //Check
- //soundtrack = minim.loadFile("music/ferrisWheel.mp3", 2048);  //Commented out what was the previous default music file
+void getTrack(int tracks) {
+  //track = currentDaySelected; //So we can index the correct track in the array
+  println("Loading music: " + musicFiles[tracks]);
+  soundtrack = minim.loadFile(musicFiles[tracks], 2048);  //Check
+  //soundtrack = minim.loadFile("music/ferrisWheel.mp3", 2048);  //Commented out what was the previous default music file
 }
 
-void getSounds(int tracks){
- //track = currentDaySelected; //So we can index the correct track in the array
- println("Loading voiceover: " + soundFiles[tracks]);
- sounds = minim2.loadFile(soundFiles[tracks], 2048);  //Check
- //soundtrack = minim.loadFile("music/ferrisWheel.mp3", 2048);  //Commented out what was the previous default music file
+void getSounds(int voiceovers) {
+  //track = currentDaySelected; //So we can index the correct track in the array
+  println("Loading voiceover: " + soundFiles[voiceovers]);
+  sounds = minim2.loadFile(soundFiles[voiceovers], 2048);  //Check
+  //soundtrack = minim.loadFile("music/ferrisWheel.mp3", 2048);  //Commented out what was the previous default music file
 }
 
-void changeTracks(int tracks){
- if (track == tracks){
-   //println("Track: " + track + ", Changing to tracks: " + tracks);
- } else {
-   println("Track: " + track + ", Changing to tracks: " + tracks);
-   track = tracks; //set the new track to specified integer
-     if (soundtrack.isPlaying()){
-       soundtrack.pause(); //stop current music
-       soundtrack.rewind(); //set back to beginning of track
-     }
-   musicPlay();
- }
-}
-
-void changeSounds(int tracks){
- if (voiceover == tracks){
-   //println("Track: " + track + ", Changing to tracks: " + tracks);
- } else {
-   println("Sound: " + track + ", Changing to sound: " + tracks);
-   voiceover = tracks; //set the new track to specified integer
-     if (sounds.isPlaying()){
-       sounds.pause(); //stop current music
-       sounds.rewind(); //set back to beginning of track
-     }
-   voiceoverPlay();
- }
-}
-
-void changeTrackToDanceDay(){
-  if (currentDaySelected == 1 || currentDaySelected == 3 ){
-      changeTracks(2);
-    } else {
-      changeTracks(3);
+void changeTracks(int tracks) {
+  if (track == tracks) {
+    //println("Track: " + track + ", Changing to tracks: " + tracks);
+  } else {
+    println("Track: " + track + ", Changing to tracks: " + tracks);
+    track = tracks; //set the new track to specified integer
+    if (soundtrack.isPlaying()) {
+      soundtrack.pause(); //stop current music
+      soundtrack.rewind(); //set back to beginning of track
     }
+    musicPlay();
+  }
+}
+
+void changeSounds(int voiceovers) {
+  if (voiceover == voiceovers) {
+    //println("Track: " + track + ", Changing to tracks: " + tracks);
+  } else {
+    println("Sound: " + voiceover + ", Changing to sound: " + voiceovers);
+    voiceover = voiceovers; //set the new track to specified integer
+    if (sounds.isPlaying()) {
+      sounds.pause(); //stop current music
+      sounds.rewind(); //set back to beginning of track
+    }
+    voiceoverPlay();
+  }
+}
+
+void changeTrackToDanceDay() {
+  if (currentDaySelected == 1) {
+    changeTracks(2);
+  } else if (currentDaySelected == 2) {
+    changeTracks(3);
+  } else { // currentDaySelected == 3
+    changeTracks(2);
+  }
+}
+
+void changeSoundToChoreoSegment() {
+  if (currentDaySelected == 1) { // snow
+    if (currentChoreoSegment == 0) { 
+      changeSounds(1); 
+    } else if (currentChoreoSegment == 2) {
+      changeSounds(2);
+    } else { // when recording: currentDanceSegment == 1 or 3
+      // no music playing;
+    }
+    
+  } else if (currentDaySelected == 2) { // bird
+    if (currentChoreoSegment == 0) { 
+      changeSounds(3); // CHANGE
+    } else if (currentChoreoSegment == 2) {
+      changeSounds(4); // CHANGE
+    } else { // when recording: currentDanceSegment == 1 or 3
+      // no music playing;
+    }
+  } else if (currentDaySelected == 3) { // car
+    if (currentChoreoSegment == 0) { 
+      changeSounds(4);
+    } else if (currentChoreoSegment == 2) {
+      changeSounds(5);
+    } else { // when recording: currentDanceSegment == 1 or 3
+      // no music playing;
+    }
+  }
 }
