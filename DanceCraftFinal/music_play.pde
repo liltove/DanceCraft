@@ -8,12 +8,13 @@ Minim minim;//audio context
 Minim minim2;
 int track = 0; //initial track number
 int voiceover = 0; //initial voiceover number
-// String[] musicFiles= {"music/2.mp3", "music/01Coming Over_filous Remix.mp3", "music/02New Resolution.mp3", "music/07AnthemsforaSeventeenYearOldGirl.mp3"};
-String[] musicFiles= {"music/silence.mp3", "music/silence.mp3", "music/silence.mp3", "music/silence.mp3"};
-String[] soundFiles = {"music/voiceover/snow- intro.mp3", "music/voiceover/snow- 1.mp3", "music/voiceover/snow- 2.mp3", 
+String[] musicFiles= {"music/menu.mp3", "music/warmup_technique.mp3", "music/choreo_segments.mp3"};
+//String[] musicFiles= {"music/silence.mp3", "music/silence.mp3", "music/silence.mp3"};
+String[] soundFiles = {
+  "music/voiceover/warmup.mp3", "music/voiceover/technique- intro- 1.mp3",
+  "music/voiceover/snow- intro- 1.mp3", "music/voiceover/snow- 2.mp3", 
   "music/voiceover/bird- intro- 1.mp3", "music/voiceover/bird- 2.mp3", 
-  "music/voiceover/car- intro.mp3", "music/voiceover/car- 1.mp3", "music/voiceover/car- 2.mp3", 
-  "music/voiceover/warmup.mp3", "music/voiceover/technique- intro.mp3", "music/voiceover/technique- 1.mp3"
+  "music/voiceover/car- intro- 1.mp3", "music/voiceover/car- 2.mp3"  
 }; // ignore the first sound file 
 
 void musicSetup() {
@@ -94,38 +95,43 @@ void changeSounds(int voiceovers) {
 }
 
 void changeTrackToDanceDay() {
-  if (currentDaySelected == 1) {
-    changeTracks(2);
-  } else if (currentDaySelected == 2) {
-    changeTracks(3);
-  } else { // currentDaySelected == 3
+  if (currentDanceSegment == 0 || currentDanceSegment == 1) { // warmup and technique
+    changeTracks(1);
+  } else if (currentDanceSegment == 2) { // choreos
     changeTracks(2);
   }
 }
 
 void changeSoundToChoreoSegment() {
-  if (currentDaySelected == 1) { // snow
+  if (currentDanceSegment == 0) { // warmup 
+    changeSounds(0);
+  } else if (currentDanceSegment == 1) { // technique 
+    changeSounds(1);
+  }
+  
+  // choreos 
+  
+  else if (currentDaySelected == 1) { // snow
     if (currentChoreoSegment == 0) { 
-      changeSounds(1); 
-    } else if (currentChoreoSegment == 2) {
       changeSounds(2);
+    } else if (currentChoreoSegment == 2) {
+      changeSounds(3);
     } else { // when recording: currentDanceSegment == 1 or 3
       // no music playing;
     }
-    
   } else if (currentDaySelected == 2) { // bird
     if (currentChoreoSegment == 0) { 
-      changeSounds(3); // CHANGE
-    } else if (currentChoreoSegment == 2) {
       changeSounds(4); // CHANGE
+    } else if (currentChoreoSegment == 2) {
+      changeSounds(5); // CHANGE
     } else { // when recording: currentDanceSegment == 1 or 3
       // no music playing;
     }
   } else if (currentDaySelected == 3) { // car
     if (currentChoreoSegment == 0) { 
-      changeSounds(4);
+      changeSounds(6);
     } else if (currentChoreoSegment == 2) {
-      changeSounds(5);
+      changeSounds(7);
     } else { // when recording: currentDanceSegment == 1 or 3
       // no music playing;
     }
