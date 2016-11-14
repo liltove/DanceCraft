@@ -28,13 +28,13 @@ float totalX = 0;
 float totalY = 0;
 
 String[] danceFileNames= {
-  "teacherRecording- warmup.csv", "teacherRecording- technique.csv"
+  "teacherRecording- warmup- new.csv", "teacherRecording- technique- new.csv"
 };
 
 String[] danceChoreoFiles= {
   "teacherRecording- snow- 1.csv", "teacherRecording- snow- 2- new.csv", 
-  "teacherRecording- bird- 1.csv", "teacherRecording- bird- 2.csv", 
-  "teacherRecording- car- 1.csv", "teacherRecording- car- 2.csv"
+  "teacherRecording- bird- 1- new.csv", "teacherRecording- bird- 2- new.csv", 
+  "teacherRecording- car- 1.csv", "teacherRecording- car- 2- new.csv"
 };
 
 String[] teacherRecordings= {
@@ -353,14 +353,14 @@ void fileForDaySelected() {
     danceChoreoFiles[2] = "teacherRecording- snow- 2- new.csv";
     danceChoreoFiles[3] = "1choreo_3.csv";
   } else if (currentDaySelected == 2) {
-    danceChoreoFiles[0] = "teacherRecording- bird- 1.csv";
+    danceChoreoFiles[0] = "teacherRecording- bird- 1- new.csv";
     danceChoreoFiles[1] = "2choreo_1.csv";
-    danceChoreoFiles[2] = "teacherRecording- bird- 2.csv";
+    danceChoreoFiles[2] = "teacherRecording- bird- 2- new.csv";
     danceChoreoFiles[3] = "2choreo_3.csv";
   } else if (currentDaySelected == 3) {
     danceChoreoFiles[0] = "teacherRecording- car- 1.csv";
     danceChoreoFiles[1] = "3choreo_1.csv";
-    danceChoreoFiles[2] = "teacherRecording- car- 2.csv";
+    danceChoreoFiles[2] = "teacherRecording- car- 2- new.csv";
     danceChoreoFiles[3] = "3choreo_3.csv";
   }
 }

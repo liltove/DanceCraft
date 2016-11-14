@@ -9,7 +9,7 @@ Minim minim2;
 int track = 0; //initial track number
 int voiceover = 0; //initial voiceover number
 String[] musicFiles= {"music/menu.mp3", "music/warmup_technique.mp3", "music/choreo_segments.mp3"};
-//String[] musicFiles= {"music/silence.mp3", "music/silence.mp3", "music/silence.mp3"};
+// String[] musicFiles= {"music/silence.mp3", "music/silence.mp3", "music/silence.mp3"};
 String[] soundFiles = {
   "music/voiceover/warmup.mp3", "music/voiceover/technique- intro- 1.mp3",
   "music/voiceover/snow- intro- 1.mp3", "music/voiceover/snow- 2.mp3", 
