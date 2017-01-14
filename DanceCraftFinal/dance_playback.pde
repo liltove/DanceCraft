@@ -357,25 +357,26 @@ void playDances() {
     changeSoundToChoreoSegment(); 
 
     //countdown to the recording
-    if (recordMode && waitingToRecord && !savedRecording) { //haven't recorded yet and record mode activated
+    if (recordMode && waitingToRecord) { //haven't recorded yet and record mode activated
       countdownRecord();
-    } else if (!recordMode && waitingToRecord && !savedRecording) { //haven't recorded yet and record mode waiting
-      drawMessage("Press SPACE to begin recording.");
-    } else if (!recordMode && !waitingToRecord && !savedRecording) { //finished recording but not saved yet
+    } else if (!recordMode && waitingToRecord) { //haven't recorded yet and record mode waiting
+      drawMessage("Press SPACE to begin and end recording.");
+    } else if (!recordMode && !waitingToRecord) { //finished recording but not saved yet
       //save current recording to csv file
       if (currentChoreoSegment == 1) {
         saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoA); //save full play through of skeletal data
-        println("Saving dance");
-        savedRecording = true;
-      } else {
+        println("Saving dance: " + currentDaySelected + "choreo_" + currentChoreoSegment);
+        keepRecordedDance();
+      } else if (currentChoreoSegment == 3){
         saveSkeletonTable(currentDaySelected + "choreo_" + currentChoreoSegment, choreoB); //save full play through of skeletal data
-        println("Saving dance");
-        savedRecording = true;
+        println("Saving dance: " + currentDaySelected + "choreo_" + currentChoreoSegment);
+        keepRecordedDance();
       }
-    } else if (!recordMode && !waitingToRecord && savedRecording) { //finished recording, dance is saved in csv
-      //check to see if they want to save the dance
-      drawMessage("To KEEP recorded dance, press 'k'." + '\n' + "To REDO recorded dance, press 'r'.");
     }
+    // else if (!recordMode && !waitingToRecord && savedRecording) { //finished recording, dance is saved in csv
+    //  //check to see if they want to save the dance
+    //  drawMessage("To KEEP recorded dance, press 'k'." + '\n' + "To REDO recorded dance, press 'r'.");
+    //}
   } else if (playthroughChoreo < danceChoreoFiles.length) {
     playVideo(danceChoreoFiles[playthroughChoreo]);
   }

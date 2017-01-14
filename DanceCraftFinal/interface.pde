@@ -76,7 +76,7 @@ void drawDanceScreen() {
   textAlign(LEFT);
 
   recordIndicator();
-  countdown_choreoSeg2();
+  //countdown_choreoSeg2();
 
   //if (phase == "tutorial") {
   //  image(tutorial, 0, 0, 340, 300);
@@ -84,7 +84,7 @@ void drawDanceScreen() {
   //} else 
   if (phase == "dance" || phase == "teacherMode") {
     //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-    //kinectDance();
+    kinectDance();
   }
 }
 
@@ -180,24 +180,24 @@ void countdownRecord() {
   }
 }
 
-void countdown_choreoSeg2() {
-  textSize(35);
-  fill(0);
+//void countdown_choreoSeg2() {
+//  textSize(35);
+//  fill(0);
 
-  if (currentChoreoSegment == 2) {
-    if (countdownReady < countdownTimer_choreoSeg2.length) {
-      text(countdownTimer_choreoSeg2[countdownReady], 550, 50);
-      if (millis() - countdown_time >= wait) {
-        countdown_time = millis();//also update the stored time
-        countdownReady++;
-      }
-    }
-  }
+//  if (currentChoreoSegment == 2) {
+//    if (countdownReady < countdownTimer_choreoSeg2.length) {
+//      text(countdownTimer_choreoSeg2[countdownReady], 550, 50);
+//      if (millis() - countdown_time >= wait) {
+//        countdown_time = millis();//also update the stored time
+//        countdownReady++;
+//      }
+//    }
+  //}
 
 
-  //check the difference between now and the previously stored time is greater than the wait interval
-}
-
+  ////check the difference between now and the previously stored time is greater than the wait interval
+//}
+//
 /*---------------------------------------------------------------
  Display a RED dot when RecordMode is true
  ----------------------------------------------------------------*/
