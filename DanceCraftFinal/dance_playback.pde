@@ -27,14 +27,15 @@ float midHeight = 720; //middle height of the left haft screen
 float totalX = 0;
 float totalY = 0;
 
+//the two files of dances that happen before the choreo section
 String[] danceFileNames= {
-  "teacherRecording- warmup.csv", "teacherRecording- technique.csv"
+  "teacherRecording-warmup.csv", "teacherRecording-technique.csv"
 };
 
+//populating with choreo dances, will repopulate with kids' choreos later
 String[] danceChoreoFiles= {
-  "teacherRecording- snow- 1.csv", "teacherRecording- snow- 2.csv", 
-  "teacherRecording- bird- 1.csv", "teacherRecording- bird- 2.csv", 
-  "teacherRecording- car- 1.csv", "teacherRecording- car- 2.csv"
+  "teacherRecording-snow-1.csv", "teacherRecording-snow-2.csv", 
+  "teacherRecording-bird-1.csv", "teacherRecording-bird-2.csv"
 };
 
 String[] teacherRecordings= {
@@ -148,24 +149,7 @@ void playBack(Integer rowNum)
     drawBack(averageV[10], averageV[12], false, false); //Right hip and right knee
     drawBack(averageV[12], averageV[14], false, false); //Right knee and right foot
     drawBack(averageV[10], averageV[9], false, false); //Right hip and left hip
-    //    if (!useModel) {
-    //      drawBack(skel_data[rowNum][0], skel_data[rowNum][1], false, true); //Head and neck
-    //      drawBack(skel_data[rowNum][1], skel_data[rowNum][2], false, false); //Neck and left shoulder
-    //      drawBack(skel_data[rowNum][2], skel_data[rowNum][4], false, false); //Left shoulder and Left elbow
-    //      drawBack(skel_data[rowNum][4], skel_data[rowNum][6], false, false); //Left elbow and left hand
-    //      drawBack(skel_data[rowNum][1], skel_data[rowNum][3], false, false); //Neck and right shoulder
-    //      drawBack(skel_data[rowNum][3], skel_data[rowNum][5], false, false); //Right shoulder and right elbow
-    //      drawBack(skel_data[rowNum][5], skel_data[rowNum][7], false, false); //Right elbow and right hand
-    //      drawBack(skel_data[rowNum][2], skel_data[rowNum][8], true, false); //Left shoulder and TORSO
-    //      drawBack(skel_data[rowNum][3], skel_data[rowNum][8], true, false); //Right shoulder and TORSO
-    //      drawBack(skel_data[rowNum][8], skel_data[rowNum][9], true, false); //Torso and left Hip
-    //      drawBack(skel_data[rowNum][9], skel_data[rowNum][11], false, false); //Left hip and left Knee
-    //      drawBack(skel_data[rowNum][11], skel_data[rowNum][13], false, false); //left knee and left foot
-    //      drawBack(skel_data[rowNum][8], skel_data[rowNum][10], true, false); ///Torso and right hip
-    //      drawBack(skel_data[rowNum][10], skel_data[rowNum][12], false, false); //Right hip and right knee
-    //      drawBack(skel_data[rowNum][12], skel_data[rowNum][14], false, false); //Right knee and right foot
-    //      drawBack(skel_data[rowNum][10], skel_data[rowNum][9], false, false); //Right hip and left hip
-    //    }
+
   } else {
     dancePlayback = false;
     numIterationsCompleted = 0;
@@ -195,8 +179,6 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   stroke(0);
   //Set weight of line
   strokeWeight (5);
-  //load texture image
-  //PImage txt = loadImage("crumpledPaper.jpg");
 
   float xAint = 0.25 * (offsetX + skeA.x);
   float yAint = 0.25 * ((-skeA.y) + offsetY);
@@ -269,15 +251,7 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   newX = xB;
   newY = yM;
 
-  //  println("point A: (" + xA + ", " + yA + ")");
-  //  println("point B: (" + xB + ", " + yB + ")");
-  //  println("midpoint: (" + xM + ", " + yM + ")");
-  //  println("new point: (" + newX + ", " + newY + ")");
-  //  println("distance: " + distance);
-
-
   fill(0, 0, 0);
-  //texture(txt);
 
   pushMatrix();
   translate(xM, yM);
@@ -293,8 +267,6 @@ void drawBack(PVector skeA, PVector skeB, Boolean thicker, Boolean isHead)
   if (yB < yM) {
     radians = (2 * PI) - radians;
   }
-
-  //  println("radians: " + radians);
 
   rotate(radians);
   if (thicker) {
@@ -348,19 +320,19 @@ void playVideo(String filename) {
 void fileForDaySelected() {
 
   if (currentDaySelected == 1) {
-    danceChoreoFiles[0] = "teacherRecording- snow- 1.csv";
+    danceChoreoFiles[0] = "teacherRecording-snow-1.csv";
     danceChoreoFiles[1] = "1choreo_1.csv";
-    danceChoreoFiles[2] = "teacherRecording- snow- 2.csv";
+    danceChoreoFiles[2] = "teacherRecording-snow-2.csv";
     danceChoreoFiles[3] = "1choreo_3.csv";
   } else if (currentDaySelected == 2) {
-    danceChoreoFiles[0] = "teacherRecording- bird- 1.csv";
+    danceChoreoFiles[0] = "teacherRecording-bird-1.csv";
     danceChoreoFiles[1] = "2choreo_1.csv";
-    danceChoreoFiles[2] = "teacherRecording- bird- 2.csv";
+    danceChoreoFiles[2] = "teacherRecording-bird-2.csv";
     danceChoreoFiles[3] = "2choreo_3.csv";
   } else if (currentDaySelected == 3) {
-    danceChoreoFiles[0] = "teacherRecording- car- 1.csv";
+    danceChoreoFiles[0] = "teacherRecording-car-1.csv";
     danceChoreoFiles[1] = "3choreo_1.csv";
-    danceChoreoFiles[2] = "teacherRecording- car- 2.csv";
+    danceChoreoFiles[2] = "teacherRecording-car-2.csv";
     danceChoreoFiles[3] = "3choreo_3.csv";
   }
 }
