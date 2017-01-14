@@ -34,7 +34,7 @@ int numIterationsCompleted = 0; //Used to drawback skeletons
 int currentDaySelected = 0; //which day is selected to play appropriate dance files
 
 //CHANGE THIS LINE IF YOU DON'T WANT TO START AT THE BEGINNING!! --currently 4 gets you to mirror
-int currentDanceSegment = 2; //which segment of the dance are we on //0- warmup, 1- technique, 2- choreo
+int currentDanceSegment = 0; //which segment of the dance are we on //0- warmup, 1- technique, 2- choreo
 int currentChoreoSegment = 0; //which segment of choreo are we on //0- first 8, 1- record, 2- second 8, 3- record
 int playthroughChoreo = 0; //final play through of all choreo files
 int numTimesTutorialPressed = 0;  //used to keep track of the times Tutorial button is pressed
