@@ -3,10 +3,10 @@ import ddf.minim.*;
 import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
-import controlP5.*;
+//import controlP5.*;
 import java.util.ArrayList;
 
-ControlP5 cp5;
+//ControlP5 cp5;
 PFont font;
 
 String phase, mode;
