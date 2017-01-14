@@ -28,6 +28,7 @@ void musicSetup() {
 void musicPlay() {
   if (!soundtrack.isPlaying()) {
     getTrack(track);   //Loads the corresponding track to be played.
+    soundtrack.setGain(-20.0);
     soundtrack.play();
   }
 }
