@@ -101,7 +101,7 @@ void kinectDance(){
     // if the pixel is part of the user
     if (userMapping[i] != 0) {
       // set the pixel color of the part of the display that is the user to black
-      pixels[i] = color (50, 50, 100, 63);
+      pixels[i] = color (0, 0, 0, 63);
     }
   } // (int i =0; i < userMap.length; i++)
 

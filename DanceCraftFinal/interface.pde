@@ -84,7 +84,7 @@ void drawDanceScreen() {
   //} else 
   if (phase == "dance" || phase == "teacherMode") {
     //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-    kinectDance();
+    //kinectDance();
   }
 }
 
