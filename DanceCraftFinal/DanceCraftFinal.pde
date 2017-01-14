@@ -93,7 +93,7 @@ void setup() {
   figure = true;
 
   //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
-  //kinectSetup();
+  kinectSetup();
 
   minim = new Minim(this);
   musicSetup();
