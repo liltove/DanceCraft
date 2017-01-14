@@ -1,4 +1,4 @@
-import processing.video.*;
+//import processing.video.*;
 import ddf.minim.*;
 import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
@@ -45,7 +45,7 @@ Boolean savedRecording = false; //did the choreo get saved?
 //Boolean finishedRecording = false; //are they all done recording?
 
 //holds tutorial movie
-Movie tutorial;
+//Movie tutorial;
 
 //dance backgrounds
 PImage danceBackdrop;
@@ -130,7 +130,7 @@ void draw() {
     playDances();
   } else if (phase=="tutorial") {
     pauseMusic(); //pause any music
-    drawMovie();
+    //drawMovie();
   } else if (phase=="teacherMode") {
     pauseMusic();
     drawDanceScreen();
@@ -166,8 +166,8 @@ void mouseReleased() {
 
         buttonIsPressed[i] = false;
         buttonIsOver[i] = false;
-        tutorial.jump(0);
-        tutorial.play();
+        //tutorial.jump(0);
+        //tutorial.play();
       } else {
         //update days to set which day is selected
         currentDaySelected = i+1;

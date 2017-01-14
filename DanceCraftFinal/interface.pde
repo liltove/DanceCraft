@@ -16,8 +16,8 @@ int buttonHeight = 35;
 int distanceFromLeft = (width/2) - (buttonWidth/2);
 int distanceFromTop = (height/5) * 2; //  distance from top to start drawing buttons;
 int distanceBetweenButtons = 33;
-String[] buttonNames = {"One", "Two", "Three", "Tutorial"}; // array of button names;
-String[] buttonImgs = {"Day1.png", "Day2.png", "Day3.png", "Help.png"}; //array of button images
+String[] buttonNames = {"One", "Two", "Three"/*, "Tutorial"*/}; // array of button names;
+String[] buttonImgs = {"Day1.png", "Day2.png", "Day3.png"/*, "Help.png"*/}; //array of button images
 //String[] danceFileNames= {"better_dance_recording.csv", "good_dance_recording.csv", "csvPoseData.csv"}; // array of associated File names to go with buttons
 Boolean[] buttonIsPressed = {false, false, false, false};
 Boolean[] buttonIsOver = {false, false, false, false};
@@ -78,10 +78,11 @@ void drawDanceScreen() {
   recordIndicator();
   countdown_choreoSeg2();
 
-  if (phase == "tutorial") {
-    image(tutorial, 0, 0, 340, 300);
-    tutorial.read();
-  } else if (phase == "dance" || phase == "teacherMode") {
+  //if (phase == "tutorial") {
+  //  image(tutorial, 0, 0, 340, 300);
+  //  tutorial.read();
+  //} else 
+  if (phase == "dance" || phase == "teacherMode") {
     //COMMENT OUT THIS LINE TO RUN WITHOUT KINECT
     kinectDance();
   }
